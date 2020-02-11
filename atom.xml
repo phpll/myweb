@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-11T12:59:42.620Z</updated>
+    <updated>2020-02-11T13:15:49.714Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -11,35 +11,23 @@
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
     <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://newdy.cf/post/hello-gridea</id>
-        <link href="https://newdy.cf/post/hello-gridea">
+        <title type="html"><![CDATA[搭建 DNS 服务解锁 Netflix]]></title>
+        <id>https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix</id>
+        <link href="https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix">
         </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+        <updated>2020-02-11T13:14:06.000Z</updated>
+        <content type="html"><![CDATA[<p>有观看 Netflix 习惯的朋友应该都知道，除了需要科学上网之外，IP 能够解锁 Netflix 也是正常播放的必要条件之一。不过有时因为流量原因，我们不直接使用能够解锁 NF 的服务器来播放，而是架设 DNS 服务作为其它机器的中转。这样，原本不能解锁 NF 的服务器便也可以正常播放了。不过我们今天并不细究原理，只是分享方法。</p>
+<p>如果需要解锁 Netflix ，前提条件是你拥有一台能够正常观看 NF 的服务器A，以及另一台无法观看 NF 的服务器B。</p>
+<p>首先我们在服务器A上运行以下代码安装 DNS 服务：</p>
+<p>wget --no-check-certificate -O dnsmasq_sniproxy.sh https://raw.githubusercontent.com/myxuchangbin/dnsmasq_sniproxy_install/master/dnsmasq_sniproxy.sh &amp;&amp; bash dnsmasq_sniproxy.sh -i</p>
+<p>如果开启了防火墙，记得在服务器A上放行53端口的入网连接。随后在服务器B上设置 DNS 为服务器A的 ip ，以 Debian 为例：</p>
+<p>如果你的服务器B是静态配置 IP，只需要修改<br>
+/etc/resolv.conf 中的 nameserver 即可。如：nameserver 1.0.0.1</p>
+<p>如果你的服务器B是自动获取IP，切勿修改 /etc/resolv.conf 。<br>
+因为此时这个文件受到 DHCP 的影响，在每次重启后都会还原为默认值。此时我们需要编辑 /etc/dhcp/dhclient.conf ，添加：supersede domain-name-servers 1.0.0.1; 来手动指派 DNS 地址。</p>
+<p>最后重启服务器B的网络即可：/etc/init.d/networking restart</p>
+<p>上述例子中的 1.0.0.1 仅用于示范，实际使用时需要填写服务器A的公网 ip 地址。</p>
+<p>此时再使用服务器B，Netflix 已经可以正常播放了。并且 DNS 解锁只需要消耗服务器A非常少的流量，适用于流量较少无法直接使用服务器A来观看 NF 的情况。为了提高系统安全性，还可以自行配置 iptables 来限制53端口的入网 ip 地址，在此便不细谈了。</p>
 ]]></content>
     </entry>
 </feed>
