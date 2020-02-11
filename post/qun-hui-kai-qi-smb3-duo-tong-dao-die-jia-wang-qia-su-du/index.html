@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动 | Gridea</title>
+<title>群晖开启 SMB3 多通道叠加网卡速度 | Gridea</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,7 +24,7 @@
 
 
 
-    <meta name="description" content="ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，..." />
+    <meta name="description" content="不少的群晖机型都带有2个甚至更多的网卡，为了突破 1Gbps 的局域网连接速度，我们以往需要在交换机、群晖和 PC 端配置链路聚合(link aggregation)。不仅配置较为繁琐，而且额外增加了 PC 端和交换机的成本，实际普及率并不..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -96,30 +96,42 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动</h2>
+            <h2 class="post-title">群晖开启 SMB3 多通道叠加网卡速度</h2>
             <div class="post-date">2020-02-11</div>
             
             <div class="post-content" v-pre>
-              <p>ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，自 ESXi 5.5 版本起 VMware 移除了大量家用 PC 机的驱动，其中就包含 RTL8168/8111 网卡以及 Intel SATA 控制器。</p>
-<p>不过天无绝人之路，我们仍然可以使用第三方工具 ESXi-Customizer-PS 对安装镜像进行修改，加载我们想要的驱动，从而继续正常使用。</p>
-<p>在使用 ESXi-Customizer-PS 之前，我们需要先安装 VMware PowerCLI，可以在网络搜索下载。安装完成后，在这个网址下载 ESXi-Customizer-PS。</p>
-<p>随后我们打开 VMware PowerCLI ，并且定位到 ESXi-Customizer-PS 所在的目录，执行：</p>
-<p>##.\ESXi-Customizer-PS-v2.5.ps1 -v65 -vft -load net55-r8168,net51-r8169,sata-xahci<br>
-<img src="https://newdy.cf/post-images/1581431304708.png" alt="" loading="lazy"></p>
-<pre><code>随后脚本会自动连接到 VMware 下载安装镜像并加载对应的驱动。其中 net55-r8168 对应 RTL8168/8111 ，net51-r8169 对应 RTL8169 ，sata-xahci 对应常见 SATA 控制器。如果你还有特殊的硬件驱动需要加载的话，可以到 V-Front 的官方源按照硬件 id 来查找，只需在 load 后继续添加并用逗号分隔即可。
-</code></pre>
-<p>经过漫长的等待后，对应版本的 ESXi 安装镜像便会保存在 ESXi-Customizer-PS 同目录中。当然你也可以使用 -v60 -v55 来生成6.0或是5.5版本的安装镜像。<br>
-<img src="https://newdy.cf/post-images/1581431377324.png" alt="" loading="lazy"><br>
-如不清楚硬件 id ，可先引导至 Windows 并通过设备管理器查看。如图所示，这个 Intel USB 3.0 控制器的硬件 id 为：8086:A12F。</p>
+              <p>不少的群晖机型都带有2个甚至更多的网卡，为了突破 1Gbps 的局域网连接速度，我们以往需要在交换机、群晖和 PC 端配置链路聚合(link aggregation)。不仅配置较为繁琐，而且额外增加了 PC 端和交换机的成本，实际普及率并不高。而自 DSM 6.1-15047 之后，群晖为我们带来了 SMB3 多通道支持，使得我们能够以及其低廉的成本享受多网卡叠加带来的速度提升。</p>
+<p>要使用 SMB3.0 的多通道来叠加网卡速度，需要以下几个条件：</p>
+<p>群晖带有2个或以上的相同线速的网卡，并安装 DSM 6.1-15047 及更高版本<br>
+普通交换机<br>
+PC 端带有2个或以上的相同线速的网卡，并安装 Windows 8/Server 2012及更高版本 OS<br>
+由于群晖目前没有开放相关设置项，所以我们部分操作需要通过 SSH 来完成：</p>
+<p>1.打开控制面板，依次进入：文件服务-高级设置，将最大协议改为 SMB3，点击应用<br>
+<img src="https://newdy.cf/post-images/1581432465559.png" alt="" loading="lazy"><br>
+2.进入：终端机和 SNMP，勾选启动 SSH 功能，点击应用<br>
+<img src="https://newdy.cf/post-images/1581432503103.png" alt="" loading="lazy"><br>
+3.使用 PUTTY 等软件登入群晖 SSH，输入 sudo -i 临时提权，并输入密码回车。待命令提示符由 $ 变为 # 后，执行：vi /etc/samba/smb.conf<br>
+<img src="https://newdy.cf/post-images/1581432535629.png" alt="" loading="lazy"><br>
+4.在文件末尾添加以下内容，完成后按 ESC，并输入 :wq 保存退出</p>
+<p>server multi channel support = yes<br>
+aio read size = 1<br>
+aio write size = 1<br>
+5.重启群晖，PC 和交换机，所有设置完成。</p>
+<p>在重启完成后，PC 端使用主机名（如\homeshare）或 ip 进入一次共享，即可自动启用 SMB3 多通道了。另外也可以用管理员权限运行 PowerShell ，执行： Get-SmbMultichannelConnection 确认。<br>
+<img src="https://newdy.cf/post-images/1581432576355.png" alt="" loading="lazy"><br>
+如上所示，目前 PC 已连接到服务器 192.168.199.189，并且分别通过本地 ip:192.168.199.99 192.168.199.100 与远端 ip: 192.168.199.188 192.168.199.189 建立了 SMB3 多通道连接。<br>
+<img src="https://newdy.cf/post-images/1581432604857.png" alt="" loading="lazy"><br>
+通过复制文件也可以看出，两张网卡均有流量，并且总和超过了 1Gbps 。</p>
+<p>基于 RTL8111 的 PCIE x1 网卡目前均价不过20-30块，并且对于交换机并无特殊限制，故整套解决方案成本是非常低的。除了PCIE 网卡之外，也可以使用 USB 网卡，但需要确保所有网卡线速一致，才能够启用 SMB3 多通道。</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix">
+                <a href="https://newdy.cf/post/wei-esxi-tian-jia-rtl81688111-ji-sata-kong-zhi-qi-qu-dong">
                   <h3 class="post-title">
-                    搭建 DNS 服务解锁 Netflix
+                    为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动
                   </h3>
                 </a>
               </div>
