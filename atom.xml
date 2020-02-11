@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-11T14:50:30.047Z</updated>
+    <updated>2020-02-11T15:01:59.189Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,42 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[群晖存储空间损毁 Btrfs 数据恢复教程]]></title>
+        <id>https://newdy.cf/post/qun-hui-cun-chu-kong-jian-sun-hui-btrfs-shu-ju-hui-fu-jiao-cheng</id>
+        <link href="https://newdy.cf/post/qun-hui-cun-chu-kong-jian-sun-hui-btrfs-shu-ju-hui-fu-jiao-cheng">
+        </link>
+        <updated>2020-02-11T14:52:53.000Z</updated>
+        <content type="html"><![CDATA[<p>由于囊中羞涩，reizhi 一直在使用黑群晖作为家庭存储方案。不知何故，几天前突然提示存储空间已损毁。这种情况下白群晖是可以直接联系技术支持的，无奈我只好自己想办法解决。而网络上搜索到的教程和案例都是使用 Ext4 作为文件系统，那么只需要用 UFS explorer 来修复就好了。偏偏我是用的是 Btrfs 文件系统，于是只好爬问研究。最终通过三天时间的反复尝试，成功将所有数据挽回，在此分享一下经历和经验供日后参考。</p>
+<p>如果你也遇到了类似问题，完全不用急着慌张。虽然 Btrfs 相比于 Ext4 并没有任何稳定性上的优势，但经过多年的更新和改进文件系统已经比较完善，再加上 RAID 的数据保护，丢失文件的几率并不高。</p>
+<p>如果你的群晖提示存储空间损毁，但 RAID 并没有异常，可以无需进行 RAID 清理。通过查看 S.M.A.R.T 状态，发现所有硬盘均处于健康状态，于是跳过这一步。接下来我们需要引导到 Ubuntu 系统并尝试挂载 RAID ，此时既可以使用原有机器，也可以将所有硬盘连接到其他机器中操作。在原机安装 Ubuntu 时请注意不要将系统安装至存有数据的硬盘。安装镜像以及教程可以直接在官网获取，这里便不再赘述了。另外由于恢复过程耗时较长，不建议使用 LiveCD 来操作。</p>
+<p>安装完成后的第一件事是安装必要的工具包以及挂载 RAID，打开终端并以 root 身份（sudo -i）执行以下操作：</p>
+<p>apt-get update<br>
+apt-get install mdadm lvm2 btrfs-prog<br>
+mdadm -Asf &amp;&amp; vgchange -ay<br>
+正常完成后可以在磁盘管理中看到 RAID 阵列，但是由于文件系统损坏，此时是无法挂载的。这里会显示阵列的设备文件是 /dev/md/2 ，记住你的显示值，稍后会要用到。<br>
+<img src="https://newdy.cf/post-images/1581432806246.png" alt="" loading="lazy"><br>
+我们切换回终端，运行以下命令：</p>
+<p>btrfs-find-root /dev/md/2 &amp;&gt; /tmp/root.txt<br>
+运行过程可能需要10-30分钟，期间是没有任何回显的。等待运行完成后终端会返回命令提示符，这时我们打开 /tmp/root.txt 文件，可以看到如下内容：<br>
+<img src="https://newdy.cf/post-images/1581432867060.png" alt="" loading="lazy"><br>
+我们需要用到的数据是 Well block 后面的这一串数字，其后的 gen 数字越高，恢复的可能性越大。下一步使用找到的 tree root 来模拟修复，到目前为止的所有操作都不会对硬盘进行写入和修改，也不会破坏任何数据。</p>
+<p>btrfs check --tree-root <block> --super <sup><br>
+其中 <block> 为上一步中的数值，按 gen 数字从高到低依次尝试使用，<sup> 可以尝试0，1或2。如果 <block> 有效，运行结果末尾应当类似于以下图示：<br>
+<img src="https://newdy.cf/post-images/1581432909952.png" alt="" loading="lazy"><br>
+如果最后回显不是以上格式，表明这一条 <block> 无效，需要继续尝试下一条。在确认看到以上提示后，我们尝试将数据导出。</p>
+<p>btrfs restore /dev/md/2 /tmp -D -v -F -i -t <sup><br>
+此时仍然使用上一步中的 <block> 值，将 /tmp 改为导出目录，需要确保留有足够空间存储文件。如果文件名包含特殊符号可能导致导出中断，将目标分区格式化为 Ext3/4 即可。<br>
+<img src="https://newdy.cf/post-images/1581432941261.png" alt="" loading="lazy"><br>
+如果导出正常进行，会看到类似上图的提示，此处没有进度提示，可以自行前往导出目录查看。如果导出失败会给出其他提示，在确认导出分区是 Ext3/4 的情况下，则只能退回上一步尝试其他 <sup> 值。</p>
+<p>到目前为止我们并没有对数据盘进行任何写入和修改操作，如果因为种种原因无法导出，或是导出过程异常中断，仍然可以通过修复原盘的方式来挽回数据。不过请注意，此步骤有可能会损坏数据，如果你不能接受任何风险，请停止执行并联系专业机构。</p>
+<p>btrfs check --repair --tree-root <block> --super <sup><br>
+使用之前步骤中正常回显的 <block> 及 <sup> 值进行正式修复，确认操作完成后执行：</p>
+<p>btrfs rescue super-recover /dev/md/2<br>
+<img src="https://newdy.cf/post-images/1581432991454.png" alt="" loading="lazy"></p>
+<p>提示确认目标分区是 Btrfs 文件系统，否则会损坏数据，输入 y 确认操作。等待数秒后再次回到提示符，如果一切顺利，此时已经可以通过磁盘管理工具挂载 Btrfs 分区了。不过群晖很大几率不会识别修复后的文件系统，还是建议将数据导出后再将硬盘还原。😚</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[群晖开启 SMB3 多通道叠加网卡速度]]></title>
         <id>https://newdy.cf/post/qun-hui-kai-qi-smb3-duo-tong-dao-die-jia-wang-qia-su-du</id>
