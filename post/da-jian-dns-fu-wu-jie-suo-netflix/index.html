@@ -1,94 +1,100 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>搭建 DNS 服务解锁 Netflix | Gridea</title>
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1581430646740">
-<link href="https://cdn.remixicon.com/releases/v2.1.0/remixicon.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1581430815737">
 <link rel="stylesheet" href="https://newdy.cf/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="搭建 DNS 服务解锁 Netflix | Gridea - Atom Feed" href="https://newdy.cf/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
 
     <meta name="description" content="有观看 Netflix 习惯的朋友应该都知道，除了需要科学上网之外，IP 能够解锁 Netflix 也是正常播放的必要条件之一。不过有时因为流量原因，我们不直接使用能够解锁 NF 的服务器来播放，而是架设 DNS 服务作为其它机器的中转。这..." />
     <meta name="keywords" content="" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://newdy.cf">
-  <img class="avatar" src="https://newdy.cf/images/avatar.png?v=1581430646740" alt="">
-  </a>
-  <h1 class="site-title">
-    Gridea
-  </h1>
-  <p class="site-description">
-    温故而知新
-  </p>
-  <div class="menu-container">
-    
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1581430815737" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
       
-        <a href="/" class="menu">
-          首页
-        </a>
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
       
-    
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
       
-        <a href="/archives" class="menu">
-          归档
-        </a>
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
       
-    
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
       
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+    </div>
   </div>
-  <div class="social-container">
-    
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
   </div>
 </div>
 
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              搭建 DNS 服务解锁 Netflix
-            </h2>
-            <div class="post-info">
-              <span>
-                2020-02-11
-              </span>
-              <span>
-                3 min read
-              </span>
-              
-            </div>
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">搭建 DNS 服务解锁 Netflix</h2>
+            <div class="post-date">2020-02-11</div>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <p>有观看 Netflix 习惯的朋友应该都知道，除了需要科学上网之外，IP 能够解锁 Netflix 也是正常播放的必要条件之一。不过有时因为流量原因，我们不直接使用能够解锁 NF 的服务器来播放，而是架设 DNS 服务作为其它机器的中转。这样，原本不能解锁 NF 的服务器便也可以正常播放了。不过我们今天并不细究原理，只是分享方法。</p>
+            <div class="post-content" v-pre>
+              <p>有观看 Netflix 习惯的朋友应该都知道，除了需要科学上网之外，IP 能够解锁 Netflix 也是正常播放的必要条件之一。不过有时因为流量原因，我们不直接使用能够解锁 NF 的服务器来播放，而是架设 DNS 服务作为其它机器的中转。这样，原本不能解锁 NF 的服务器便也可以正常播放了。不过我们今天并不细究原理，只是分享方法。</p>
 <p>如果需要解锁 Netflix ，前提条件是你拥有一台能够正常观看 NF 的服务器A，以及另一台无法观看 NF 的服务器B。</p>
 <p>首先我们在服务器A上运行以下代码安装 DNS 服务：</p>
 <p>wget --no-check-certificate -O dnsmasq_sniproxy.sh https://raw.githubusercontent.com/myxuchangbin/dnsmasq_sniproxy_install/master/dnsmasq_sniproxy.sh &amp;&amp; bash dnsmasq_sniproxy.sh -i</p>
@@ -101,67 +107,36 @@
 <p>上述例子中的 1.0.0.1 仅用于示范，实际使用时需要填写服务器A的公网 ip 地址。</p>
 <p>此时再使用服务器B，Netflix 已经可以正常播放了。并且 DNS 解锁只需要消耗服务器A非常少的流量，适用于流量较少无法直接使用服务器A来观看 NF 的情况。为了提高系统安全性，还可以自行配置 iptables 来限制53端口的入网 ip 地址，在此便不细谈了。</p>
 
-              </div>
-              <div class="toc-container">
-                
-              </div>
             </div>
-          </article>
+            
+            
+
+            
+
+          </div>
+
         </div>
-
-        
-
-        
-
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
-</div>
-
       </div>
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+AOS.init();
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+</script>
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
 
-    </script>
+
+
+
+
   </body>
 </html>
