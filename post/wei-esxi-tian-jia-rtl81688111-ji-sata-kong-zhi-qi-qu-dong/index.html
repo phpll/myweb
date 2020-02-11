@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>搭建 DNS 服务解锁 Netflix | Gridea</title>
+<title>为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动 | Gridea</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,7 +24,7 @@
 
 
 
-    <meta name="description" content="有观看 Netflix 习惯的朋友应该都知道，除了需要科学上网之外，IP 能够解锁 Netflix 也是正常播放的必要条件之一。不过有时因为流量原因，我们不直接使用能够解锁 NF 的服务器来播放，而是架设 DNS 服务作为其它机器的中转。这..." />
+    <meta name="description" content="ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -96,25 +96,33 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">搭建 DNS 服务解锁 Netflix</h2>
+            <h2 class="post-title">为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动</h2>
             <div class="post-date">2020-02-11</div>
             
             <div class="post-content" v-pre>
-              <p>有观看 Netflix 习惯的朋友应该都知道，除了需要科学上网之外，IP 能够解锁 Netflix 也是正常播放的必要条件之一。不过有时因为流量原因，我们不直接使用能够解锁 NF 的服务器来播放，而是架设 DNS 服务作为其它机器的中转。这样，原本不能解锁 NF 的服务器便也可以正常播放了。不过我们今天并不细究原理，只是分享方法。</p>
-<p>如果需要解锁 Netflix ，前提条件是你拥有一台能够正常观看 NF 的服务器A，以及另一台无法观看 NF 的服务器B。</p>
-<p>首先我们在服务器A上运行以下代码安装 DNS 服务：</p>
-<p>wget --no-check-certificate -O dnsmasq_sniproxy.sh https://raw.githubusercontent.com/myxuchangbin/dnsmasq_sniproxy_install/master/dnsmasq_sniproxy.sh &amp;&amp; bash dnsmasq_sniproxy.sh -i</p>
-<p>如果开启了防火墙，记得在服务器A上放行53端口的入网连接。随后在服务器B上设置 DNS 为服务器A的 ip ，以 Debian 为例：</p>
-<p>如果你的服务器B是静态配置 IP，只需要修改<br>
-/etc/resolv.conf 中的 nameserver 即可。如：nameserver 1.0.0.1</p>
-<p>如果你的服务器B是自动获取IP，切勿修改 /etc/resolv.conf 。<br>
-因为此时这个文件受到 DHCP 的影响，在每次重启后都会还原为默认值。此时我们需要编辑 /etc/dhcp/dhclient.conf ，添加：supersede domain-name-servers 1.0.0.1; 来手动指派 DNS 地址。</p>
-<p>最后重启服务器B的网络即可：/etc/init.d/networking restart</p>
-<p>上述例子中的 1.0.0.1 仅用于示范，实际使用时需要填写服务器A的公网 ip 地址。</p>
-<p>此时再使用服务器B，Netflix 已经可以正常播放了。并且 DNS 解锁只需要消耗服务器A非常少的流量，适用于流量较少无法直接使用服务器A来观看 NF 的情况。为了提高系统安全性，还可以自行配置 iptables 来限制53端口的入网 ip 地址，在此便不细谈了。</p>
+              <p>ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，自 ESXi 5.5 版本起 VMware 移除了大量家用 PC 机的驱动，其中就包含 RTL8168/8111 网卡以及 Intel SATA 控制器。</p>
+<p>不过天无绝人之路，我们仍然可以使用第三方工具 ESXi-Customizer-PS 对安装镜像进行修改，加载我们想要的驱动，从而继续正常使用。</p>
+<p>在使用 ESXi-Customizer-PS 之前，我们需要先安装 VMware PowerCLI，可以在网络搜索下载。安装完成后，在这个网址下载 ESXi-Customizer-PS。</p>
+<p>随后我们打开 VMware PowerCLI ，并且定位到 ESXi-Customizer-PS 所在的目录，执行：</p>
+<p>##.\ESXi-Customizer-PS-v2.5.ps1 -v65 -vft -load net55-r8168,net51-r8169,sata-xahci<br>
+<img src="https://newdy.cf/post-images/1581431304708.png" alt="" loading="lazy"></p>
+<pre><code>随后脚本会自动连接到 VMware 下载安装镜像并加载对应的驱动。其中 net55-r8168 对应 RTL8168/8111 ，net51-r8169 对应 RTL8169 ，sata-xahci 对应常见 SATA 控制器。如果你还有特殊的硬件驱动需要加载的话，可以到 V-Front 的官方源按照硬件 id 来查找，只需在 load 后继续添加并用逗号分隔即可。
+</code></pre>
+<p>经过漫长的等待后，对应版本的 ESXi 安装镜像便会保存在 ESXi-Customizer-PS 同目录中。当然你也可以使用 -v60 -v55 来生成6.0或是5.5版本的安装镜像。<br>
+<img src="https://newdy.cf/post-images/1581431377324.png" alt="" loading="lazy"><br>
+如不清楚硬件 id ，可先引导至 Windows 并通过设备管理器查看。如图所示，这个 Intel USB 3.0 控制器的硬件 id 为：8086:A12F。</p>
 
             </div>
             
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix">
+                  <h3 class="post-title">
+                    搭建 DNS 服务解锁 Netflix
+                  </h3>
+                </a>
+              </div>
             
 
             
