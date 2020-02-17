@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-17T01:35:13.189Z</updated>
+    <updated>2020-02-17T02:37:50.896Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,241 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[EasyProxy-又一款有管理面板的内网穿透代理服务器]]></title>
+        <id>https://newdy.cf/post/easyproxy-you-yi-kuan-you-guan-li-mian-ban-de-nei-wang-chuan-tou-dai-li-fu-wu-qi/</id>
+        <link href="https://newdy.cf/post/easyproxy-you-yi-kuan-you-guan-li-mian-ban-de-nei-wang-chuan-tou-dai-li-fu-wu-qi/">
+        </link>
+        <updated>2020-02-17T02:11:45.000Z</updated>
+        <content type="html"><![CDATA[<p>easyProxy是一款轻量级、高性能、功能最为强大的内网穿透代理服务器。目前支持tcp、udp流量转发，可支持任何tcp、udp上层协议（访问内网网站、本地支付接口调试、ssh访问、远程桌面，内网dns解析等等……），此外还支持内网http代理、内网socks5代理，可实现在非内网环境下如同使用vpn一样访问内网资源和设备的效果，同时支持socks5验证，gzip、snnapy压缩（节省带宽和流量）。</p>
+<p>目前市面上提供类似服务的有花生壳、TeamView、GoToMyCloud等等，但要使用第三方的公网服务器就必须为第三方付费，并且这些服务都有各种各样的限制，此外，由于数据包会流经第三方，因此对数据安全也是一大隐患。<br>
+支持客户端与服务端连接中断自动重连，多路传输，大大的提高请求处理速度，go语言编写，无第三方依赖。<br>
+<img src="https://newdy.cf/post-images/1581905568218.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1581905601275.png" alt="" loading="lazy"><br>
+一、简介<br>
+web管理模式，可配置多条tcp、udp隧道，多个域名代理等等—-&gt; web管理模式<br>
+内网多站点配合代理。—-&gt; http反向代理请求<br>
+想在外网通过ssh连接内网的机器，做云服务器到内网服务器端口的映射，或者做微信公众号开发、小程序开发等—-&gt;tcp隧道模式<br>
+在非内网环境下使用内网dns，或者需要通过udp访问内网机器等—-&gt;udp隧道模式<br>
+在外网使用HTTP代理访问内网站点—-&gt;http代理模式<br>
+搭建一个内网穿透ss，在外网如同使用内网vpn一样访问内网资源或者设备—-&gt; socks5代理模式<br>
+二、特点<br>
+支持gzip、snappy压缩,减小传输过程流量消耗<br>
+支持多站点配置,兼容多个内网网站，可处理相互之间的跳转包含关系<br>
+断线自动重连<br>
+支持多路传输,提高并发<br>
+跨站自动匹配替换<br>
+支持tcp隧道,提升访问效率<br>
+支持udp隧道<br>
+支持http代理<br>
+支持内网穿透sock5代理，配合proxifer可达到vpn的效果，在外网访问内网资源或者设备，同时可以设置用户名和密码验证<br>
+强大的web管理界面，可方便的设置的和管理隧道<br>
+支持同时开多条tcp、udp隧道等等，且只需要开一个客户端和服务端<br>
+支持一个服务端，多个客户端模式<br>
+三、安装方法<br>
+release安装<br>
+https://github.com/cnlh/easyProxy/releases</p>
+<p>下载对应的系统版本即可（目前linux和windows只编译了64位的），服务端和客户端共用一个程序，go语言开发，无需任何第三方依赖</p>
+<p>源码安装<br>
+安装源码<br>
+go get github.com/cnlh/easyProxy</p>
+<p>编译（无第三方模块）<br>
+go build</p>
+<p>四、使用方法<br>
+有两种模式：</p>
+<p>1、单客户端模式，所有的隧道流量均从这个单客户端转发。</p>
+<p>服务端<br>
+./easyProxy -mode=webServer -tcpport=8284 -vkey=DKibZF5TXvic1g3kY<br>
+名称	含义<br>
+mode	运行模式<br>
+vkey	验证密钥<br>
+tcpport	服务端与客户端通信端口<br>
+客户端<br>
+./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
+配置<br>
+进入web界面，公网ip:web界面端口（默认8080），密码为123</p>
+<p>2、多客户端模式，不同的隧道流量均从不同的客户端转发。</p>
+<p>服务端<br>
+./easyProxy -mode=webServer -tcpport=8284<br>
+名称	含义<br>
+mode	运行模式<br>
+tcpport	服务端与客户端通信端口<br>
+客户端<br>
+进入web管理界面，有详细的命令</p>
+<p>配置<br>
+进入web界面，公网ip:web界面端口（默认8080），密码为123</p>
+<p>配置文件/conf/app.conf<br>
+名称	含义<br>
+httpport	web管理端口<br>
+password	web界面管理密码<br>
+hostPort	域名代理模式监听端口<br>
+TCP隧道模式<br>
+场景及原理<br>
+较为适用于处理tcp连接，例如ssh，同时也适用于http等，访问服务端的8024端口相当于访问内网10.1.50.202机器的4000端口，构成如下所示的隧道。<br>
+<img src="https://newdy.cf/post-images/1581905662220.jpg" alt="" loading="lazy"><br>
+例如：</p>
+<p>背景:</p>
+<p>内网机器10.1.50.203提供了web服务80端口<br>
+有VPS一个,公网IP:123.206.77.88<br>
+需求:</p>
+<p>在家里能够通过访问VPS的8024端口访问到内网机器A的80端口</p>
+<p>使用<br>
+服务端<br>
+./easyProxy -mode=tunnelServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024 -target=10.1.50.203:80<br>
+名称	含义<br>
+mode	运行模式(client、server不写默认client)<br>
+vkey	验证密钥<br>
+tcpport	服务端与客户端通信端口<br>
+httpport	外部访问端口<br>
+target	目标地址，格式如上<br>
+客户端<br>
+./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
+udp隧道模式<br>
+场景及原理<br>
+背景</p>
+<p>内网机器A提供了DNS解析服务,10.1.50.210:53端口<br>
+有VPS一个,公网IP:123.206.77.88<br>
+需求: 在家里能够通过设置本地dns为123.206.77.88,使用内网机器A进行域名解析服务.</p>
+<p>访问vps的53端口相当于访问10.1.50.210的53端口，构成如下所示的隧道。<br>
+<img src="https://newdy.cf/post-images/1581905725788.png" alt="" loading="lazy"><br>
+使用<br>
+服务端<br>
+./easyProxy -mode=udpServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=53 -target=10.1.50.210:53<br>
+名称	含义<br>
+mode	运行模式(client、server不写默认client)<br>
+vkey	验证密钥<br>
+tcpport	服务端与客户端通信端口<br>
+httpport	公网vps的访问端口<br>
+target	目标地址，格式如上<br>
+客户端<br>
+./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
+HTTP代理请求<br>
+场景及原理<br>
+较为适用于http，也就是web站点的穿透，服务端与客户端之间建立连接，服务端收到http请求后，将请求发送到客户端，客户端再执行这个请求，并将结果返回给服务端，服务端收到后再返回。特点：支持同时代理多个站点，不同站点之间有联系还可以实现匹配替换<br>
+<img src="https://newdy.cf/post-images/1581905766574.png" alt="" loading="lazy"><br>
+最终效果：</p>
+<p>访问a.server.com和访问10.1.50.203的80端口相同<br>
+访问b.server.com和访问10.1.50.202的80端口相同<br>
+访问c.server.com和访问10.1.50.201的80端口相同<br>
+使用<br>
+服务端<br>
+./easyProxy -mode=httpServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024<br>
+名称	含义<br>
+mode	运行模式(client、server不写默认client)<br>
+vkey	验证密钥<br>
+tcpport	服务端与客户端通信端口<br>
+httpport	代理的http端口（与nginx配合使用）<br>
+客户端<br>
+建立配置文件 config.json<br>
+./easyProxy -server=ip:port -config=config.json -vkey=DKibZF5TXvic1g3kY<br>
+名称	含义<br>
+config	配置文件路径<br>
+配置文件config.json<br>
+{<br>
+&quot;SiteList&quot;: [<br>
+{<br>
+&quot;host&quot;: &quot;a.ourcauc.com&quot;,<br>
+&quot;url&quot;: &quot;10.1.50.203&quot;,<br>
+&quot;port&quot;: 80<br>
+},<br>
+{<br>
+&quot;host&quot;: &quot;b.ourcauc.com&quot;,<br>
+&quot;url&quot;: &quot;10.1.50.202&quot;,<br>
+&quot;port&quot;: 80<br>
+},<br>
+{<br>
+&quot;host&quot;: &quot;c.ourcauc.com&quot;,<br>
+&quot;url&quot;: &quot;10.1.50.203&quot;,<br>
+&quot;port&quot;: 80<br>
+}<br>
+],<br>
+&quot;Replace&quot;: 0<br>
+}<br>
+名称	含义<br>
+SiteList	本地解析的域名列表<br>
+host	域名地址<br>
+url	内网代理的地址<br>
+port	内网代理的地址对应的端口<br>
+Replace	是否自动匹配替换（查看场景）<br>
+nginx代理配置示例<br>
+upstream nodejs {<br>
+server 127.0.0.1:8024;<br>
+keepalive 64;<br>
+}<br>
+server {<br>
+listen 80;<br>
+server_name a.ourcauc.com b.ourcauc.com c.ourcauc.com ;<br>
+location / {<br>
+proxy_set_header X-Real-IP $remote_addr;<br>
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>
+proxy_set_header Host  $http_host;<br>
+proxy_set_header X-Nginx-Proxy true;<br>
+proxy_set_header Connection &quot;&quot;;<br>
+proxy_pass      http://nodejs;<br>
+}<br>
+}<br>
+域名配置示例<br>
+-a	A	123.206.77.88</p>
+<p>-b	A	123.206.77.88</p>
+<p>-c	A	123.206.77.88</p>
+<p>跨站自动匹配替换说明<br>
+例如，访问：a.ourcauc.com，该页面里面有一个超链接为10.1.50.202:80,将根据配置文件自动该将url替换为b.ourcauc.com，以达到跨站也可访问的效果，但需要提前在配置文件中配置这些站点。</p>
+<p>如需开启，请加配置文件Replace值设置为1</p>
+<p>注意：开启可能导致不应该被替换的内容被替换，请谨慎开启</p>
+<p>socks5代理模式<br>
+场景及原理<br>
+原理</p>
+<p>主要用于socks5代理，也就是和ss类似，不过是代理内网。使用此模式时，可在非内网环境下配置本机的socks5代理（服务器ip、sock5代理端口），即可实现socks5代理，达到访问内网的网站的效果，配合proxifer等全局代理软件，即可如同使用内网vpn一样，访问内网网站，通过ssh连接内网机器等等……。<br>
+<img src="https://newdy.cf/post-images/1581905816245.png" alt="" loading="lazy"><br>
+使用<br>
+服务端<br>
+./easyProxy -mode=sock5ServerServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024<br>
+名称	含义<br>
+mode	运行模式(client、server不写默认client)<br>
+vkey	验证密钥<br>
+tcpport	服务端与客户端通信端口<br>
+httpport	代理的http端口（socks5连接端口）<br>
+u	验证的用户名<br>
+p	验证的密码<br>
+说明：用户名和密码验证模式，仅部分socks5客户端支持，例如proxifer。 如需验证，在服务端命令后加上</p>
+<p>-u=user -p=password<br>
+即可</p>
+<p>客户端<br>
+./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
+需要使用内网代理的机器<br>
+配置sock5代理即可，ip为外网服务器ip，端口为httpport，即可在外网环境使用内网啦！也可使用proxifer等全局代理软件。<br>
+如果设置了用户名和密码，记得填上用户名和密码</p>
+<p>http代理模式<br>
+场景及原理<br>
+<img src="https://newdy.cf/post-images/1581905912887.png" alt="" loading="lazy"><br>
+主要用于HTTP代理，区别也就是HTTP代理和sock5代理的区别。使用此模式时，可在非内网环境下配置本机的HTTP代理（服务器ip、HTTP代理端口），即可实现HTTP代理，达到访问内网的网站的效果。</p>
+<p>使用<br>
+服务端<br>
+./easyProxy -mode=httpProxyServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024<br>
+名称	含义<br>
+mode	运行模式(client、server不写默认client)<br>
+vkey	验证密钥<br>
+tcpport	服务端与客户端通信端口<br>
+httpport	http代理连接端口<br>
+客户端<br>
+./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
+需要使用内网代理的机器<br>
+配置HTTP代理即可，ip为外网服务器ip，端口为httpport，即可在外网环境访问内网啦！<br>
+数据压缩支持<br>
+场景及原理<br>
+由于是内网穿透，内网客户端与服务端之间的隧道存在大量的数据交换，为节省流量，加快传输速度，由此本程序支持GZIP、SNNAPY两种形式的压缩，两者差异请自行选择。</p>
+<p>注意点<br>
+所有模式均支持数据压缩<br>
+如何使用<br>
+GZIP压缩</p>
+<p>在server端加上参数 -compress=gzip，例如在TCP隧道模式<br>
+./easyProxy -mode tunnelServer -vkey DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024 -target=10.1.50.203:80 -compress=gzip<br>
+SNAPPY压缩</p>
+<p>将参数修改为snappy即可</p>
+<p>操作系统支持<br>
+支持Windows、Linux、MacOSX等，无第三方依赖库。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ 群晖上监控插件SurveillanceStation 破解255]]></title>
         <id>https://newdy.cf/post/surveillancestation-po-jie-255/</id>
