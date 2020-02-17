@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1581901165122">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1581901677484">
 <link rel="stylesheet" href="https://newdy.cf/styles/main.css">
 
 
@@ -21,6 +21,8 @@
     <meta name="description" content="安装好群晖的监控工具后！先不要启动把这三个附件解压后
 
 
+sscored权限应该是 755
+chmod 755 /var/packages/SurveillanceStation/target/sbin/sscored
 ..." />
     <meta name="keywords" content="" />
   </head>
@@ -31,7 +33,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1581901165122" class="site-logo">
+        <img src="https://newdy.cf/images/avatar.png?v=1581901677484" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -103,7 +105,9 @@
             <div class="post-content" v-pre>
               <p>安装好群晖的监控工具后！先不要启动把这三个附件解压后<br>
 <img src="https://newdy.cf/post-images/1581901059143.jpg" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1581901149329.jpg" alt="" loading="lazy"></p>
+<img src="https://newdy.cf/post-images/1581901149329.jpg" alt="" loading="lazy"><br>
+sscored权限应该是 755</p>
+<p>chmod 755 /var/packages/SurveillanceStation/target/sbin/sscored</p>
 
             </div>
             
