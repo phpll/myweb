@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Nginx配置中location匹配规则详解 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582088124399">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Nginx 的语法形式是： location [=|||^~|@] /uri/ { … } ，意思是可以以“ = ”或“ ~ ”或“ ~ ”或“ ^~ ”或“ @ ”符号为前缀，当然也可以没有前缀（因为 [A] 是表示可选的 A ； A|B..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582088124399" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Nginx配置中location匹配规则详解</h2>
+            <div class="post-date">2020-02-19</div>
+            
+            <div class="post-content" v-pre>
+              <p>Nginx 的语法形式是： location [=|<sub>|</sub><em>|^~|@] /uri/ { … } ，意思是可以以“ = ”或“ ~</em> ”或“ ~ ”或“ ^~ ”或“ @ ”符号为前缀，当然也可以没有前缀（因为 [A] 是表示可选的 A ； A|B 表示 A 和 B 选一个），紧接着是 /uri/ ，再接着是{…} 指令块，整个意思是对于满足这样条件的 /uri/ 适用指令块 {…} 的指令。</p>
+<p>上述各种 location 可分两大类，分别是：“普通 location ”，官方英文说法是 location using   literal strings 和“正则 location ”，英文说法是 location using regular expressions 。其中“普通 location ”是以“ = ”或“ ^~ ”为前缀或者没有任何前缀的 /uri/ ；“正则 location ”是以“ ~ ”或“ ~* ”为前缀的 /uri/ 。</p>
+<p>那么，当我们在一个 server 上下文编写了多个 location 的时候， Nginx 对于一个 HTTP 请求，是如何匹配到一个 location 做处理呢？用一句话简单概括 Nginx 的 location 匹配规则是：“正则 location ”让步 “普通 location”的严格精确匹配结果；但覆盖 “普通 location ”的最大前缀匹配结果。理解这句话，我想通过下面的实例来说明。</p>
+<p>#1 先普通 location ，再正则 location<br>
+周边不少童鞋告诉我， nginx 是“先匹配正则 location 再匹配普通 location ”，其实这是一个误区， nginx 其实是“先匹配普通 location ，再匹配正则 location ”，但是普通 location 的匹配结果又分两种：一种是“严格精确匹配”，官方英文说法是“ exact match ”；另一种是“最大前缀匹配”，官方英文说法是“ Literal strings match the beginning portion of the query – the most specific match will be used. ”。我们做个实验：</p>
+<p>例题 1 ：假设 nginx 的配置如下</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+              location / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       deny all;
+
+   }
+
+   location ~ \.html$ {
+
+       allow all;
+
+   }
+</code></pre>
+<p>}</p>
+<p>附录 nginx 的目录结构是： nginx-&gt;html-&gt;index.html</p>
+<p>上述配置的意思是： location / {… deny all;} 普通 location 以“ / ”开始的 URI 请求（注意任何 HTTP 请求都必然以“/ ”开始，所以“ / ”的意思是所有的请求都能被匹配上），都拒绝访问； location ~.html$ {allow all;} 正则 location以 .html 结尾的 URI 请求，都允许访问。</p>
+<p>测试结果：</p>
+<p>[root@web108 ~]# curl http://localhost:9090/</p>
+<html>
+<head><title>403 Forbidden</title></head>
+<body bgcolor=”white”>
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx/1.1.0</center>
+</body>
+</html>
+<p>[root@web108 ~]# curl http://localhost:9090/index.html</p>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+</head>
+<body bgcolor=”white” text=”black”>
+<center><h1>Welcome to nginx!</h1></center>
+</body>
+</html>
+<p>[root@web108 ~]# curl http://localhost:9090/index_notfound.html</p>
+<html>
+<head><title>404 Not Found</title></head>
+<body bgcolor=”white”>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.1.0</center>
+</body>
+</html>
+<p>[root@web108 ~]#</p>
+<p>测试结果如下：</p>
+<p>URI 请求	HTTP 响应<br>
+curl http://localhost:9090/	403 Forbidden<br>
+curl http://localhost:9090/index.html	Welcome to nginx!<br>
+curl http://localhost:9090/index_notfound.html	404 Not Found<br>
+curl http://localhost:9090/ 的结果是“ 403 Forbidden ”，说明被匹配到“ location / {..deny all;} ”了，原因很简单HTTP 请求 GET / 被“严格精确”匹配到了普通 location / {} ，则会停止搜索正则 location ；</p>
+<p>curl http://localhost:9090/index.html 结果是“ Welcome to nginx! ”，说明没有被“ location / {…deny all;} ”匹配，否则会 403 Forbidden ，但 /index.html 的确也是以“ / ”开头的，只不过此时的普通 location / 的匹配结果是“最大前缀”匹配，所以 Nginx 会继续搜索正则 location ， location ~ .html$ 表达了以 .html 结尾的都 allow all; 于是接着就访问到了实际存在的 index.html 页面。</p>
+<p>curl http://localhost:9090/index_notfound.html   同样的道理先匹配 location / {} ，但属于“普通 location 的最大前缀匹配”，于是后面被“正则 location ” location ~ .html$ {} 覆盖了，最终 allow all ； 但的确目录下不存在index_notfound.html 页面，于是 404 Not Found 。</p>
+<p>如果此时我们访问 http://localhost:9090/index.txt 会是什么结果呢？显然是 deny all ；因为先匹配上了 location / {..deny all;} 尽管属于“普通 location ”的最大前缀匹配结果，继续搜索正则 location ，但是 /index.txt 不是以 .html结尾的，正则 location 失败，最终采纳普通 location 的最大前缀匹配结果，于是 deny all 了。</p>
+<p>[root@web108 ~]# curl http://localhost:9090/index.txt</p>
+<html>
+<head><title>403 Forbidden</title></head>
+<body bgcolor=”white”>
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx/1.1.0</center>
+</body>
+</html>
+<p>[root@web108 ~]#</p>
+<p>#2 普通 location 的“隐式”严格匹配<br>
+例题 2 ：我们在例题 1 的基础上增加精确配置</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+              location /exact/match.html {
+
+       allow all;
+
+   }
+
+              location / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       deny all;
+
+   }
+
+   location ~ \.html$ {
+
+       allow all;
+
+   }
+</code></pre>
+<p>}</p>
+<p>测试请求：</p>
+<p>[root@web108 ~]# curl http://localhost:9090/exact/match.html</p>
+<html>
+<head><title>404 Not Found</title></head>
+<body bgcolor=”white”>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.1.0</center>
+</body>
+</html>
+<p>[root@web108 ~]#</p>
+<p>结果进一步验证了“普通 location ”的“严格精确”匹配会终止对正则 location 的搜索。这里我们小结下“普通 location”与“正则 location ”的匹配规则：先匹配普通 location ，再匹配正则 location ，但是如果普通 location 的匹配结果恰好是“严格精确（ exact match ）”的，则 nginx 不再尝试后面的正则 location ；如果普通 location 的匹配结果是“最大前缀”，则正则 location 的匹配覆盖普通 location 的匹配。也就是前面说的“正则 location 让步普通location 的严格精确匹配结果，但覆盖普通 location 的最大前缀匹配结果”。</p>
+<p>#3 普通 location 的“显式”严格匹配和“ ^~ ” 前缀<br>
+上面我们演示的普通 location 都是不加任何前缀的，其实普通 location 也可以加前缀：“ ^~ ”和“ = ”。其中“ ^~”的意思是“非正则，不需要继续正则匹配”，也就是通常我们的普通 location ，还会继续搜索正则 location （恰好严格精确匹配除外），但是 nginx 很人性化允许配置人员告诉 nginx 某条普通 location ，无论最大前缀匹配，还是严格精确匹配都终止继续搜索正则 location ；而“ = ”则表达的是普通 location 不允许“最大前缀”匹配结果，必须严格等于，严格精确匹配。</p>
+<p>例题 3 ：“ ^~ ”前缀的使用</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+              location /exact/match.html {
+
+       allow all;
+
+   }
+
+             location ^~ / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       deny all;
+
+   }
+
+   location ~ \.html$ {
+
+       allow all;
+
+   }
+</code></pre>
+<p>}</p>
+<p>把例题 2 中的 location / {} 修改成 location ^~ / {} ，再看看测试结果：</p>
+<p>URI 请求	修改前	修改后<br>
+curl http://localhost:9090/	403 Forbidden	403 Forbidden<br>
+curl http://localhost:9090/index.html	Welcome to nginx!	403 Forbidden<br>
+curl http://localhost:9090/index_notfound.html	404 Not Found	403 Forbidden<br>
+curl http://localhost:9090/exact/match.html	404 Not Found	404 Not Found<br>
+除了 GET /exact/match.html 是 404 Not Found ，其余都是 403 Forbidden ，原因很简单所有请求都是以“ / ”开头，所以所有请求都能匹配上“ / ”普通 location ，但普通 location 的匹配原则是“最大前缀”，所以只有/exact/match.html 匹配到 location /exact/match.html {allow all;} ，其余都 location ^~ / {deny all;} 并终止正则搜索。</p>
+<p>例题 4 ：“ = ”前缀的使用</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+              location /exact/match.html {
+
+       allow all;
+
+   }
+
+             location = / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       deny all;
+
+   }
+
+   location ~ \.html$ {
+
+       allow all;
+
+   }
+</code></pre>
+<p>}</p>
+<p>例题 4 相对例题 2 把 location / {} 修改成了 location = / {} ，再次测试结果：</p>
+<p>URI 请求	修改前	修改后<br>
+curl http://localhost:9090/	403 Forbidden	403 Forbidden<br>
+curl http://localhost:9090/index.html	Welcome to nginx!	Welcome to nginx!<br>
+curl http://localhost:9090/index_notfound.html	404 Not Found	404 Not Found<br>
+curl http://localhost:9090/exact/match.html	404 Not Found	404 Not Found<br>
+curl http://localhost:9090/test.jsp	403 Forbidden	404 Not Found<br>
+最能说明问题的测试是 GET /test.jsp ，实际上 /test.jsp 没有匹配正则 location （ location ~.html$ ），也没有匹配 location = / {} ，如果按照 location / {} 的话，会“最大前缀”匹配到普通 location / {} ，结果是 deny all 。</p>
+<p>#4 正则 location 与编辑顺序<br>
+location 的指令与编辑顺序无关，这句话不全对。对于普通 location 指令，匹配规则是：最大前缀匹配（与顺序无关），如果恰好是严格精确匹配结果或者加有前缀“ ^~ ”或“ = ”（符号“ = ”只能严格匹配，不能前缀匹配），则停止搜索正则 location ；但对于正则 location 的匹配规则是：按编辑顺序逐个匹配（与顺序有关），只要匹配上，就立即停止后面的搜索。</p>
+<p>配置 3.1</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+   location ~ \.html$ {
+
+       allow all; 
+
+   } 
+
+   location ~ ^/prefix/.*\.html$ {
+
+       deny all; 
+
+   } 
+</code></pre>
+<p>}</p>
+<p>配置 3.2</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+ 
+
+   location ~ ^/prefix/.*\.html$ {
+
+       deny all; 
+
+   } 
+
+             
+
+              location ~ \.html$ {
+
+       allow all; 
+
+   } 
+</code></pre>
+<p>}</p>
+<p>测试结果：</p>
+<p>URI 请求	配置 3.1	配置 3.2<br>
+curl http://localhost:9090/regextest.html	404 Not Found	404 Not Found<br>
+curl http://localhost:9090/prefix/regextest.html	404 Not Found	403 Forbidden<br>
+解释：</p>
+<p>Location ~ ^/prefix/.*.html$ {deny all;} 表示正则 location 对于以 /prefix/ 开头， .html 结尾的所有 URI 请求，都拒绝访问；   location ~.html<span class='katex-error' title='ParseError: KaTeX parse error: Can&#039;t use function &#039;\.&#039; in math mode at position 71: …实际上，prefix 的是 ~\̲.̲html'>{allow all;} 表示正则 location 对于以 .html 结尾的 URI 请求，都允许访问。 实际上，prefix 的是 ~\.html</span> 的子集。</p>
+<p>在“配置 3.1 ”下，两个请求都匹配上 location ~.html$ {allow all;} ，并且停止后面的搜索，于是都允许访问， 404 Not Found ；在“配置 3.2 ”下， /regextest.html 无法匹配 prefix ，于是继续搜索 ~.html$ ，允许访问，于是 404 Not Found ；然而 /prefix/regextest.html 匹配到 prefix ，于是 deny all ， 403 Forbidden 。</p>
+<p>配置 3.3</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+   location  /prefix/ {
+
+           deny all; 
+
+   } 
+
+     
+
+   location  /prefix/mid/ {
+
+           allow all; 
+
+   } 
+</code></pre>
+<p>}</p>
+<p>配置 3.4</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+ 
+
+   location  /prefix/mid/ {
+
+           allow all; 
+
+   } 
+
+              location  /prefix/ {
+
+           deny all; 
+
+   } 
+</code></pre>
+<p>}</p>
+<p>测试结果：</p>
+<p>URI 请求	配置 3.1	配置 3.2<br>
+curl http://localhost:9090/prefix/t.html	  403 Forbidden    	403 Forbidden<br>
+curl http://localhost:9090/prefix/mid/t.html	404 Not Found	404 Not Found<br>
+测试结果表明：普通 location 的匹配规则是“最大前缀”匹配，而且与编辑顺序无关。</p>
+<p>#5 “@” 前缀 Named Location 使用<br>
+REFER:  http://wiki.nginx.org/HttpCoreModule#error_page</p>
+<p>假设配置如下：</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+    location  / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       allow all;
+
+   }
+
+   #error_page 404 http://www.baidu.com # 直接这样是不允许的
+
+   error_page 404 = @fallback;
+
+   location @fallback {
+
+       proxy_pass http://www.baidu.com;
+
+   }
+</code></pre>
+<p>}</p>
+<p>上述配置文件的意思是：如果请求的 URI 存在，则本 nginx 返回对应的页面；如果不存在，则把请求代理到baidu.com 上去做个弥补（注： nginx 当发现 URI 对应的页面不存在， HTTP_StatusCode 会是 404 ，此时error_page 404 指令能捕获它）。</p>
+<p>测试一：</p>
+<p>[root@web108 ~]# curl http://localhost:9090/nofound.html -i</p>
+<p>HTTP/1.1 302 Found</p>
+<p>Server: nginx/1.1.0</p>
+<p>Date: Sat, 06 Aug 2011 08:17:21 GMT</p>
+<p>Content-Type: text/html; charset=iso-8859-1</p>
+<p>Location: http://localhost:9090/search/error.html</p>
+<p>Connection: keep-alive</p>
+<p>Cache-Control: max-age=86400</p>
+<p>Expires: Sun, 07 Aug 2011 08:17:21 GMT</p>
+<p>Content-Length: 222</p>
+<!DOCTYPE HTML PUBLIC “-//IETF//DTD HTML 2.0//EN”>
+<html><head>
+<title>302 Found</title>
+</head><body>
+<h1>Found</h1>
+<p>The document has moved <a href=”http://www.baidu.com/search/error.html”>here</a>.</p>
+</body></html>
+<p>[root@web108 ~]#</p>
+<p>当我们 GET /nofound.html 发送给本 nginx ， nginx 找不到对应的页面，于是 error_page 404 = @fallback ，请求被代理到 http://www.baidu.com ，于是 nginx 给 http://www.baidu.com 发送了 GET /nofound.html ，但/nofound.html 页面在百度也不存在，百度 302 跳转到错误页。</p>
+<p>直接访问 http://www.baidu.com/nofound.html 结果：</p>
+<p>[root@web108 ~]# curl http://www.baidu.com/nofound.html -i</p>
+<p>HTTP/1.1 302 Found</p>
+<p>Date: Sat, 06 Aug 2011 08:20:05 GMT</p>
+<p>Server: Apache</p>
+<p>Location: http://www.baidu.com/search/error.html</p>
+<p>Cache-Control: max-age=86400</p>
+<p>Expires: Sun, 07 Aug 2011 08:20:05 GMT</p>
+<p>Content-Length: 222</p>
+<p>Connection: Keep-Alive</p>
+<p>Content-Type: text/html; charset=iso-8859-1</p>
+<!DOCTYPE HTML PUBLIC “-//IETF//DTD HTML 2.0//EN”>
+<html><head>
+<title>302 Found</title>
+</head><body>
+<h1>Found</h1>
+<p>The document has moved <a href=”http://www.baidu.com/search/error.html”>here</a>.</p>
+</body></html>
+<p>[root@web108 ~]#</p>
+<p>测试二：访问一个 nginx 不存在，但 baidu 存在的页面</p>
+<p>[root@web108 ~]# curl http://www.baidu.com/duty/ -i</p>
+<p>HTTP/1.1 200 OK</p>
+<p>Date: Sat, 06 Aug 2011 08:21:56 GMT</p>
+<p>Server: Apache</p>
+<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
+<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
+<p>Set-Cookie: BAIDUID=5C5D2B2FD083737A0C88CA7075A6601A:FG=1; expires=Sun, 05-Aug-12 08:21:56 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
+<p>Set-Cookie: BAIDUID=5C5D2B2FD083737A2337F78F909CCB90:FG=1; expires=Sun, 05-Aug-12 08:21:56 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
+<p>Last-Modified: Wed, 05 Jan 2011 06:44:53 GMT</p>
+<p>ETag: “d66-49913b8efe340″</p>
+<p>Accept-Ranges: bytes</p>
+<p>Content-Length: 3430</p>
+<p>Cache-Control: max-age=86400</p>
+<p>Expires: Sun, 07 Aug 2011 08:21:56 GMT</p>
+<p>Vary: Accept-Encoding,User-Agent</p>
+<p>Connection: Keep-Alive</p>
+<p>Content-Type: text/html</p>
+<!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN”
+
+“http://www.w3.org/TR/html4/loose.dtd”>
+<p>。。。。</p>
+</body>
+</html>
+<p>显示，的确百度这个页面是存在的。</p>
+<p>[root@web108 ~]# curl http://localhost:9090/duty/ -i</p>
+<p>HTTP/1.1 200 OK</p>
+<p>Server: nginx/1.1.0</p>
+<p>Date: Sat, 06 Aug 2011 08:23:23 GMT</p>
+<p>Content-Type: text/html</p>
+<p>Connection: keep-alive</p>
+<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
+<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
+<p>Set-Cookie: BAIDUID=8FEF0A3A2C31D277DCB4CC5F80B7F457:FG=1; expires=Sun, 05-Aug-12 08:23:23 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
+<p>Set-Cookie: BAIDUID=8FEF0A3A2C31D277B1F87691AFFD7440:FG=1; expires=Sun, 05-Aug-12 08:23:23 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
+<p>Last-Modified: Wed, 05 Jan 2011 06:44:53 GMT</p>
+<p>ETag: “d66-49913b8efe340″</p>
+<p>Accept-Ranges: bytes</p>
+<p>Content-Length: 3430</p>
+<p>Cache-Control: max-age=86400</p>
+<p>Expires: Sun, 07 Aug 2011 08:23:23 GMT</p>
+<p>Vary: Accept-Encoding,User-Agent</p>
+<!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN”
+
+“http://www.w3.org/TR/html4/loose.dtd”>
+<html>
+<p>。。。</p>
+</body>
+</html>
+<p>当 curl http://localhost:9090/duty/ -i 时， nginx 没找到对应的页面，于是 error_page = @fallback ，把请求代理到 baidu.com 。注意这里的 error_page = @fallback 不是靠重定向实现的，而是所说的“ internally redirected （forward ）”。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/nginx-qi-ceng-fu-zai-jun-heng-de-ji-chong-diao-du-suan-fa/">
+                  <h3 class="post-title">
+                    Nginx七层负载均衡的几种调度算法
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

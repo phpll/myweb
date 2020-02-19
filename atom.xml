@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-19T04:31:18.215Z</updated>
+    <updated>2020-02-19T04:58:43.317Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,722 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[生成Nginx服务器SSL证书和客户端证书]]></title>
+        <id>https://newdy.cf/post/sheng-cheng-nginx-fu-wu-qi-ssl-zheng-shu-he-ke-hu-duan-zheng-shu/</id>
+        <link href="https://newdy.cf/post/sheng-cheng-nginx-fu-wu-qi-ssl-zheng-shu-he-ke-hu-duan-zheng-shu/">
+        </link>
+        <updated>2020-02-19T04:54:59.000Z</updated>
+        <content type="html"><![CDATA[<p>Nginx服务器SSL证书<br>
+生成pass key</p>
+<p>下面的命令用于生成一个2048bit的pass key, -passout pass:111111 用于避免交互式输入密码</p>
+<p>[tomcat@a02 tmp]$ openssl genrsa -aes256 -passout pass:111111 -out server.pass.key 2048<br>
+Generating RSA private key, 2048 bit long modulus<br>
+...........+++<br>
+.....................+++<br>
+e is 65537 (0x10001)</p>
+<p>生成key</p>
+<p>下面的命令用于生成私钥, -passin pass:111111是和pass key的密码对应的, 用于避免交互式输入密码</p>
+<p>[tomcat@a02 tmp]$ openssl rsa -passin pass:111111 -in server.pass.key -out server.key<br>
+writing RSA key</p>
+<p>生成证书签发请求文件(CSR)</p>
+<p>下面的命令用于生成csr文件, 这里需要填写机构相关信息. 其中CN务必填写为对应的服务器域名. 最后那个challenge password, 是这个csr的password</p>
+<h2 id="tomcata02-tmp-openssl-req-new-sha256-key-serverkey-out-servercsryou-are-about-to-be-asked-to-enter-information-that-will-be-incorporatedinto-your-certificate-requestwhat-you-are-about-to-enter-is-what-is-called-a-distinguished-name-or-a-dnthere-are-quite-a-few-fields-but-you-can-leave-some-blankfor-some-fields-there-will-be-a-default-valueif-you-enter-the-field-will-be-left-blank">[tomcat@a02 tmp]$ openssl req -new -sha256 -key server.key -out server.csr<br>
+You are about to be asked to enter information that will be incorporated<br>
+into your certificate request.<br>
+What you are about to enter is what is called a Distinguished Name or a DN.<br>
+There are quite a few fields but you can leave some blank<br>
+For some fields there will be a default value,<br>
+If you enter '.', the field will be left blank.</h2>
+<p>Country Name (2 letter code) [XX]:CN<br>
+State or Province Name (full name) []:Beijing<br>
+Locality Name (eg, city) [Default City]:Chaoyang<br>
+Organization Name (eg, company) [Default Company Ltd]:HenSomeone<br>
+Organizational Unit Name (eg, section) []:iSomeone<br>
+Common Name (eg, your name or your server's hostname) []:internal.someone.com<br>
+Email Address []:</p>
+<p>Please enter the following 'extra' attributes<br>
+to be sent with your certificate request<br>
+A challenge password []:222222<br>
+An optional company name []:</p>
+<p>发送CSR文件给CA服务商签发证书</p>
+<p>如果是购买的CA服务商的SSL证书服务, 这一步把CSR发给服务商就可以了. 收到证书后将内容写入到 server.pem 文件</p>
+<p>在Nginx上这样配置</p>
+<p>server {<br>
+listen      443;<br>
+server_name  www.example.com;</p>
+<pre><code>ssl                  on;
+ssl_certificate      /path/to/ssl/server.pem;
+ssl_certificate_key  /path/to/ssl/server.key;
+ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+ssl_session_cache shared:ssl_www_example_com:5m;
+ssl_session_timeout  5m;
+ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:ECDHE-ECDSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES256-SHA256:AES256-SHA:AES128-GCM-SHA256:AES128-SHA256:AES128-SHA:DES-CBC3-SHA;
+#...
+location / {
+    #...
+}
+#...
+</code></pre>
+<p>}</p>
+<p>制作自签名证书</p>
+<p>如果是打算制作自签名证书, 则进行如下的操作生成pem证书</p>
+<p>[tomcat@a02 tmp]$ openssl x509 -req -sha256 -days 3655 -in server.csr -signkey server.key -out server.pem<br>
+Signature ok<br>
+subject=/C=CN/ST=Beijing/L=Chaoyang/O=HenSomeone/OU=iSomeone/CN=internal.someone.com<br>
+Getting Private key</p>
+<p>Nginx客户端验证证书<br>
+Nginx客户端验证证书和服务端SSL证书其实是没关系的, 你可以一边使用CA签发的证书, 一边使用自己制作的客户端验证证书.</p>
+<p>生成服务器端私钥</p>
+<p>[tomcat@a02 tmp]$ openssl genrsa -aes256 -passout pass:201906 -out ca.pass.key 2048<br>
+Generating RSA private key, 2048 bit long modulus<br>
+...............................................................................................................+++<br>
+...................................+++<br>
+e is 65537 (0x10001)</p>
+<p>[tomcat@a02 tmp]$ openssl rsa -passin pass:201906 -in ca.pass.key -out ca.key<br>
+writing RSA key</p>
+<p>生成服务器端证书</p>
+<p>下面的命令会生成服务器证书ca.pem, 用于配制到nginx.</p>
+<h2 id="tomcata02-tmp-openssl-req-new-x509-days-3655-key-cakey-out-capemyou-are-about-to-be-asked-to-enter-information-that-will-be-incorporatedinto-your-certificate-requestwhat-you-are-about-to-enter-is-what-is-called-a-distinguished-name-or-a-dnthere-are-quite-a-few-fields-but-you-can-leave-some-blankfor-some-fields-there-will-be-a-default-valueif-you-enter-the-field-will-be-left-blank">[tomcat@a02 tmp]$ openssl req -new -x509 -days 3655 -key ca.key -out ca.pem<br>
+You are about to be asked to enter information that will be incorporated<br>
+into your certificate request.<br>
+What you are about to enter is what is called a Distinguished Name or a DN.<br>
+There are quite a few fields but you can leave some blank<br>
+For some fields there will be a default value,<br>
+If you enter '.', the field will be left blank.</h2>
+<p>Country Name (2 letter code) [XX]:CN<br>
+State or Province Name (full name) []:Beijing<br>
+Locality Name (eg, city) [Default City]:Chaoyang<br>
+Organization Name (eg, company) [Default Company Ltd]:HenSomeone<br>
+Organizational Unit Name (eg, section) []:iSomeone<br>
+Common Name (eg, your name or your server's hostname) []:internal.someone.com<br>
+Email Address []:</p>
+<p>生成客户端私钥</p>
+<p>[tomcat@a02 tmp]$ openssl genrsa -aes256 -passout pass:201906 -out client_01.pass.key 2048<br>
+Generating RSA private key, 2048 bit long modulus<br>
+..........................+++<br>
+.....+++<br>
+e is 65537 (0x10001)</p>
+<p>[tomcat@a02 tmp]$ openssl rsa -passin pass:201906 -in client_01.pass.key -out client_01.key<br>
+writing RSA key</p>
+<p>生成客户端证书签发请求CSR</p>
+<h2 id="tomcata02-tmp-openssl-req-new-key-client_01key-out-client_01csryou-are-about-to-be-asked-to-enter-information-that-will-be-incorporatedinto-your-certificate-requestwhat-you-are-about-to-enter-is-what-is-called-a-distinguished-name-or-a-dnthere-are-quite-a-few-fields-but-you-can-leave-some-blankfor-some-fields-there-will-be-a-default-valueif-you-enter-the-field-will-be-left-blank">[tomcat@a02 tmp]$ openssl req -new -key client_01.key -out client_01.csr<br>
+You are about to be asked to enter information that will be incorporated<br>
+into your certificate request.<br>
+What you are about to enter is what is called a Distinguished Name or a DN.<br>
+There are quite a few fields but you can leave some blank<br>
+For some fields there will be a default value,<br>
+If you enter '.', the field will be left blank.</h2>
+<p>Country Name (2 letter code) [XX]:CN<br>
+State or Province Name (full name) []:Beijing<br>
+Locality Name (eg, city) [Default City]:Chaoyang<br>
+Organization Name (eg, company) [Default Company Ltd]:HenSomeone<br>
+Organizational Unit Name (eg, section) []:Staff<br>
+Common Name (eg, your name or your server's hostname) []:Staff<br>
+Email Address []:</p>
+<p>Please enter the following 'extra' attributes<br>
+to be sent with your certificate request<br>
+A challenge password []:201907<br>
+An optional company name []:</p>
+<p>签发客户端证书</p>
+<p>下面的命令, 用服务端的私钥和服务端的证书, 对客户端的CSR进行签发, 生成服务端证书. 这里有一个 -set_serial 01 的参数, 如果签发多个客户端证书, 这个数字不能重复</p>
+<p>[tomcat@a02 tmp]$ openssl x509 -req -days 3655 -in client_01.csr -CA ca.pem -CAkey ca.key -set_serial 01 -out client_01.pem<br>
+Signature ok<br>
+subject=/C=CN/ST=Beijing/L=Chaoyang/O=HenSomeone/OU=Staff/CN=Staff<br>
+Getting CA Private Key</p>
+<p>客户端证书格式转换</p>
+<p>前面生成的证书, 不能直接用于常见的应用, 需要转换成应用需要的格式</p>
+<p>Full PEM:</p>
+<p>[tomcat@a02 tmp]$ cat client_01.key client_01.pem ca.pem &gt; client_01.full.pem</p>
+<p>PFX - 这里输入的export password, 就是应用导入PFX证书时需要输入的密码.</p>
+<p>[tomcat@a02 tmp]$ openssl pkcs12 -export -out client_01.full.pfx -inkey client_01.key -in client_01.pem -certfile ca.pem<br>
+Enter Export Password:<br>
+Verifying - Enter Export Password:</p>
+<p>配置Nginx的客户端验证证书</p>
+<p>ssl_client_certificate /path/to/ca.pem;<br>
+ssl_verify_client optional; # or <code>on</code> if you require client key</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Nginx配置中location匹配规则详解]]></title>
+        <id>https://newdy.cf/post/nginx-pei-zhi-zhong-location-pi-pei-gui-ze-xiang-jie/</id>
+        <link href="https://newdy.cf/post/nginx-pei-zhi-zhong-location-pi-pei-gui-ze-xiang-jie/">
+        </link>
+        <updated>2020-02-19T04:48:02.000Z</updated>
+        <content type="html"><![CDATA[<p>Nginx 的语法形式是： location [=|<sub>|</sub><em>|^~|@] /uri/ { … } ，意思是可以以“ = ”或“ ~</em> ”或“ ~ ”或“ ^~ ”或“ @ ”符号为前缀，当然也可以没有前缀（因为 [A] 是表示可选的 A ； A|B 表示 A 和 B 选一个），紧接着是 /uri/ ，再接着是{…} 指令块，整个意思是对于满足这样条件的 /uri/ 适用指令块 {…} 的指令。</p>
+<p>上述各种 location 可分两大类，分别是：“普通 location ”，官方英文说法是 location using   literal strings 和“正则 location ”，英文说法是 location using regular expressions 。其中“普通 location ”是以“ = ”或“ ^~ ”为前缀或者没有任何前缀的 /uri/ ；“正则 location ”是以“ ~ ”或“ ~* ”为前缀的 /uri/ 。</p>
+<p>那么，当我们在一个 server 上下文编写了多个 location 的时候， Nginx 对于一个 HTTP 请求，是如何匹配到一个 location 做处理呢？用一句话简单概括 Nginx 的 location 匹配规则是：“正则 location ”让步 “普通 location”的严格精确匹配结果；但覆盖 “普通 location ”的最大前缀匹配结果。理解这句话，我想通过下面的实例来说明。</p>
+<p>#1 先普通 location ，再正则 location<br>
+周边不少童鞋告诉我， nginx 是“先匹配正则 location 再匹配普通 location ”，其实这是一个误区， nginx 其实是“先匹配普通 location ，再匹配正则 location ”，但是普通 location 的匹配结果又分两种：一种是“严格精确匹配”，官方英文说法是“ exact match ”；另一种是“最大前缀匹配”，官方英文说法是“ Literal strings match the beginning portion of the query – the most specific match will be used. ”。我们做个实验：</p>
+<p>例题 1 ：假设 nginx 的配置如下</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+              location / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       deny all;
+
+   }
+
+   location ~ \.html$ {
+
+       allow all;
+
+   }
+</code></pre>
+<p>}</p>
+<p>附录 nginx 的目录结构是： nginx-&gt;html-&gt;index.html</p>
+<p>上述配置的意思是： location / {… deny all;} 普通 location 以“ / ”开始的 URI 请求（注意任何 HTTP 请求都必然以“/ ”开始，所以“ / ”的意思是所有的请求都能被匹配上），都拒绝访问； location ~.html$ {allow all;} 正则 location以 .html 结尾的 URI 请求，都允许访问。</p>
+<p>测试结果：</p>
+<p>[root@web108 ~]# curl http://localhost:9090/</p>
+<html>
+<head><title>403 Forbidden</title></head>
+<body bgcolor=”white”>
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx/1.1.0</center>
+</body>
+</html>
+<p>[root@web108 ~]# curl http://localhost:9090/index.html</p>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+</head>
+<body bgcolor=”white” text=”black”>
+<center><h1>Welcome to nginx!</h1></center>
+</body>
+</html>
+<p>[root@web108 ~]# curl http://localhost:9090/index_notfound.html</p>
+<html>
+<head><title>404 Not Found</title></head>
+<body bgcolor=”white”>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.1.0</center>
+</body>
+</html>
+<p>[root@web108 ~]#</p>
+<p>测试结果如下：</p>
+<p>URI 请求	HTTP 响应<br>
+curl http://localhost:9090/	403 Forbidden<br>
+curl http://localhost:9090/index.html	Welcome to nginx!<br>
+curl http://localhost:9090/index_notfound.html	404 Not Found<br>
+curl http://localhost:9090/ 的结果是“ 403 Forbidden ”，说明被匹配到“ location / {..deny all;} ”了，原因很简单HTTP 请求 GET / 被“严格精确”匹配到了普通 location / {} ，则会停止搜索正则 location ；</p>
+<p>curl http://localhost:9090/index.html 结果是“ Welcome to nginx! ”，说明没有被“ location / {…deny all;} ”匹配，否则会 403 Forbidden ，但 /index.html 的确也是以“ / ”开头的，只不过此时的普通 location / 的匹配结果是“最大前缀”匹配，所以 Nginx 会继续搜索正则 location ， location ~ .html$ 表达了以 .html 结尾的都 allow all; 于是接着就访问到了实际存在的 index.html 页面。</p>
+<p>curl http://localhost:9090/index_notfound.html   同样的道理先匹配 location / {} ，但属于“普通 location 的最大前缀匹配”，于是后面被“正则 location ” location ~ .html$ {} 覆盖了，最终 allow all ； 但的确目录下不存在index_notfound.html 页面，于是 404 Not Found 。</p>
+<p>如果此时我们访问 http://localhost:9090/index.txt 会是什么结果呢？显然是 deny all ；因为先匹配上了 location / {..deny all;} 尽管属于“普通 location ”的最大前缀匹配结果，继续搜索正则 location ，但是 /index.txt 不是以 .html结尾的，正则 location 失败，最终采纳普通 location 的最大前缀匹配结果，于是 deny all 了。</p>
+<p>[root@web108 ~]# curl http://localhost:9090/index.txt</p>
+<html>
+<head><title>403 Forbidden</title></head>
+<body bgcolor=”white”>
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx/1.1.0</center>
+</body>
+</html>
+<p>[root@web108 ~]#</p>
+<p>#2 普通 location 的“隐式”严格匹配<br>
+例题 2 ：我们在例题 1 的基础上增加精确配置</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+              location /exact/match.html {
+
+       allow all;
+
+   }
+
+              location / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       deny all;
+
+   }
+
+   location ~ \.html$ {
+
+       allow all;
+
+   }
+</code></pre>
+<p>}</p>
+<p>测试请求：</p>
+<p>[root@web108 ~]# curl http://localhost:9090/exact/match.html</p>
+<html>
+<head><title>404 Not Found</title></head>
+<body bgcolor=”white”>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.1.0</center>
+</body>
+</html>
+<p>[root@web108 ~]#</p>
+<p>结果进一步验证了“普通 location ”的“严格精确”匹配会终止对正则 location 的搜索。这里我们小结下“普通 location”与“正则 location ”的匹配规则：先匹配普通 location ，再匹配正则 location ，但是如果普通 location 的匹配结果恰好是“严格精确（ exact match ）”的，则 nginx 不再尝试后面的正则 location ；如果普通 location 的匹配结果是“最大前缀”，则正则 location 的匹配覆盖普通 location 的匹配。也就是前面说的“正则 location 让步普通location 的严格精确匹配结果，但覆盖普通 location 的最大前缀匹配结果”。</p>
+<p>#3 普通 location 的“显式”严格匹配和“ ^~ ” 前缀<br>
+上面我们演示的普通 location 都是不加任何前缀的，其实普通 location 也可以加前缀：“ ^~ ”和“ = ”。其中“ ^~”的意思是“非正则，不需要继续正则匹配”，也就是通常我们的普通 location ，还会继续搜索正则 location （恰好严格精确匹配除外），但是 nginx 很人性化允许配置人员告诉 nginx 某条普通 location ，无论最大前缀匹配，还是严格精确匹配都终止继续搜索正则 location ；而“ = ”则表达的是普通 location 不允许“最大前缀”匹配结果，必须严格等于，严格精确匹配。</p>
+<p>例题 3 ：“ ^~ ”前缀的使用</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+              location /exact/match.html {
+
+       allow all;
+
+   }
+
+             location ^~ / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       deny all;
+
+   }
+
+   location ~ \.html$ {
+
+       allow all;
+
+   }
+</code></pre>
+<p>}</p>
+<p>把例题 2 中的 location / {} 修改成 location ^~ / {} ，再看看测试结果：</p>
+<p>URI 请求	修改前	修改后<br>
+curl http://localhost:9090/	403 Forbidden	403 Forbidden<br>
+curl http://localhost:9090/index.html	Welcome to nginx!	403 Forbidden<br>
+curl http://localhost:9090/index_notfound.html	404 Not Found	403 Forbidden<br>
+curl http://localhost:9090/exact/match.html	404 Not Found	404 Not Found<br>
+除了 GET /exact/match.html 是 404 Not Found ，其余都是 403 Forbidden ，原因很简单所有请求都是以“ / ”开头，所以所有请求都能匹配上“ / ”普通 location ，但普通 location 的匹配原则是“最大前缀”，所以只有/exact/match.html 匹配到 location /exact/match.html {allow all;} ，其余都 location ^~ / {deny all;} 并终止正则搜索。</p>
+<p>例题 4 ：“ = ”前缀的使用</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+              location /exact/match.html {
+
+       allow all;
+
+   }
+
+             location = / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       deny all;
+
+   }
+
+   location ~ \.html$ {
+
+       allow all;
+
+   }
+</code></pre>
+<p>}</p>
+<p>例题 4 相对例题 2 把 location / {} 修改成了 location = / {} ，再次测试结果：</p>
+<p>URI 请求	修改前	修改后<br>
+curl http://localhost:9090/	403 Forbidden	403 Forbidden<br>
+curl http://localhost:9090/index.html	Welcome to nginx!	Welcome to nginx!<br>
+curl http://localhost:9090/index_notfound.html	404 Not Found	404 Not Found<br>
+curl http://localhost:9090/exact/match.html	404 Not Found	404 Not Found<br>
+curl http://localhost:9090/test.jsp	403 Forbidden	404 Not Found<br>
+最能说明问题的测试是 GET /test.jsp ，实际上 /test.jsp 没有匹配正则 location （ location ~.html$ ），也没有匹配 location = / {} ，如果按照 location / {} 的话，会“最大前缀”匹配到普通 location / {} ，结果是 deny all 。</p>
+<p>#4 正则 location 与编辑顺序<br>
+location 的指令与编辑顺序无关，这句话不全对。对于普通 location 指令，匹配规则是：最大前缀匹配（与顺序无关），如果恰好是严格精确匹配结果或者加有前缀“ ^~ ”或“ = ”（符号“ = ”只能严格匹配，不能前缀匹配），则停止搜索正则 location ；但对于正则 location 的匹配规则是：按编辑顺序逐个匹配（与顺序有关），只要匹配上，就立即停止后面的搜索。</p>
+<p>配置 3.1</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+   location ~ \.html$ {
+
+       allow all; 
+
+   } 
+
+   location ~ ^/prefix/.*\.html$ {
+
+       deny all; 
+
+   } 
+</code></pre>
+<p>}</p>
+<p>配置 3.2</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+ 
+
+   location ~ ^/prefix/.*\.html$ {
+
+       deny all; 
+
+   } 
+
+             
+
+              location ~ \.html$ {
+
+       allow all; 
+
+   } 
+</code></pre>
+<p>}</p>
+<p>测试结果：</p>
+<p>URI 请求	配置 3.1	配置 3.2<br>
+curl http://localhost:9090/regextest.html	404 Not Found	404 Not Found<br>
+curl http://localhost:9090/prefix/regextest.html	404 Not Found	403 Forbidden<br>
+解释：</p>
+<p>Location ~ ^/prefix/.*.html$ {deny all;} 表示正则 location 对于以 /prefix/ 开头， .html 结尾的所有 URI 请求，都拒绝访问；   location ~.html<span class='katex-error' title='ParseError: KaTeX parse error: Can&#039;t use function &#039;\.&#039; in math mode at position 71: …实际上，prefix 的是 ~\̲.̲html'>{allow all;} 表示正则 location 对于以 .html 结尾的 URI 请求，都允许访问。 实际上，prefix 的是 ~\.html</span> 的子集。</p>
+<p>在“配置 3.1 ”下，两个请求都匹配上 location ~.html$ {allow all;} ，并且停止后面的搜索，于是都允许访问， 404 Not Found ；在“配置 3.2 ”下， /regextest.html 无法匹配 prefix ，于是继续搜索 ~.html$ ，允许访问，于是 404 Not Found ；然而 /prefix/regextest.html 匹配到 prefix ，于是 deny all ， 403 Forbidden 。</p>
+<p>配置 3.3</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+   location  /prefix/ {
+
+           deny all; 
+
+   } 
+
+     
+
+   location  /prefix/mid/ {
+
+           allow all; 
+
+   } 
+</code></pre>
+<p>}</p>
+<p>配置 3.4</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+ 
+
+   location  /prefix/mid/ {
+
+           allow all; 
+
+   } 
+
+              location  /prefix/ {
+
+           deny all; 
+
+   } 
+</code></pre>
+<p>}</p>
+<p>测试结果：</p>
+<p>URI 请求	配置 3.1	配置 3.2<br>
+curl http://localhost:9090/prefix/t.html	  403 Forbidden    	403 Forbidden<br>
+curl http://localhost:9090/prefix/mid/t.html	404 Not Found	404 Not Found<br>
+测试结果表明：普通 location 的匹配规则是“最大前缀”匹配，而且与编辑顺序无关。</p>
+<p>#5 “@” 前缀 Named Location 使用<br>
+REFER:  http://wiki.nginx.org/HttpCoreModule#error_page</p>
+<p>假设配置如下：</p>
+<p>server {</p>
+<pre><code>   listen       9090;
+
+   server_name  localhost;
+
+    location  / {
+
+       root   html;
+
+       index  index.html index.htm;
+
+       allow all;
+
+   }
+
+   #error_page 404 http://www.baidu.com # 直接这样是不允许的
+
+   error_page 404 = @fallback;
+
+   location @fallback {
+
+       proxy_pass http://www.baidu.com;
+
+   }
+</code></pre>
+<p>}</p>
+<p>上述配置文件的意思是：如果请求的 URI 存在，则本 nginx 返回对应的页面；如果不存在，则把请求代理到baidu.com 上去做个弥补（注： nginx 当发现 URI 对应的页面不存在， HTTP_StatusCode 会是 404 ，此时error_page 404 指令能捕获它）。</p>
+<p>测试一：</p>
+<p>[root@web108 ~]# curl http://localhost:9090/nofound.html -i</p>
+<p>HTTP/1.1 302 Found</p>
+<p>Server: nginx/1.1.0</p>
+<p>Date: Sat, 06 Aug 2011 08:17:21 GMT</p>
+<p>Content-Type: text/html; charset=iso-8859-1</p>
+<p>Location: http://localhost:9090/search/error.html</p>
+<p>Connection: keep-alive</p>
+<p>Cache-Control: max-age=86400</p>
+<p>Expires: Sun, 07 Aug 2011 08:17:21 GMT</p>
+<p>Content-Length: 222</p>
+<!DOCTYPE HTML PUBLIC “-//IETF//DTD HTML 2.0//EN”>
+<html><head>
+<title>302 Found</title>
+</head><body>
+<h1>Found</h1>
+<p>The document has moved <a href=”http://www.baidu.com/search/error.html”>here</a>.</p>
+</body></html>
+<p>[root@web108 ~]#</p>
+<p>当我们 GET /nofound.html 发送给本 nginx ， nginx 找不到对应的页面，于是 error_page 404 = @fallback ，请求被代理到 http://www.baidu.com ，于是 nginx 给 http://www.baidu.com 发送了 GET /nofound.html ，但/nofound.html 页面在百度也不存在，百度 302 跳转到错误页。</p>
+<p>直接访问 http://www.baidu.com/nofound.html 结果：</p>
+<p>[root@web108 ~]# curl http://www.baidu.com/nofound.html -i</p>
+<p>HTTP/1.1 302 Found</p>
+<p>Date: Sat, 06 Aug 2011 08:20:05 GMT</p>
+<p>Server: Apache</p>
+<p>Location: http://www.baidu.com/search/error.html</p>
+<p>Cache-Control: max-age=86400</p>
+<p>Expires: Sun, 07 Aug 2011 08:20:05 GMT</p>
+<p>Content-Length: 222</p>
+<p>Connection: Keep-Alive</p>
+<p>Content-Type: text/html; charset=iso-8859-1</p>
+<!DOCTYPE HTML PUBLIC “-//IETF//DTD HTML 2.0//EN”>
+<html><head>
+<title>302 Found</title>
+</head><body>
+<h1>Found</h1>
+<p>The document has moved <a href=”http://www.baidu.com/search/error.html”>here</a>.</p>
+</body></html>
+<p>[root@web108 ~]#</p>
+<p>测试二：访问一个 nginx 不存在，但 baidu 存在的页面</p>
+<p>[root@web108 ~]# curl http://www.baidu.com/duty/ -i</p>
+<p>HTTP/1.1 200 OK</p>
+<p>Date: Sat, 06 Aug 2011 08:21:56 GMT</p>
+<p>Server: Apache</p>
+<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
+<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
+<p>Set-Cookie: BAIDUID=5C5D2B2FD083737A0C88CA7075A6601A:FG=1; expires=Sun, 05-Aug-12 08:21:56 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
+<p>Set-Cookie: BAIDUID=5C5D2B2FD083737A2337F78F909CCB90:FG=1; expires=Sun, 05-Aug-12 08:21:56 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
+<p>Last-Modified: Wed, 05 Jan 2011 06:44:53 GMT</p>
+<p>ETag: “d66-49913b8efe340″</p>
+<p>Accept-Ranges: bytes</p>
+<p>Content-Length: 3430</p>
+<p>Cache-Control: max-age=86400</p>
+<p>Expires: Sun, 07 Aug 2011 08:21:56 GMT</p>
+<p>Vary: Accept-Encoding,User-Agent</p>
+<p>Connection: Keep-Alive</p>
+<p>Content-Type: text/html</p>
+<!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN”
+
+“http://www.w3.org/TR/html4/loose.dtd”>
+<p>。。。。</p>
+</body>
+</html>
+<p>显示，的确百度这个页面是存在的。</p>
+<p>[root@web108 ~]# curl http://localhost:9090/duty/ -i</p>
+<p>HTTP/1.1 200 OK</p>
+<p>Server: nginx/1.1.0</p>
+<p>Date: Sat, 06 Aug 2011 08:23:23 GMT</p>
+<p>Content-Type: text/html</p>
+<p>Connection: keep-alive</p>
+<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
+<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
+<p>Set-Cookie: BAIDUID=8FEF0A3A2C31D277DCB4CC5F80B7F457:FG=1; expires=Sun, 05-Aug-12 08:23:23 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
+<p>Set-Cookie: BAIDUID=8FEF0A3A2C31D277B1F87691AFFD7440:FG=1; expires=Sun, 05-Aug-12 08:23:23 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
+<p>Last-Modified: Wed, 05 Jan 2011 06:44:53 GMT</p>
+<p>ETag: “d66-49913b8efe340″</p>
+<p>Accept-Ranges: bytes</p>
+<p>Content-Length: 3430</p>
+<p>Cache-Control: max-age=86400</p>
+<p>Expires: Sun, 07 Aug 2011 08:23:23 GMT</p>
+<p>Vary: Accept-Encoding,User-Agent</p>
+<!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN”
+
+“http://www.w3.org/TR/html4/loose.dtd”>
+<html>
+<p>。。。</p>
+</body>
+</html>
+<p>当 curl http://localhost:9090/duty/ -i 时， nginx 没找到对应的页面，于是 error_page = @fallback ，把请求代理到 baidu.com 。注意这里的 error_page = @fallback 不是靠重定向实现的，而是所说的“ internally redirected （forward ）”。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Nginx七层负载均衡的几种调度算法]]></title>
+        <id>https://newdy.cf/post/nginx-qi-ceng-fu-zai-jun-heng-de-ji-chong-diao-du-suan-fa/</id>
+        <link href="https://newdy.cf/post/nginx-qi-ceng-fu-zai-jun-heng-de-ji-chong-diao-du-suan-fa/">
+        </link>
+        <updated>2020-02-19T04:44:25.000Z</updated>
+        <content type="html"><![CDATA[<p>Nginx是一款轻量级的高性能web服务器，同时也是一款非常优秀的负载均衡器和反向代理服务器。由于支持强大的正则匹配规则、动静分离、URLrewrite功能及安装配置简单且对网络稳定性依赖非常小等优点，所以常用来做为七层负载均衡使用。在硬件不差的情况下，通常可以稳定支持几万的并发连接，在硬件性能足够好，且对系统内核参数及Nginx配置进行优化甚至可以达到10万以上的并发。</p>
+<p>以下是Nginx作为七层负载均衡常用的几种调度算法和适用的业务场景</p>
+<p>1、轮询（默认调度算法）</p>
+<p>特点：每个请求按时间顺序逐一分配到不同的后端服务器处理。<br>
+适用业务场景：后端服务器硬件性能配置完全一致，业务无特殊要求时使用。<br>
+upstream backendserver {<br>
+server 192.168.0.14：80 max_fails=2 fail_timeout=10s;<br>
+server 192.168.0.15：80 max_fails=2 fail_timeout=10s;<br>
+}</p>
+<p>2、加权轮询</p>
+<p>特点：指定轮询几率，weight值(权重)和访问比例成正比，用户请求按权重比例分配。<br>
+适用业务场景：用于后端服务器硬件性处理能力不平均的情形。<br>
+upstream backendserver {<br>
+server 192.168.0.14:80 weight=5 max_fails=2 fail_timeout=10s;<br>
+server 192.168.0.15:80 weight=10 max_fails=2 fail_timeout=10s;<br>
+}</p>
+<p>3、ip_hash</p>
+<p>特点：每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session会话保持问题。<br>
+适用业务场景：适用于需要账号登录的系统，会话连接保持的业务。<br>
+upstream backendserver {<br>
+ip_hash;<br>
+server 192.168.0.14:80 max_fails=2 fail_timeout=10s;<br>
+server 192.168.0.15:80 max_fails=2 fail_timeout=10s;<br>
+}</p>
+<p>4、最少连接数 least_conn</p>
+<p>特点：按nginx反向代理与后端服务器之间的连接数，连接数最少的优先分配。</p>
+<p>适用业务场景：适用于客户端与后端服务器需要保持长连接的业务。<br>
+upstream backendserver {<br>
+least_conn;<br>
+server 192.168.0.14:80 max_fails=2 fail_timeout=10s;<br>
+server 192.168.0.15:80 max_fails=2 fail_timeout=10s;<br>
+}</p>
+<p>5、fair（需编译安装第三方模块 ngx_http_upstream_fair_module）</p>
+<p>特点：按后端服务器的响应时间来分配请求，响应时间短的优先分配。<br>
+适用业务场景：对访问响应速度有一定要求的业务。<br>
+upstream backendserver {<br>
+fair;<br>
+server 192.168.0.14:80 max_fails=2 fail_timeout=10s;<br>
+server 192.168.0.15:80 max_fails=2 fail_timeout=10s;<br>
+}</p>
+<p>6、url_hash（需编译安装第三方模块 ngx_http_upstream_hash_module）</p>
+<p>特点：按访问url的hash结果来分配请求，使同一个url访问到同一个后端服务器。<br>
+适用业务场景：适用于后端服务器为缓存服务器时比较有效。<br>
+upstream backendserver {<br>
+server 192.168.0.14:80 max_fails=2 fail_timeout=10s;<br>
+server 192.168.0.15:80 max_fails=2 fail_timeout=10s;<br>
+hash $request_uri;<br>
+}</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Linux CentOS 7 非root用户安装源码版Docker]]></title>
+        <id>https://newdy.cf/post/linux-centos-7-fei-root-yong-hu-an-zhuang-yuan-ma-ban-docker/</id>
+        <link href="https://newdy.cf/post/linux-centos-7-fei-root-yong-hu-an-zhuang-yuan-ma-ban-docker/">
+        </link>
+        <updated>2020-02-19T04:37:46.000Z</updated>
+        <content type="html"><![CDATA[<p>注意:非root用户必须要有sudo权限</p>
+<p>一、安装前的准备</p>
+<p>1.查看当前主机是否有docker组</p>
+<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582087080673.png" alt="" loading="lazy"></figure>
+<p>若没有输出结果则新建</p>
+<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582087086554.png" alt="" loading="lazy"></figure>
+<p>再次查看,发现已经有了docker组</p>
+<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582087091705.png" alt="" loading="lazy"></figure>
+<p>2.新增拥有sudo权限的用户(若知道root和其他拥有sudo权限的系统用户密码,跳到3;若都没有,必做)</p>
+<figure data-type="image" tabindex="4"><img src="https://newdy.cf/post-images/1582087133234.png" alt="" loading="lazy"></figure>
+<p>修改该用户的密码<br>
+<img src="https://newdy.cf/post-images/1582087138797.png" alt="" loading="lazy"></p>
+<p>为新增的用户添加sudo权限</p>
+<p>sudo vi /etc/sudoers<br>
+　　在92行下一行添加<br>
+　　test    　　ALL=(ALL)    　　ALL<br>
+3.把当前用户加入到docker组 （此时用户并没有加入进docker组）</p>
+<figure data-type="image" tabindex="5"><img src="https://newdy.cf/post-images/1582087165679.png" alt="" loading="lazy"></figure>
+<p>切换至sudo权限用户，然后再切换回当前用户（此时可以看到用户已经加入docker组）</p>
+<figure data-type="image" tabindex="6"><img src="https://newdy.cf/post-images/1582087175735.png" alt="" loading="lazy"></figure>
+<p>3.删除新增的用户和它的sudo权限（第2步没做请忽略此步）</p>
+<p>sudo vi /etc/sudoers<br>
+　　在92行下一行添加<br>
+　　test　　ALL=(ALL)  ALL<br>
+两次退出，不然删除用户时会报错</p>
+<figure data-type="image" tabindex="7"><img src="https://newdy.cf/post-images/1582087195961.png" alt="" loading="lazy"></figure>
+<p>二、安装docker</p>
+<p>1.下载docker源码包并上传至虚拟机</p>
+<p>https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/static/stable/x86_64/docker-18.09.0.tgz</p>
+<p>2.解压源码包至指定目录下</p>
+<figure data-type="image" tabindex="8"><img src="https://newdy.cf/post-images/1582087215827.png" alt="" loading="lazy"></figure>
+<p>3.将解压出来的docker目录下的指令复制到 /usr/bin/ 目录下</p>
+<p>sudo cp docker/* /usr/bin/<br>
+4./usr/bin/目录下docker有关指令的所属用户和所属组(必做,不然非root用户使用docker指令报错:权限不够)</p>
+<p>sudo chown root:docker /usr/bin/docker*<br>
+sudo chown root:docker /usr/bin/containerd*<br>
+sudo chown root:docker /usr/bin/runc<br>
+sudo chown root:docker /usr/bin/ctr<br>
+5.查看一下是否改变所属用户和所属组(得到和解压出来的docker目录下的一样的8个指令)</p>
+<figure data-type="image" tabindex="9"><img src="https://newdy.cf/post-images/1582087235444.png" alt="" loading="lazy"></figure>
+<p>6.将docker注册为service服务</p>
+<p>新建该文件<br>
+sudo vi /etc/systemd/system/docker.service<br>
+加入以下内容：<br>
+[Unit]<br>
+Description=Docker Application Container Engine<br>
+Documentation=https://docs.docker.com<br>
+After=network-online.target firewalld.service<br>
+Wants=network-online.target</p>
+<p>[Service]<br>
+Type=notify<br>
+ExecStart=/usr/bin/dockerd<br>
+ExecReload=/bin/kill -s HUP $MAINPID<br>
+LimitNOFILE=infinity<br>
+LimitNPROC=infinity<br>
+LimitCORE=infinity<br>
+TimeoutStartSec=0<br>
+Delegate=yes<br>
+KillMode=process<br>
+Restart=on-failure<br>
+StartLimitBurst=3<br>
+StartLimitInterval=60s</p>
+<p>[Install]<br>
+WantedBy=multi-user.target<br>
+7.添加执行权限并重新加载配置文件</p>
+<p>sudo chmod a+x /etc/systemd/system/docker.service<br>
+sudo systemctl daemon-reloa<br>
+8.docker镜像加速(可以不做,但是docker pull会很慢,由于docker官网在海外)</p>
+<p>新建该文件<br>
+sudo vi /etc/docker/daemon.json<br>
+加入以下内容<br>
+{<br>
+&quot;registry-mirrors&quot;: [&quot;http://hub-mirror.c.163.com&quot;]<br>
+}</p>
+<p>9.启动docker</p>
+<p>sudo systemctl start docker<br>
+三、docker基础命令</p>
+<p>docker启/停/重启/查看状态<br>
+sudo systemctl  start/stop/restart/status</p>
+<p>查看docker已有镜像<br>
+docker images</p>
+<p>在docker官网搜寻指定镜像<br>
+docker search 镜像</p>
+<p>下载镜像(不加标签默认下载最新版本的镜像)<br>
+docker pull 镜像名字:tag(即标签)</p>
+<p>启动容器(以xxx名字运行基于镜像的容器，并映射容器端口到本机端口，容器目录文件储存在本机目录)<br>
+docker run -d -name xxx -p 本机端口:容器端口 -v 本机目录:容器目录 镜像name:tag(或ID)</p>
+<p>进入正在运行的容器内部<br>
+docker exec -it 容器name(或ID) /bin/bash</p>
+<p>容器的启/停/重启/信息/删除<br>
+docker start/stop/restart/inspect/rm 容器name(或ID)</p>
+<p>查看正在运行的容器<br>
+docker ps</p>
+<p>查看所有容器(包括正在运行的、停止的,不包括删除的)<br>
+docker ps -a</p>
+<p>镜像的删除(删除镜像前请删除所有与该镜像有关的容器)<br>
+docker rmi 镜像name:tag(或ID)</p>
+<p>查看当前安装的docker有关信息<br>
+docker info<br>
+dd</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Windows10下nginx的rtmp服务器搭建]]></title>
         <id>https://newdy.cf/post/windows10-xia-nginx-de-rtmp-fu-wu-qi-da-jian/</id>
@@ -603,45 +1319,6 @@ aio write size = 1<br>
 <img src="https://newdy.cf/post-images/1581432604857.png" alt="" loading="lazy"><br>
 通过复制文件也可以看出，两张网卡均有流量，并且总和超过了 1Gbps 。</p>
 <p>基于 RTL8111 的 PCIE x1 网卡目前均价不过20-30块，并且对于交换机并无特殊限制，故整套解决方案成本是非常低的。除了PCIE 网卡之外，也可以使用 USB 网卡，但需要确保所有网卡线速一致，才能够启用 SMB3 多通道。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动]]></title>
-        <id>https://newdy.cf/post/wei-esxi-tian-jia-rtl81688111-ji-sata-kong-zhi-qi-qu-dong/</id>
-        <link href="https://newdy.cf/post/wei-esxi-tian-jia-rtl81688111-ji-sata-kong-zhi-qi-qu-dong/">
-        </link>
-        <updated>2020-02-11T14:27:41.000Z</updated>
-        <content type="html"><![CDATA[<p>ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，自 ESXi 5.5 版本起 VMware 移除了大量家用 PC 机的驱动，其中就包含 RTL8168/8111 网卡以及 Intel SATA 控制器。</p>
-<p>不过天无绝人之路，我们仍然可以使用第三方工具 ESXi-Customizer-PS 对安装镜像进行修改，加载我们想要的驱动，从而继续正常使用。</p>
-<p>在使用 ESXi-Customizer-PS 之前，我们需要先安装 VMware PowerCLI，可以在网络搜索下载。安装完成后，在这个网址下载 ESXi-Customizer-PS。</p>
-<p>随后我们打开 VMware PowerCLI ，并且定位到 ESXi-Customizer-PS 所在的目录，执行：</p>
-<p>##.\ESXi-Customizer-PS-v2.5.ps1 -v65 -vft -load net55-r8168,net51-r8169,sata-xahci<br>
-<img src="https://newdy.cf/post-images/1581431304708.png" alt="" loading="lazy"></p>
-<pre><code>随后脚本会自动连接到 VMware 下载安装镜像并加载对应的驱动。其中 net55-r8168 对应 RTL8168/8111 ，net51-r8169 对应 RTL8169 ，sata-xahci 对应常见 SATA 控制器。如果你还有特殊的硬件驱动需要加载的话，可以到 V-Front 的官方源按照硬件 id 来查找，只需在 load 后继续添加并用逗号分隔即可。
-</code></pre>
-<p>经过漫长的等待后，对应版本的 ESXi 安装镜像便会保存在 ESXi-Customizer-PS 同目录中。当然你也可以使用 -v60 -v55 来生成6.0或是5.5版本的安装镜像。<br>
-<img src="https://newdy.cf/post-images/1581431377324.png" alt="" loading="lazy"><br>
-如不清楚硬件 id ，可先引导至 Windows 并通过设备管理器查看。如图所示，这个 Intel USB 3.0 控制器的硬件 id 为：8086:A12F。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[搭建 DNS 服务解锁 Netflix]]></title>
-        <id>https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix/</id>
-        <link href="https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix/">
-        </link>
-        <updated>2020-02-11T13:14:06.000Z</updated>
-        <content type="html"><![CDATA[<p>有观看 Netflix 习惯的朋友应该都知道，除了需要科学上网之外，IP 能够解锁 Netflix 也是正常播放的必要条件之一。不过有时因为流量原因，我们不直接使用能够解锁 NF 的服务器来播放，而是架设 DNS 服务作为其它机器的中转。这样，原本不能解锁 NF 的服务器便也可以正常播放了。不过我们今天并不细究原理，只是分享方法。</p>
-<p>如果需要解锁 Netflix ，前提条件是你拥有一台能够正常观看 NF 的服务器A，以及另一台无法观看 NF 的服务器B。</p>
-<p>首先我们在服务器A上运行以下代码安装 DNS 服务：</p>
-<p>wget --no-check-certificate -O dnsmasq_sniproxy.sh https://raw.githubusercontent.com/myxuchangbin/dnsmasq_sniproxy_install/master/dnsmasq_sniproxy.sh &amp;&amp; bash dnsmasq_sniproxy.sh -i</p>
-<p>如果开启了防火墙，记得在服务器A上放行53端口的入网连接。随后在服务器B上设置 DNS 为服务器A的 ip ，以 Debian 为例：</p>
-<p>如果你的服务器B是静态配置 IP，只需要修改<br>
-/etc/resolv.conf 中的 nameserver 即可。如：nameserver 1.0.0.1</p>
-<p>如果你的服务器B是自动获取IP，切勿修改 /etc/resolv.conf 。<br>
-因为此时这个文件受到 DHCP 的影响，在每次重启后都会还原为默认值。此时我们需要编辑 /etc/dhcp/dhclient.conf ，添加：supersede domain-name-servers 1.0.0.1; 来手动指派 DNS 地址。</p>
-<p>最后重启服务器B的网络即可：/etc/init.d/networking restart</p>
-<p>上述例子中的 1.0.0.1 仅用于示范，实际使用时需要填写服务器A的公网 ip 地址。</p>
-<p>此时再使用服务器B，Netflix 已经可以正常播放了。并且 DNS 解锁只需要消耗服务器A非常少的流量，适用于流量较少无法直接使用服务器A来观看 NF 的情况。为了提高系统安全性，还可以自行配置 iptables 来限制53端口的入网 ip 地址，在此便不细谈了。</p>
 ]]></content>
     </entry>
 </feed>

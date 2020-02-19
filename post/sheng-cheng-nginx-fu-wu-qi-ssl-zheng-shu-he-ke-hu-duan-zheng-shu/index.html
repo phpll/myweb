@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>生成Nginx服务器SSL证书和客户端证书 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582088124399">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Nginx服务器SSL证书
+生成pass key
+下面的命令用于生成一个2048bit的pass key, -passout pass:111111 用于避免交互式输入密码
+[tomcat@a02 tmp]$ openssl genrsa ..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582088124399" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">生成Nginx服务器SSL证书和客户端证书</h2>
+            <div class="post-date">2020-02-19</div>
+            
+            <div class="post-content" v-pre>
+              <p>Nginx服务器SSL证书<br>
+生成pass key</p>
+<p>下面的命令用于生成一个2048bit的pass key, -passout pass:111111 用于避免交互式输入密码</p>
+<p>[tomcat@a02 tmp]$ openssl genrsa -aes256 -passout pass:111111 -out server.pass.key 2048<br>
+Generating RSA private key, 2048 bit long modulus<br>
+...........+++<br>
+.....................+++<br>
+e is 65537 (0x10001)</p>
+<p>生成key</p>
+<p>下面的命令用于生成私钥, -passin pass:111111是和pass key的密码对应的, 用于避免交互式输入密码</p>
+<p>[tomcat@a02 tmp]$ openssl rsa -passin pass:111111 -in server.pass.key -out server.key<br>
+writing RSA key</p>
+<p>生成证书签发请求文件(CSR)</p>
+<p>下面的命令用于生成csr文件, 这里需要填写机构相关信息. 其中CN务必填写为对应的服务器域名. 最后那个challenge password, 是这个csr的password</p>
+<h2 id="tomcata02-tmp-openssl-req-new-sha256-key-serverkey-out-servercsryou-are-about-to-be-asked-to-enter-information-that-will-be-incorporatedinto-your-certificate-requestwhat-you-are-about-to-enter-is-what-is-called-a-distinguished-name-or-a-dnthere-are-quite-a-few-fields-but-you-can-leave-some-blankfor-some-fields-there-will-be-a-default-valueif-you-enter-the-field-will-be-left-blank">[tomcat@a02 tmp]$ openssl req -new -sha256 -key server.key -out server.csr<br>
+You are about to be asked to enter information that will be incorporated<br>
+into your certificate request.<br>
+What you are about to enter is what is called a Distinguished Name or a DN.<br>
+There are quite a few fields but you can leave some blank<br>
+For some fields there will be a default value,<br>
+If you enter '.', the field will be left blank.</h2>
+<p>Country Name (2 letter code) [XX]:CN<br>
+State or Province Name (full name) []:Beijing<br>
+Locality Name (eg, city) [Default City]:Chaoyang<br>
+Organization Name (eg, company) [Default Company Ltd]:HenSomeone<br>
+Organizational Unit Name (eg, section) []:iSomeone<br>
+Common Name (eg, your name or your server's hostname) []:internal.someone.com<br>
+Email Address []:</p>
+<p>Please enter the following 'extra' attributes<br>
+to be sent with your certificate request<br>
+A challenge password []:222222<br>
+An optional company name []:</p>
+<p>发送CSR文件给CA服务商签发证书</p>
+<p>如果是购买的CA服务商的SSL证书服务, 这一步把CSR发给服务商就可以了. 收到证书后将内容写入到 server.pem 文件</p>
+<p>在Nginx上这样配置</p>
+<p>server {<br>
+listen      443;<br>
+server_name  www.example.com;</p>
+<pre><code>ssl                  on;
+ssl_certificate      /path/to/ssl/server.pem;
+ssl_certificate_key  /path/to/ssl/server.key;
+ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+ssl_session_cache shared:ssl_www_example_com:5m;
+ssl_session_timeout  5m;
+ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:ECDHE-ECDSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES256-SHA256:AES256-SHA:AES128-GCM-SHA256:AES128-SHA256:AES128-SHA:DES-CBC3-SHA;
+#...
+location / {
+    #...
+}
+#...
+</code></pre>
+<p>}</p>
+<p>制作自签名证书</p>
+<p>如果是打算制作自签名证书, 则进行如下的操作生成pem证书</p>
+<p>[tomcat@a02 tmp]$ openssl x509 -req -sha256 -days 3655 -in server.csr -signkey server.key -out server.pem<br>
+Signature ok<br>
+subject=/C=CN/ST=Beijing/L=Chaoyang/O=HenSomeone/OU=iSomeone/CN=internal.someone.com<br>
+Getting Private key</p>
+<p>Nginx客户端验证证书<br>
+Nginx客户端验证证书和服务端SSL证书其实是没关系的, 你可以一边使用CA签发的证书, 一边使用自己制作的客户端验证证书.</p>
+<p>生成服务器端私钥</p>
+<p>[tomcat@a02 tmp]$ openssl genrsa -aes256 -passout pass:201906 -out ca.pass.key 2048<br>
+Generating RSA private key, 2048 bit long modulus<br>
+...............................................................................................................+++<br>
+...................................+++<br>
+e is 65537 (0x10001)</p>
+<p>[tomcat@a02 tmp]$ openssl rsa -passin pass:201906 -in ca.pass.key -out ca.key<br>
+writing RSA key</p>
+<p>生成服务器端证书</p>
+<p>下面的命令会生成服务器证书ca.pem, 用于配制到nginx.</p>
+<h2 id="tomcata02-tmp-openssl-req-new-x509-days-3655-key-cakey-out-capemyou-are-about-to-be-asked-to-enter-information-that-will-be-incorporatedinto-your-certificate-requestwhat-you-are-about-to-enter-is-what-is-called-a-distinguished-name-or-a-dnthere-are-quite-a-few-fields-but-you-can-leave-some-blankfor-some-fields-there-will-be-a-default-valueif-you-enter-the-field-will-be-left-blank">[tomcat@a02 tmp]$ openssl req -new -x509 -days 3655 -key ca.key -out ca.pem<br>
+You are about to be asked to enter information that will be incorporated<br>
+into your certificate request.<br>
+What you are about to enter is what is called a Distinguished Name or a DN.<br>
+There are quite a few fields but you can leave some blank<br>
+For some fields there will be a default value,<br>
+If you enter '.', the field will be left blank.</h2>
+<p>Country Name (2 letter code) [XX]:CN<br>
+State or Province Name (full name) []:Beijing<br>
+Locality Name (eg, city) [Default City]:Chaoyang<br>
+Organization Name (eg, company) [Default Company Ltd]:HenSomeone<br>
+Organizational Unit Name (eg, section) []:iSomeone<br>
+Common Name (eg, your name or your server's hostname) []:internal.someone.com<br>
+Email Address []:</p>
+<p>生成客户端私钥</p>
+<p>[tomcat@a02 tmp]$ openssl genrsa -aes256 -passout pass:201906 -out client_01.pass.key 2048<br>
+Generating RSA private key, 2048 bit long modulus<br>
+..........................+++<br>
+.....+++<br>
+e is 65537 (0x10001)</p>
+<p>[tomcat@a02 tmp]$ openssl rsa -passin pass:201906 -in client_01.pass.key -out client_01.key<br>
+writing RSA key</p>
+<p>生成客户端证书签发请求CSR</p>
+<h2 id="tomcata02-tmp-openssl-req-new-key-client_01key-out-client_01csryou-are-about-to-be-asked-to-enter-information-that-will-be-incorporatedinto-your-certificate-requestwhat-you-are-about-to-enter-is-what-is-called-a-distinguished-name-or-a-dnthere-are-quite-a-few-fields-but-you-can-leave-some-blankfor-some-fields-there-will-be-a-default-valueif-you-enter-the-field-will-be-left-blank">[tomcat@a02 tmp]$ openssl req -new -key client_01.key -out client_01.csr<br>
+You are about to be asked to enter information that will be incorporated<br>
+into your certificate request.<br>
+What you are about to enter is what is called a Distinguished Name or a DN.<br>
+There are quite a few fields but you can leave some blank<br>
+For some fields there will be a default value,<br>
+If you enter '.', the field will be left blank.</h2>
+<p>Country Name (2 letter code) [XX]:CN<br>
+State or Province Name (full name) []:Beijing<br>
+Locality Name (eg, city) [Default City]:Chaoyang<br>
+Organization Name (eg, company) [Default Company Ltd]:HenSomeone<br>
+Organizational Unit Name (eg, section) []:Staff<br>
+Common Name (eg, your name or your server's hostname) []:Staff<br>
+Email Address []:</p>
+<p>Please enter the following 'extra' attributes<br>
+to be sent with your certificate request<br>
+A challenge password []:201907<br>
+An optional company name []:</p>
+<p>签发客户端证书</p>
+<p>下面的命令, 用服务端的私钥和服务端的证书, 对客户端的CSR进行签发, 生成服务端证书. 这里有一个 -set_serial 01 的参数, 如果签发多个客户端证书, 这个数字不能重复</p>
+<p>[tomcat@a02 tmp]$ openssl x509 -req -days 3655 -in client_01.csr -CA ca.pem -CAkey ca.key -set_serial 01 -out client_01.pem<br>
+Signature ok<br>
+subject=/C=CN/ST=Beijing/L=Chaoyang/O=HenSomeone/OU=Staff/CN=Staff<br>
+Getting CA Private Key</p>
+<p>客户端证书格式转换</p>
+<p>前面生成的证书, 不能直接用于常见的应用, 需要转换成应用需要的格式</p>
+<p>Full PEM:</p>
+<p>[tomcat@a02 tmp]$ cat client_01.key client_01.pem ca.pem &gt; client_01.full.pem</p>
+<p>PFX - 这里输入的export password, 就是应用导入PFX证书时需要输入的密码.</p>
+<p>[tomcat@a02 tmp]$ openssl pkcs12 -export -out client_01.full.pfx -inkey client_01.key -in client_01.pem -certfile ca.pem<br>
+Enter Export Password:<br>
+Verifying - Enter Export Password:</p>
+<p>配置Nginx的客户端验证证书</p>
+<p>ssl_client_certificate /path/to/ca.pem;<br>
+ssl_verify_client optional; # or <code>on</code> if you require client key</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/nginx-pei-zhi-zhong-location-pi-pei-gui-ze-xiang-jie/">
+                  <h3 class="post-title">
+                    Nginx配置中location匹配规则详解
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

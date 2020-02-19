@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Linux CentOS 7 非root用户安装源码版Docker | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582088124399">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="注意:非root用户必须要有sudo权限
+一、安装前的准备
+1.查看当前主机是否有docker组
+
+若没有输出结果则新建
+
+再次查看,发现已经有了docker组
+
+2.新增拥有sudo权限的用户(若知道root和其他拥有sudo权限的系统用..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582088124399" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Linux CentOS 7 非root用户安装源码版Docker</h2>
+            <div class="post-date">2020-02-19</div>
+            
+            <div class="post-content" v-pre>
+              <p>注意:非root用户必须要有sudo权限</p>
+<p>一、安装前的准备</p>
+<p>1.查看当前主机是否有docker组</p>
+<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582087080673.png" alt="" loading="lazy"></figure>
+<p>若没有输出结果则新建</p>
+<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582087086554.png" alt="" loading="lazy"></figure>
+<p>再次查看,发现已经有了docker组</p>
+<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582087091705.png" alt="" loading="lazy"></figure>
+<p>2.新增拥有sudo权限的用户(若知道root和其他拥有sudo权限的系统用户密码,跳到3;若都没有,必做)</p>
+<figure data-type="image" tabindex="4"><img src="https://newdy.cf/post-images/1582087133234.png" alt="" loading="lazy"></figure>
+<p>修改该用户的密码<br>
+<img src="https://newdy.cf/post-images/1582087138797.png" alt="" loading="lazy"></p>
+<p>为新增的用户添加sudo权限</p>
+<p>sudo vi /etc/sudoers<br>
+　　在92行下一行添加<br>
+　　test    　　ALL=(ALL)    　　ALL<br>
+3.把当前用户加入到docker组 （此时用户并没有加入进docker组）</p>
+<figure data-type="image" tabindex="5"><img src="https://newdy.cf/post-images/1582087165679.png" alt="" loading="lazy"></figure>
+<p>切换至sudo权限用户，然后再切换回当前用户（此时可以看到用户已经加入docker组）</p>
+<figure data-type="image" tabindex="6"><img src="https://newdy.cf/post-images/1582087175735.png" alt="" loading="lazy"></figure>
+<p>3.删除新增的用户和它的sudo权限（第2步没做请忽略此步）</p>
+<p>sudo vi /etc/sudoers<br>
+　　在92行下一行添加<br>
+　　test　　ALL=(ALL)  ALL<br>
+两次退出，不然删除用户时会报错</p>
+<figure data-type="image" tabindex="7"><img src="https://newdy.cf/post-images/1582087195961.png" alt="" loading="lazy"></figure>
+<p>二、安装docker</p>
+<p>1.下载docker源码包并上传至虚拟机</p>
+<p>https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/static/stable/x86_64/docker-18.09.0.tgz</p>
+<p>2.解压源码包至指定目录下</p>
+<figure data-type="image" tabindex="8"><img src="https://newdy.cf/post-images/1582087215827.png" alt="" loading="lazy"></figure>
+<p>3.将解压出来的docker目录下的指令复制到 /usr/bin/ 目录下</p>
+<p>sudo cp docker/* /usr/bin/<br>
+4./usr/bin/目录下docker有关指令的所属用户和所属组(必做,不然非root用户使用docker指令报错:权限不够)</p>
+<p>sudo chown root:docker /usr/bin/docker*<br>
+sudo chown root:docker /usr/bin/containerd*<br>
+sudo chown root:docker /usr/bin/runc<br>
+sudo chown root:docker /usr/bin/ctr<br>
+5.查看一下是否改变所属用户和所属组(得到和解压出来的docker目录下的一样的8个指令)</p>
+<figure data-type="image" tabindex="9"><img src="https://newdy.cf/post-images/1582087235444.png" alt="" loading="lazy"></figure>
+<p>6.将docker注册为service服务</p>
+<p>新建该文件<br>
+sudo vi /etc/systemd/system/docker.service<br>
+加入以下内容：<br>
+[Unit]<br>
+Description=Docker Application Container Engine<br>
+Documentation=https://docs.docker.com<br>
+After=network-online.target firewalld.service<br>
+Wants=network-online.target</p>
+<p>[Service]<br>
+Type=notify<br>
+ExecStart=/usr/bin/dockerd<br>
+ExecReload=/bin/kill -s HUP $MAINPID<br>
+LimitNOFILE=infinity<br>
+LimitNPROC=infinity<br>
+LimitCORE=infinity<br>
+TimeoutStartSec=0<br>
+Delegate=yes<br>
+KillMode=process<br>
+Restart=on-failure<br>
+StartLimitBurst=3<br>
+StartLimitInterval=60s</p>
+<p>[Install]<br>
+WantedBy=multi-user.target<br>
+7.添加执行权限并重新加载配置文件</p>
+<p>sudo chmod a+x /etc/systemd/system/docker.service<br>
+sudo systemctl daemon-reloa<br>
+8.docker镜像加速(可以不做,但是docker pull会很慢,由于docker官网在海外)</p>
+<p>新建该文件<br>
+sudo vi /etc/docker/daemon.json<br>
+加入以下内容<br>
+{<br>
+&quot;registry-mirrors&quot;: [&quot;http://hub-mirror.c.163.com&quot;]<br>
+}</p>
+<p>9.启动docker</p>
+<p>sudo systemctl start docker<br>
+三、docker基础命令</p>
+<p>docker启/停/重启/查看状态<br>
+sudo systemctl  start/stop/restart/status</p>
+<p>查看docker已有镜像<br>
+docker images</p>
+<p>在docker官网搜寻指定镜像<br>
+docker search 镜像</p>
+<p>下载镜像(不加标签默认下载最新版本的镜像)<br>
+docker pull 镜像名字:tag(即标签)</p>
+<p>启动容器(以xxx名字运行基于镜像的容器，并映射容器端口到本机端口，容器目录文件储存在本机目录)<br>
+docker run -d -name xxx -p 本机端口:容器端口 -v 本机目录:容器目录 镜像name:tag(或ID)</p>
+<p>进入正在运行的容器内部<br>
+docker exec -it 容器name(或ID) /bin/bash</p>
+<p>容器的启/停/重启/信息/删除<br>
+docker start/stop/restart/inspect/rm 容器name(或ID)</p>
+<p>查看正在运行的容器<br>
+docker ps</p>
+<p>查看所有容器(包括正在运行的、停止的,不包括删除的)<br>
+docker ps -a</p>
+<p>镜像的删除(删除镜像前请删除所有与该镜像有关的容器)<br>
+docker rmi 镜像name:tag(或ID)</p>
+<p>查看当前安装的docker有关信息<br>
+docker info<br>
+dd</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/windows10-xia-nginx-de-rtmp-fu-wu-qi-da-jian/">
+                  <h3 class="post-title">
+                    Windows10下nginx的rtmp服务器搭建
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
