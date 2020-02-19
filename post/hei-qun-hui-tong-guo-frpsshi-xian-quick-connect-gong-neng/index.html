@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>黑群晖通过frps，实现quick connect功能 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582105111965">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="一、申请免费的vps：https://cloud.google.com/free/
+二、申请完vps后， 安装frps服务端：
+第一步：
+1、获取root 权限
+sudo su -
+2、#安装git客户端
+yum install -y gi..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582105111965" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">黑群晖通过frps，实现quick connect功能</h2>
+            <div class="post-date">2020-02-19</div>
+            
+            <div class="post-content" v-pre>
+              <p>一、申请免费的vps：https://cloud.google.com/free/</p>
+<p>二、申请完vps后， 安装frps服务端：</p>
+<p>第一步：</p>
+<p>1、获取root 权限<br>
+sudo su -<br>
+2、#安装git客户端<br>
+yum install -y git<br>
+3、获取一键安装frps脚本<br>
+git clone https://github.com/clangcn/onekey-install-shell.git<br>
+4、进去frps目录安装<br>
+cd onekey-install-shell/frps<br>
+sh version.sh<br>
+sh install-frps.sh install</p>
+<p>然后选择2，就可以一直往下按回车</p>
+<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582101396279.jpg" alt="" loading="lazy"></figure>
+<p>安装完后，会看到相关的账户密码信息，请记录下来。</p>
+<p>第二步：</p>
+<p>开通vps上的防火墙，在vpc网络–&gt; 防火墙策略下新建一条防火墙，放开所有端口和所有来源ip（假如要安全的话，按需开通端口）,如下图</p>
+<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582101413068.jpg" alt="" loading="lazy"></figure>
+<p>第三步：</p>
+<p>启动frps</p>
+<p>frps start</p>
+<p>三、申请域名</p>
+<p>1、在godaddy网站：https://www.godaddy.com/， 申请一级域名，如： nayfeng.com</p>
+<p>2、新建一条A记录指向刚才新建vps的外网ip，如nas。那么我们访问nas.nafeng.com，就是指向刚才新建的vps上</p>
+<p>四、在vps上配置frps 服务端</p>
+<p>1、进入fprs的配置模式<br>
+frps config<br>
+2、新增配置信息，在配置文件最下面，新增subdomain_host = nayfeng.com，然后按esc，:，x 来保存配置信息</p>
+<p>3、重启fprs服务使其生效<br>
+frps restart<br>
+如下图所示的配置信息，</p>
+<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582101434713.jpg" alt="" loading="lazy"></figure>
+<p>五、在群晖nas上配置frp 客户端</p>
+<p>1、通过security crt 或者xshell的客户端，远程登录我们的nas</p>
+<p>2、下载frps客户端 wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_linux_amd64.tar.gz<br>
+3、解压<br>
+tar zxvf frp_0.21.0_linux_amd64.tar.gz<br>
+4、修改配置文件<br>
+cd frp_0.20.0_linux_amd64<br>
+vi frpc.ini</p>
+<p>frpc.ini的参考配置信息如下，只要把我们的中文说明的两行根据实际情况填写就可以了，部分人发现配置文件有异常的话，请把中文的备注信息删除：</p>
+<p>[common]<br>
+server_addr = 1.1.1.1   #用个人vps公网ip代替<br>
+server_port = 5443<br>
+token = tian-xie-token    #填写自己vps上frps的token配置代替</p>
+<p>admin_addr = 127.0.0.1<br>
+admin_port = 7001<br>
+admin_user = admin<br>
+admin_pwd = admin</p>
+<p>[ssh]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 22<br>
+remote_port = 6000</p>
+<p>[plex]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 32400<br>
+remote_port = 32400</p>
+<p>[nas_5000]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 5000<br>
+remote_port = 5000</p>
+<p>[nas_5001]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 5001<br>
+remote_port = 5001</p>
+<p>[nas_web]<br>
+type = http<br>
+local_ip = 127.0.0.1<br>
+local_port = 5000<br>
+subdomain = nas</p>
+<p>[nas_webs]<br>
+type = https<br>
+local_ip = 127.0.0.1<br>
+local_port = 5001<br>
+subdomain = nas<br>
+5、启动frpc 客户端服务</p>
+<p>nohup ./frpc -c frpc.ini &amp;<br>
+在此你就可以在外网连你家的黑群晖了。</p>
+<p>六、使其更完美。</p>
+<p>1、在黑群晖上装一个dns server套件</p>
+<p>2、在dns server 上添加刚申请的域名，并新建一条A记录，指向我们家里的nas ip</p>
+<p>3、在路由器上设置分配dns server 的ip  为我们nas 存储的ip</p>
+<p>4、黑群晖开机启动frps</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/nginx-ssl-shuang-xiang-ren-zheng/">
+                  <h3 class="post-title">
+                    Nginx SSL 双向认证
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

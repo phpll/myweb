@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Nginx SSL 双向认证 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582105111965">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="安装Nginx和OpenSSL
+yum install nginx openssl -y
+SSL 服务器 / 客户端双向验证证书的生成
+创建一个新的 CA 根证书，在 nginx 安装目录下新建 ca 文件夹，进入 ca，创建几个子文件夹
+..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582105111965" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Nginx SSL 双向认证</h2>
+            <div class="post-date">2020-02-19</div>
+            
+            <div class="post-content" v-pre>
+              <p>安装Nginx和OpenSSL</p>
+<p>yum install nginx openssl -y<br>
+SSL 服务器 / 客户端双向验证证书的生成<br>
+创建一个新的 CA 根证书，在 nginx 安装目录下新建 ca 文件夹，进入 ca，创建几个子文件夹</p>
+<p>$ mkdir ca &amp;&amp; cd ca<br>
+$ mkdir newcerts private conf server</p>
+<h1 id="newcerts-子目录将用于存放-ca-签署过的数字证书证书备份目录private-用于存放-ca-的私钥conf-目录用于存放一些简化参数用的配置文件server-存放服务器证书文件">newcerts 子目录将用于存放 CA 签署过的数字证书(证书备份目录)；private 用于存放 CA 的私钥；conf 目录用于存放一些简化参数用的配置文件；server 存放服务器证书文件。</h1>
+<p>conf 目录新建 openssl.conf 文件</p>
+<p>[ ca ]<br>
+default_ca      = foo                   # The default ca section</p>
+<p>[ foo ]<br>
+dir            = ./         # top dir<br>
+database       = ./index.txt          # index file.<br>
+new_certs_dir  = ./newcerts           # new certs dir</p>
+<p>certificate    = ./private/ca.crt         # The CA cert<br>
+serial         = ./serial             # serial no file<br>
+private_key    = ./private/ca.key  # CA private key<br>
+RANDFILE       = ./private/.rand      # random number file</p>
+<p>default_days   = 3650                     # how long to certify for<br>
+default_crl_days= 30                     # how long before next CRL<br>
+default_md     = sha256                     # message digest method to use<br>
+unique_subject = no                      # Set to 'no' to allow creation of<br>
+# several ctificates with same subject.<br>
+policy         = policy_any              # default policy</p>
+<p>[ policy_any ]<br>
+countryName = match<br>
+stateOrProvinceName = match<br>
+organizationName = match<br>
+organizationalUnitName = match<br>
+localityName            = optional<br>
+commonName              = supplied<br>
+emailAddress            = optional<br>
+生成私钥 key 文件</p>
+<p>$ openssl genrsa -out private/ca.key 2048<br>
+输出<br>
+Generating RSA private key, 2048 bit long modulus<br>
+.......+++<br>
+.........................+++<br>
+e is 65537 (0x10001)<br>
+private 目录下有 ca.key 文件生成。<br>
+生成证书请求 csr 文件</p>
+<p>$ openssl req -new -key private/ca.key -out private/ca.csr<br>
+生成凭证 crt 文件</p>
+<p>$ openssl x509 -req -days 365 -in private/ca.csr -signkey private/ca.key -out private/ca.crt<br>
+private 目录下有 ca.crt 文件生成。<br>
+为我们的 key 设置起始序列号和创建 CA 键库</p>
+<p>$ echo FACE &gt; serial<br>
+#可以是任意四个字符<br>
+$ touch index.txt<br>
+为 &quot;用户证书&quot; 的移除创建一个证书撤销列表</p>
+<p>$ openssl ca -gencrl -out ./private/ca.crl -crldays 7 -config &quot;./conf/openssl.conf&quot;</p>
+<h1 id="输出">输出</h1>
+<p>Using configuration from ./conf/openssl.conf<br>
+private 目录下有 ca.crl 文件生成。<br>
+服务器证书的生成</p>
+<p>创建一个 key</p>
+<p>$ openssl genrsa -out server/server.key 2048<br>
+为我们的 key 创建一个证书签名请求 csr 文件<br>
+$ openssl req -new -key server/server.key -out server/server.csr<br>
+使用我们私有的 CA key 为刚才的 key 签名<br>
+$ openssl ca -in server/server.csr -cert private/ca.crt -keyfile private/ca.key -out     server/server.crt -config &quot;./conf/openssl.conf&quot;</p>
+<h1 id="输出-2">输出</h1>
+<p>Using configuration from ./conf/openssl.conf<br>
+Check that the request matches the signature<br>
+Signature ok<br>
+The Subject's Distinguished Name is as follows<br>
+countryName           :PRINTABLE:'CN'<br>
+stateOrProvinceName   :ASN.1 12:'GuangDong'<br>
+localityName          :ASN.1 12:'XX'<br>
+organizationName      :ASN.1 12:'<strong><strong>'<br>
+organizationalUnitName:ASN.1 12:'<strong>'<br>
+commonName            :ASN.1 12:'</strong>'<br>
+emailAddress          :IA5STRING:'</strong></strong>'<br>
+Certificate is to be certified until Mar 19 07:37:02 2017 GMT (365 days)<br>
+Sign the certificate? [y/n]:y</p>
+<p>1 out of 1 certificate requests certified, commit? [y/n]y<br>
+Write out database with 1 new entries<br>
+Data Base Updated<br>
+注：签名信息每次必须输入一致</p>
+<p>客户端证书的生成 * 创建存放 key 的目录 users</p>
+<p>$ mkdir users</p>
+<ul>
+<li>为用户创建一个 key</li>
+</ul>
+<p>$ openssl genrsa -des3 -out ./users/client.key 2048<br>
+输出：<br>
+Enter pass phrase for ./users/client.key:123<br>
+Verifying - Enter pass phrase for ./users/client.key:123<br>
+#要求输入 pass phrase，这个是当前 key 的口令，以防止本密钥泄漏后被人盗用。两次输入同一个密码(比如我这里输入     123)，users 目录下有 client.key 文件生成。<br>
+为 key 创建一个证书签名请求 csr 文件<br>
+$ openssl req -new -key ./users/client.key -out ./users/client.csr<br>
+#users 目录下有 client.csr 文件生成。<br>
+使用我们私有的 CA key 为刚才的 key 签名</p>
+<p>$ openssl ca -in ./users/client.csr -cert ./private/ca.crt -keyfile ./private/ca.key -out    ./users/client.crt -config &quot;./conf/openssl.conf&quot;<br>
+将证书转换为大多数浏览器都能识别的 PKCS12 文件</p>
+<p>$ openssl pkcs12 -export -clcerts -in ./users/client.crt -inkey ./users/client.key -out ./users/client.p12<br>
+输出</p>
+<p>Enter pass phrase for ./users/client.key:<br>
+Enter Export Password:<br>
+Verifying - Enter Export Password:<br>
+输入密码后，users 目录下有 client.p12 文件生成。</p>
+<p>Nginx配置<br>
+vhosts.xxx.conf 在 server { }段输入如下代码</p>
+<pre><code>listen       443; 
+server_name  localhost; 
+ssi on; 
+ssi_silent_errors on; 
+ssi_types text/shtml; 
+
+ssl                  on; 
+ssl_certificate      /usr/local/nginx/ca/server/server.crt; 
+ssl_certificate_key  /usr/local/nginx/ca/server/server.key; 
+ssl_client_certificate /usr/local/nginx/ca/private/ca.crt; 
+
+ssl_session_timeout  5m; 
+ssl_verify_client on;  #开户客户端证书验证 
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDH:AES:HIGH:!aNULL:!MD5:!ADH:!DH;
+
+
+ssl_prefer_server_ciphers   on; 
+</code></pre>
+<p>重新启动Nginx</p>
+<p>nginx -t<br>
+nginx -s reload</p>
+<p>作者：假装_很深沉<br>
+链接：https://www.jianshu.com/p/40bfe7566254<br>
+来源：简书<br>
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/sheng-cheng-nginx-fu-wu-qi-ssl-zheng-shu-he-ke-hu-duan-zheng-shu/">
+                  <h3 class="post-title">
+                    生成Nginx服务器SSL证书和客户端证书
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-19T04:58:43.317Z</updated>
+    <updated>2020-02-19T09:38:38.802Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,239 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[黑群晖通过frps，实现quick connect功能]]></title>
+        <id>https://newdy.cf/post/hei-qun-hui-tong-guo-frpsshi-xian-quick-connect-gong-neng/</id>
+        <link href="https://newdy.cf/post/hei-qun-hui-tong-guo-frpsshi-xian-quick-connect-gong-neng/">
+        </link>
+        <updated>2020-02-19T08:35:45.000Z</updated>
+        <content type="html"><![CDATA[<p>一、申请免费的vps：https://cloud.google.com/free/</p>
+<p>二、申请完vps后， 安装frps服务端：</p>
+<p>第一步：</p>
+<p>1、获取root 权限<br>
+sudo su -<br>
+2、#安装git客户端<br>
+yum install -y git<br>
+3、获取一键安装frps脚本<br>
+git clone https://github.com/clangcn/onekey-install-shell.git<br>
+4、进去frps目录安装<br>
+cd onekey-install-shell/frps<br>
+sh version.sh<br>
+sh install-frps.sh install</p>
+<p>然后选择2，就可以一直往下按回车</p>
+<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582101396279.jpg" alt="" loading="lazy"></figure>
+<p>安装完后，会看到相关的账户密码信息，请记录下来。</p>
+<p>第二步：</p>
+<p>开通vps上的防火墙，在vpc网络–&gt; 防火墙策略下新建一条防火墙，放开所有端口和所有来源ip（假如要安全的话，按需开通端口）,如下图</p>
+<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582101413068.jpg" alt="" loading="lazy"></figure>
+<p>第三步：</p>
+<p>启动frps</p>
+<p>frps start</p>
+<p>三、申请域名</p>
+<p>1、在godaddy网站：https://www.godaddy.com/， 申请一级域名，如： nayfeng.com</p>
+<p>2、新建一条A记录指向刚才新建vps的外网ip，如nas。那么我们访问nas.nafeng.com，就是指向刚才新建的vps上</p>
+<p>四、在vps上配置frps 服务端</p>
+<p>1、进入fprs的配置模式<br>
+frps config<br>
+2、新增配置信息，在配置文件最下面，新增subdomain_host = nayfeng.com，然后按esc，:，x 来保存配置信息</p>
+<p>3、重启fprs服务使其生效<br>
+frps restart<br>
+如下图所示的配置信息，</p>
+<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582101434713.jpg" alt="" loading="lazy"></figure>
+<p>五、在群晖nas上配置frp 客户端</p>
+<p>1、通过security crt 或者xshell的客户端，远程登录我们的nas</p>
+<p>2、下载frps客户端 wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_linux_amd64.tar.gz<br>
+3、解压<br>
+tar zxvf frp_0.21.0_linux_amd64.tar.gz<br>
+4、修改配置文件<br>
+cd frp_0.20.0_linux_amd64<br>
+vi frpc.ini</p>
+<p>frpc.ini的参考配置信息如下，只要把我们的中文说明的两行根据实际情况填写就可以了，部分人发现配置文件有异常的话，请把中文的备注信息删除：</p>
+<p>[common]<br>
+server_addr = 1.1.1.1   #用个人vps公网ip代替<br>
+server_port = 5443<br>
+token = tian-xie-token    #填写自己vps上frps的token配置代替</p>
+<p>admin_addr = 127.0.0.1<br>
+admin_port = 7001<br>
+admin_user = admin<br>
+admin_pwd = admin</p>
+<p>[ssh]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 22<br>
+remote_port = 6000</p>
+<p>[plex]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 32400<br>
+remote_port = 32400</p>
+<p>[nas_5000]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 5000<br>
+remote_port = 5000</p>
+<p>[nas_5001]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 5001<br>
+remote_port = 5001</p>
+<p>[nas_web]<br>
+type = http<br>
+local_ip = 127.0.0.1<br>
+local_port = 5000<br>
+subdomain = nas</p>
+<p>[nas_webs]<br>
+type = https<br>
+local_ip = 127.0.0.1<br>
+local_port = 5001<br>
+subdomain = nas<br>
+5、启动frpc 客户端服务</p>
+<p>nohup ./frpc -c frpc.ini &amp;<br>
+在此你就可以在外网连你家的黑群晖了。</p>
+<p>六、使其更完美。</p>
+<p>1、在黑群晖上装一个dns server套件</p>
+<p>2、在dns server 上添加刚申请的域名，并新建一条A记录，指向我们家里的nas ip</p>
+<p>3、在路由器上设置分配dns server 的ip  为我们nas 存储的ip</p>
+<p>4、黑群晖开机启动frps</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Nginx SSL 双向认证]]></title>
+        <id>https://newdy.cf/post/nginx-ssl-shuang-xiang-ren-zheng/</id>
+        <link href="https://newdy.cf/post/nginx-ssl-shuang-xiang-ren-zheng/">
+        </link>
+        <updated>2020-02-19T08:34:51.000Z</updated>
+        <content type="html"><![CDATA[<p>安装Nginx和OpenSSL</p>
+<p>yum install nginx openssl -y<br>
+SSL 服务器 / 客户端双向验证证书的生成<br>
+创建一个新的 CA 根证书，在 nginx 安装目录下新建 ca 文件夹，进入 ca，创建几个子文件夹</p>
+<p>$ mkdir ca &amp;&amp; cd ca<br>
+$ mkdir newcerts private conf server</p>
+<h1 id="newcerts-子目录将用于存放-ca-签署过的数字证书证书备份目录private-用于存放-ca-的私钥conf-目录用于存放一些简化参数用的配置文件server-存放服务器证书文件">newcerts 子目录将用于存放 CA 签署过的数字证书(证书备份目录)；private 用于存放 CA 的私钥；conf 目录用于存放一些简化参数用的配置文件；server 存放服务器证书文件。</h1>
+<p>conf 目录新建 openssl.conf 文件</p>
+<p>[ ca ]<br>
+default_ca      = foo                   # The default ca section</p>
+<p>[ foo ]<br>
+dir            = ./         # top dir<br>
+database       = ./index.txt          # index file.<br>
+new_certs_dir  = ./newcerts           # new certs dir</p>
+<p>certificate    = ./private/ca.crt         # The CA cert<br>
+serial         = ./serial             # serial no file<br>
+private_key    = ./private/ca.key  # CA private key<br>
+RANDFILE       = ./private/.rand      # random number file</p>
+<p>default_days   = 3650                     # how long to certify for<br>
+default_crl_days= 30                     # how long before next CRL<br>
+default_md     = sha256                     # message digest method to use<br>
+unique_subject = no                      # Set to 'no' to allow creation of<br>
+# several ctificates with same subject.<br>
+policy         = policy_any              # default policy</p>
+<p>[ policy_any ]<br>
+countryName = match<br>
+stateOrProvinceName = match<br>
+organizationName = match<br>
+organizationalUnitName = match<br>
+localityName            = optional<br>
+commonName              = supplied<br>
+emailAddress            = optional<br>
+生成私钥 key 文件</p>
+<p>$ openssl genrsa -out private/ca.key 2048<br>
+输出<br>
+Generating RSA private key, 2048 bit long modulus<br>
+.......+++<br>
+.........................+++<br>
+e is 65537 (0x10001)<br>
+private 目录下有 ca.key 文件生成。<br>
+生成证书请求 csr 文件</p>
+<p>$ openssl req -new -key private/ca.key -out private/ca.csr<br>
+生成凭证 crt 文件</p>
+<p>$ openssl x509 -req -days 365 -in private/ca.csr -signkey private/ca.key -out private/ca.crt<br>
+private 目录下有 ca.crt 文件生成。<br>
+为我们的 key 设置起始序列号和创建 CA 键库</p>
+<p>$ echo FACE &gt; serial<br>
+#可以是任意四个字符<br>
+$ touch index.txt<br>
+为 &quot;用户证书&quot; 的移除创建一个证书撤销列表</p>
+<p>$ openssl ca -gencrl -out ./private/ca.crl -crldays 7 -config &quot;./conf/openssl.conf&quot;</p>
+<h1 id="输出">输出</h1>
+<p>Using configuration from ./conf/openssl.conf<br>
+private 目录下有 ca.crl 文件生成。<br>
+服务器证书的生成</p>
+<p>创建一个 key</p>
+<p>$ openssl genrsa -out server/server.key 2048<br>
+为我们的 key 创建一个证书签名请求 csr 文件<br>
+$ openssl req -new -key server/server.key -out server/server.csr<br>
+使用我们私有的 CA key 为刚才的 key 签名<br>
+$ openssl ca -in server/server.csr -cert private/ca.crt -keyfile private/ca.key -out     server/server.crt -config &quot;./conf/openssl.conf&quot;</p>
+<h1 id="输出-2">输出</h1>
+<p>Using configuration from ./conf/openssl.conf<br>
+Check that the request matches the signature<br>
+Signature ok<br>
+The Subject's Distinguished Name is as follows<br>
+countryName           :PRINTABLE:'CN'<br>
+stateOrProvinceName   :ASN.1 12:'GuangDong'<br>
+localityName          :ASN.1 12:'XX'<br>
+organizationName      :ASN.1 12:'<strong><strong>'<br>
+organizationalUnitName:ASN.1 12:'<strong>'<br>
+commonName            :ASN.1 12:'</strong>'<br>
+emailAddress          :IA5STRING:'</strong></strong>'<br>
+Certificate is to be certified until Mar 19 07:37:02 2017 GMT (365 days)<br>
+Sign the certificate? [y/n]:y</p>
+<p>1 out of 1 certificate requests certified, commit? [y/n]y<br>
+Write out database with 1 new entries<br>
+Data Base Updated<br>
+注：签名信息每次必须输入一致</p>
+<p>客户端证书的生成 * 创建存放 key 的目录 users</p>
+<p>$ mkdir users</p>
+<ul>
+<li>为用户创建一个 key</li>
+</ul>
+<p>$ openssl genrsa -des3 -out ./users/client.key 2048<br>
+输出：<br>
+Enter pass phrase for ./users/client.key:123<br>
+Verifying - Enter pass phrase for ./users/client.key:123<br>
+#要求输入 pass phrase，这个是当前 key 的口令，以防止本密钥泄漏后被人盗用。两次输入同一个密码(比如我这里输入     123)，users 目录下有 client.key 文件生成。<br>
+为 key 创建一个证书签名请求 csr 文件<br>
+$ openssl req -new -key ./users/client.key -out ./users/client.csr<br>
+#users 目录下有 client.csr 文件生成。<br>
+使用我们私有的 CA key 为刚才的 key 签名</p>
+<p>$ openssl ca -in ./users/client.csr -cert ./private/ca.crt -keyfile ./private/ca.key -out    ./users/client.crt -config &quot;./conf/openssl.conf&quot;<br>
+将证书转换为大多数浏览器都能识别的 PKCS12 文件</p>
+<p>$ openssl pkcs12 -export -clcerts -in ./users/client.crt -inkey ./users/client.key -out ./users/client.p12<br>
+输出</p>
+<p>Enter pass phrase for ./users/client.key:<br>
+Enter Export Password:<br>
+Verifying - Enter Export Password:<br>
+输入密码后，users 目录下有 client.p12 文件生成。</p>
+<p>Nginx配置<br>
+vhosts.xxx.conf 在 server { }段输入如下代码</p>
+<pre><code>listen       443; 
+server_name  localhost; 
+ssi on; 
+ssi_silent_errors on; 
+ssi_types text/shtml; 
+
+ssl                  on; 
+ssl_certificate      /usr/local/nginx/ca/server/server.crt; 
+ssl_certificate_key  /usr/local/nginx/ca/server/server.key; 
+ssl_client_certificate /usr/local/nginx/ca/private/ca.crt; 
+
+ssl_session_timeout  5m; 
+ssl_verify_client on;  #开户客户端证书验证 
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDH:AES:HIGH:!aNULL:!MD5:!ADH:!DH;
+
+
+ssl_prefer_server_ciphers   on; 
+</code></pre>
+<p>重新启动Nginx</p>
+<p>nginx -t<br>
+nginx -s reload</p>
+<p>作者：假装_很深沉<br>
+链接：https://www.jianshu.com/p/40bfe7566254<br>
+来源：简书<br>
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[生成Nginx服务器SSL证书和客户端证书]]></title>
         <id>https://newdy.cf/post/sheng-cheng-nginx-fu-wu-qi-ssl-zheng-shu-he-ke-hu-duan-zheng-shu/</id>
@@ -1252,73 +1485,6 @@ SNAPPY压缩</p>
 <img src="https://newdy.cf/post-images/1581902848427.jpg" alt="" loading="lazy"><br>
 sscored权限应该是 755</p>
 <p>chmod 755 /var/packages/SurveillanceStation/target/sbin/sscored</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[群晖存储空间损毁 Btrfs 数据恢复教程]]></title>
-        <id>https://newdy.cf/post/qun-hui-cun-chu-kong-jian-sun-hui-btrfs-shu-ju-hui-fu-jiao-cheng/</id>
-        <link href="https://newdy.cf/post/qun-hui-cun-chu-kong-jian-sun-hui-btrfs-shu-ju-hui-fu-jiao-cheng/">
-        </link>
-        <updated>2020-02-11T14:52:53.000Z</updated>
-        <content type="html"><![CDATA[<p>由于囊中羞涩，reizhi 一直在使用黑群晖作为家庭存储方案。不知何故，几天前突然提示存储空间已损毁。这种情况下白群晖是可以直接联系技术支持的，无奈我只好自己想办法解决。而网络上搜索到的教程和案例都是使用 Ext4 作为文件系统，那么只需要用 UFS explorer 来修复就好了。偏偏我是用的是 Btrfs 文件系统，于是只好爬问研究。最终通过三天时间的反复尝试，成功将所有数据挽回，在此分享一下经历和经验供日后参考。</p>
-<p>如果你也遇到了类似问题，完全不用急着慌张。虽然 Btrfs 相比于 Ext4 并没有任何稳定性上的优势，但经过多年的更新和改进文件系统已经比较完善，再加上 RAID 的数据保护，丢失文件的几率并不高。</p>
-<p>如果你的群晖提示存储空间损毁，但 RAID 并没有异常，可以无需进行 RAID 清理。通过查看 S.M.A.R.T 状态，发现所有硬盘均处于健康状态，于是跳过这一步。接下来我们需要引导到 Ubuntu 系统并尝试挂载 RAID ，此时既可以使用原有机器，也可以将所有硬盘连接到其他机器中操作。在原机安装 Ubuntu 时请注意不要将系统安装至存有数据的硬盘。安装镜像以及教程可以直接在官网获取，这里便不再赘述了。另外由于恢复过程耗时较长，不建议使用 LiveCD 来操作。</p>
-<p>安装完成后的第一件事是安装必要的工具包以及挂载 RAID，打开终端并以 root 身份（sudo -i）执行以下操作：</p>
-<p>apt-get update<br>
-apt-get install mdadm lvm2 btrfs-prog<br>
-mdadm -Asf &amp;&amp; vgchange -ay<br>
-正常完成后可以在磁盘管理中看到 RAID 阵列，但是由于文件系统损坏，此时是无法挂载的。这里会显示阵列的设备文件是 /dev/md/2 ，记住你的显示值，稍后会要用到。<br>
-<img src="https://newdy.cf/post-images/1581432806246.png" alt="" loading="lazy"><br>
-我们切换回终端，运行以下命令：</p>
-<p>btrfs-find-root /dev/md/2 &amp;&gt; /tmp/root.txt<br>
-运行过程可能需要10-30分钟，期间是没有任何回显的。等待运行完成后终端会返回命令提示符，这时我们打开 /tmp/root.txt 文件，可以看到如下内容：<br>
-<img src="https://newdy.cf/post-images/1581432867060.png" alt="" loading="lazy"><br>
-我们需要用到的数据是 Well block 后面的这一串数字，其后的 gen 数字越高，恢复的可能性越大。下一步使用找到的 tree root 来模拟修复，到目前为止的所有操作都不会对硬盘进行写入和修改，也不会破坏任何数据。</p>
-<p>btrfs check --tree-root <block> --super <sup><br>
-其中 <block> 为上一步中的数值，按 gen 数字从高到低依次尝试使用，<sup> 可以尝试0，1或2。如果 <block> 有效，运行结果末尾应当类似于以下图示：<br>
-<img src="https://newdy.cf/post-images/1581432909952.png" alt="" loading="lazy"><br>
-如果最后回显不是以上格式，表明这一条 <block> 无效，需要继续尝试下一条。在确认看到以上提示后，我们尝试将数据导出。</p>
-<p>btrfs restore /dev/md/2 /tmp -D -v -F -i -t <sup><br>
-此时仍然使用上一步中的 <block> 值，将 /tmp 改为导出目录，需要确保留有足够空间存储文件。如果文件名包含特殊符号可能导致导出中断，将目标分区格式化为 Ext3/4 即可。<br>
-<img src="https://newdy.cf/post-images/1581432941261.png" alt="" loading="lazy"><br>
-如果导出正常进行，会看到类似上图的提示，此处没有进度提示，可以自行前往导出目录查看。如果导出失败会给出其他提示，在确认导出分区是 Ext3/4 的情况下，则只能退回上一步尝试其他 <sup> 值。</p>
-<p>到目前为止我们并没有对数据盘进行任何写入和修改操作，如果因为种种原因无法导出，或是导出过程异常中断，仍然可以通过修复原盘的方式来挽回数据。不过请注意，此步骤有可能会损坏数据，如果你不能接受任何风险，请停止执行并联系专业机构。</p>
-<p>btrfs check --repair --tree-root <block> --super <sup><br>
-使用之前步骤中正常回显的 <block> 及 <sup> 值进行正式修复，确认操作完成后执行：</p>
-<p>btrfs rescue super-recover /dev/md/2<br>
-<img src="https://newdy.cf/post-images/1581432991454.png" alt="" loading="lazy"></p>
-<p>提示确认目标分区是 Btrfs 文件系统，否则会损坏数据，输入 y 确认操作。等待数秒后再次回到提示符，如果一切顺利，此时已经可以通过磁盘管理工具挂载 Btrfs 分区了。不过群晖很大几率不会识别修复后的文件系统，还是建议将数据导出后再将硬盘还原。😚</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[群晖开启 SMB3 多通道叠加网卡速度]]></title>
-        <id>https://newdy.cf/post/qun-hui-kai-qi-smb3-duo-tong-dao-die-jia-wang-qia-su-du/</id>
-        <link href="https://newdy.cf/post/qun-hui-kai-qi-smb3-duo-tong-dao-die-jia-wang-qia-su-du/">
-        </link>
-        <updated>2020-02-11T14:47:10.000Z</updated>
-        <content type="html"><![CDATA[<p>不少的群晖机型都带有2个甚至更多的网卡，为了突破 1Gbps 的局域网连接速度，我们以往需要在交换机、群晖和 PC 端配置链路聚合(link aggregation)。不仅配置较为繁琐，而且额外增加了 PC 端和交换机的成本，实际普及率并不高。而自 DSM 6.1-15047 之后，群晖为我们带来了 SMB3 多通道支持，使得我们能够以及其低廉的成本享受多网卡叠加带来的速度提升。</p>
-<p>要使用 SMB3.0 的多通道来叠加网卡速度，需要以下几个条件：</p>
-<p>群晖带有2个或以上的相同线速的网卡，并安装 DSM 6.1-15047 及更高版本<br>
-普通交换机<br>
-PC 端带有2个或以上的相同线速的网卡，并安装 Windows 8/Server 2012及更高版本 OS<br>
-由于群晖目前没有开放相关设置项，所以我们部分操作需要通过 SSH 来完成：</p>
-<p>1.打开控制面板，依次进入：文件服务-高级设置，将最大协议改为 SMB3，点击应用<br>
-<img src="https://newdy.cf/post-images/1581432465559.png" alt="" loading="lazy"><br>
-2.进入：终端机和 SNMP，勾选启动 SSH 功能，点击应用<br>
-<img src="https://newdy.cf/post-images/1581432503103.png" alt="" loading="lazy"><br>
-3.使用 PUTTY 等软件登入群晖 SSH，输入 sudo -i 临时提权，并输入密码回车。待命令提示符由 $ 变为 # 后，执行：vi /etc/samba/smb.conf<br>
-<img src="https://newdy.cf/post-images/1581432535629.png" alt="" loading="lazy"><br>
-4.在文件末尾添加以下内容，完成后按 ESC，并输入 :wq 保存退出</p>
-<p>server multi channel support = yes<br>
-aio read size = 1<br>
-aio write size = 1<br>
-5.重启群晖，PC 和交换机，所有设置完成。</p>
-<p>在重启完成后，PC 端使用主机名（如\homeshare）或 ip 进入一次共享，即可自动启用 SMB3 多通道了。另外也可以用管理员权限运行 PowerShell ，执行： Get-SmbMultichannelConnection 确认。<br>
-<img src="https://newdy.cf/post-images/1581432576355.png" alt="" loading="lazy"><br>
-如上所示，目前 PC 已连接到服务器 192.168.199.189，并且分别通过本地 ip:192.168.199.99 192.168.199.100 与远端 ip: 192.168.199.188 192.168.199.189 建立了 SMB3 多通道连接。<br>
-<img src="https://newdy.cf/post-images/1581432604857.png" alt="" loading="lazy"><br>
-通过复制文件也可以看出，两张网卡均有流量，并且总和超过了 1Gbps 。</p>
-<p>基于 RTL8111 的 PCIE x1 网卡目前均价不过20-30块，并且对于交换机并无特殊限制，故整套解决方案成本是非常低的。除了PCIE 网卡之外，也可以使用 USB 网卡，但需要确保所有网卡线速一致，才能够启用 SMB3 多通道。</p>
 ]]></content>
     </entry>
 </feed>
