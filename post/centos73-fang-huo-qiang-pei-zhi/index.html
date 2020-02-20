@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>关于 | Gridea</title>
+<title>Centos7.3防火墙配置 | Gridea</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,14 +18,15 @@
 
 
 
-    <meta name="description" content="
-欢迎来到我的小站呀，很高兴遇见你！🤝
+    <meta name="description" content="1、查看firewall服务状态
+systemctl status firewalld
 
-🏠 关于本站
-👨‍💻 博主是谁
-⛹ 兴趣爱好
-📬 联系我呀
-..." />
+2、查看firewall的状态
+firewall-cmd --state
+
+3、开启、重启、关闭、firewalld.service服务
+开启
+ser..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -101,20 +102,52 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">关于</h2>
-            <div class="post-date">2019-01-25</div>
+            <h2 class="post-title">Centos7.3防火墙配置</h2>
+            <div class="post-date">2020-02-20</div>
             
             <div class="post-content" v-pre>
-              <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+              <p>1、查看firewall服务状态<br>
+systemctl status firewalld<br>
+<img src="https://newdy.cf/post-images/1582196168648.png" alt="" loading="lazy"></p>
+<p>2、查看firewall的状态<br>
+firewall-cmd --state<br>
+<img src="https://newdy.cf/post-images/1582196217057.png" alt="" loading="lazy"></p>
+<p>3、开启、重启、关闭、firewalld.service服务</p>
+<h1 id="开启">开启</h1>
+<p>service firewalld start</p>
+<h1 id="重启">重启</h1>
+<p>service firewalld restart</p>
+<h1 id="关闭">关闭</h1>
+<p>service firewalld stop</p>
+<p>4、查看防火墙规则<br>
+firewall-cmd --list-all<br>
+<img src="https://newdy.cf/post-images/1582196328235.png" alt="" loading="lazy"></p>
+<p>5、查询、开放、关闭端口</p>
+<p>复制代码</p>
+<h1 id="查询端口是否开放">查询端口是否开放</h1>
+<p>firewall-cmd --query-port=8080/tcp</p>
+<h1 id="开放80端口">开放80端口</h1>
+<p>firewall-cmd --permanent --add-port=80/tcp</p>
+<h1 id="移除端口">移除端口</h1>
+<p>firewall-cmd --permanent --remove-port=8080/tcp</p>
+<p>#重启防火墙(修改配置后要重启防火墙)<br>
+firewall-cmd --reload</p>
+<h1 id="参数解释">参数解释</h1>
+<p>1、firwall-cmd：是Linux提供的操作firewall的一个工具；<br>
+2、--permanent：表示设置为持久；<br>
+3、--add-port：标识添加的端口；</p>
 
             </div>
             
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/an-zhuang-centos76-minimal-iso-xi-tong-bing-zeng-jia-tu-xing-hua-zhuo-mian/">
+                  <h3 class="post-title">
+                    安装CentOS7.6 Minimal ISO系统并增加图形化桌面
+                  </h3>
+                </a>
+              </div>
             
 
             

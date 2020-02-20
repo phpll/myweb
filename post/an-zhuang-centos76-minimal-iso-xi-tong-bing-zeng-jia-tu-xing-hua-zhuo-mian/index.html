@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>安装CentOS7.6 Minimal ISO系统并增加图形化桌面 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582196334828">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="1.配置网络（因为安装过程需要网络yum源。当然你这里如果有完整系统镜像做本地yum源或者其它本地yum源可以满足安装需求的话没有网络也是可以的。）
+2.查看yum源是否可用：
+yum repolist
+3.执行命令：
+yum groupl..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582196334828" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">安装CentOS7.6 Minimal ISO系统并增加图形化桌面</h2>
+            <div class="post-date">2020-02-20</div>
+            
+            <div class="post-content" v-pre>
+              <p>1.配置网络（因为安装过程需要网络yum源。当然你这里如果有完整系统镜像做本地yum源或者其它本地yum源可以满足安装需求的话没有网络也是可以的。）</p>
+<p>2.查看yum源是否可用：</p>
+<p>yum repolist</p>
+<p>3.执行命令：</p>
+<p>yum grouplist  # 先检查一下系统支持哪些桌面安装类型，见下图<br>
+<img src="https://newdy.cf/post-images/1582185918274.png" alt="" loading="lazy"><br>
+yum groupinstall -y &quot;X Window System&quot;  # X Window System是执行在UNIX系统上的视窗系统，出现complete表示成功。据其它同行说此步骤不执行亦可。</p>
+<p>yum groupinstall -y &quot;GNOME Desktop&quot;  # 表示安装GNOME Desktop类型的桌面，出现complete表示成功；查阅其它经验贴发现也可以选择KDE Desktop，安装方法请参考其它资料。<br>
+报错：</p>
+<p>Transaction check error:</p>
+<p>file /boot/efi/EFI/redhat from install of fwupdate-efi-12-5.el7.x86_64 conflicts with file from package grub2-common-1:2.02-0.65.el7_4.2.noarch</p>
+<p>file /boot/efi/EFI/redhat from install of fwupdate-efi-12-5.el7.x86_64 conflicts with file from package grub2-efi-1:2.02-0.65.el7_4.2.x86_64</p>
+<p>解决：表示包的版本有冲突，貌似是系统bug；</p>
+<p>执行</p>
+<p>yum update grub2-common</p>
+<p>yum install grub2-efi</p>
+<p>yum install fwupdate</p>
+<p>再重新执行yum groupinstall -y &quot;GNOME Desktop&quot;即可，参考链接：https://www.createdpro.com/a/100006。</p>
+<p>startx  # 表示进入桌面</p>
+<p>报错：</p>
+<p>xauth: file /root/.serverauth.2669 does not exist  # 这只是报错的其中一条，还有几条同类型报错，因当时不便截图故不能一 一列出。</p>
+<p>解决：在有网的情况下执行yum upgrade 该命令表示安装新内核，重启后即可正常进入桌面。参考链接：https://www.cnblogs.com/rgqancy/p/5554814.html。</p>
+<p>4.进入桌面后按提示输入一步步执行完成即可。注意事项：走到如下图这一步时只能以英文字母开头不能以数字开头，你输入全名时下一行的用户名会跟着自动输入，当用户名不跟着全名自动输入时说明系统不支持该类名称，但系统并不报错，只是等你到最后会发现一切就绪后桌面无图标并且鼠标右键无效无法操作；到输入密码这一步时，要求密码不能和名称有相同的字母或数字，否则无法进入下一步。<br>
+<img src="https://newdy.cf/post-images/1582185962009.png" alt="" loading="lazy"><br>
+至此桌面安装完毕，以下为知识点扩展及经验总结：</p>
+<p>1.整个过程报错几次，当时没细看报错，导致操作了几遍才解决，差点有重新装系统的冲动了。首先遇到报错不要着急要看一下报错信息再解决，不能盲目解决导致效率低，遇到问题要自信沉稳。</p>
+<p>2.yum groupinstall 这个命令的新命令据说可以这样写yum groups install，本人未亲自验证。</p>
+<p>3.卸载命令yum groupremove</p>
+<p>4.设置开机启动模式为图形模式（是否需要操作这一步有待核实，因为我当时操作了，但与别人交流时他们并未操作该步骤）</p>
+<p>systemctl set-default graphical.target或者ln -sf /usr/lib/systemd/system/graphical.target /etc/systemd/system/default.target</p>
+<p>设置开机启动模式为文本模式（这一步在装桌面肯定是不用执行的啦，我在这里写出来只是为了知识点的扩展而已）：ln -sf/lib/systemd/system/multi-user.target /etc/systemd/system/default.target</p>
+<p>5.期间如果reboot后无法正常进入桌面，亦无法进入命令行模式时可以采用Xshell等远程工具连接进入命令行。（有人说可以在终端前用Ctrl+Alt+F*（*表示1-7）之间选择即可以进入控制台来操作，本人未亲自验证）</p>
+<p>6.这种情况建议最好安装everything ISO带桌面的系统，一步到位。选择系统时不要选最新的，求稳不求新，同事下载的就是目前最新的7.6版本，新版本难免有bug</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/dockerfile-chang-yong-zhi-ling-xiang-jie-andjing-xiang-huan-cun-te-xing/">
+                  <h3 class="post-title">
+                    Dockerfile常用指令详解&amp;镜像缓存特性
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

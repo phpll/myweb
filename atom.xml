@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-20T05:39:38.367Z</updated>
+    <updated>2020-02-20T11:10:10.076Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,704 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[Centos7.3防火墙配置]]></title>
+        <id>https://newdy.cf/post/centos73-fang-huo-qiang-pei-zhi/</id>
+        <link href="https://newdy.cf/post/centos73-fang-huo-qiang-pei-zhi/">
+        </link>
+        <updated>2020-02-20T10:55:40.000Z</updated>
+        <content type="html"><![CDATA[<p>1、查看firewall服务状态<br>
+systemctl status firewalld<br>
+<img src="https://newdy.cf/post-images/1582196168648.png" alt="" loading="lazy"></p>
+<p>2、查看firewall的状态<br>
+firewall-cmd --state<br>
+<img src="https://newdy.cf/post-images/1582196217057.png" alt="" loading="lazy"></p>
+<p>3、开启、重启、关闭、firewalld.service服务</p>
+<h1 id="开启">开启</h1>
+<p>service firewalld start</p>
+<h1 id="重启">重启</h1>
+<p>service firewalld restart</p>
+<h1 id="关闭">关闭</h1>
+<p>service firewalld stop</p>
+<p>4、查看防火墙规则<br>
+firewall-cmd --list-all<br>
+<img src="https://newdy.cf/post-images/1582196328235.png" alt="" loading="lazy"></p>
+<p>5、查询、开放、关闭端口</p>
+<p>复制代码</p>
+<h1 id="查询端口是否开放">查询端口是否开放</h1>
+<p>firewall-cmd --query-port=8080/tcp</p>
+<h1 id="开放80端口">开放80端口</h1>
+<p>firewall-cmd --permanent --add-port=80/tcp</p>
+<h1 id="移除端口">移除端口</h1>
+<p>firewall-cmd --permanent --remove-port=8080/tcp</p>
+<p>#重启防火墙(修改配置后要重启防火墙)<br>
+firewall-cmd --reload</p>
+<h1 id="参数解释">参数解释</h1>
+<p>1、firwall-cmd：是Linux提供的操作firewall的一个工具；<br>
+2、--permanent：表示设置为持久；<br>
+3、--add-port：标识添加的端口；</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[安装CentOS7.6 Minimal ISO系统并增加图形化桌面]]></title>
+        <id>https://newdy.cf/post/an-zhuang-centos76-minimal-iso-xi-tong-bing-zeng-jia-tu-xing-hua-zhuo-mian/</id>
+        <link href="https://newdy.cf/post/an-zhuang-centos76-minimal-iso-xi-tong-bing-zeng-jia-tu-xing-hua-zhuo-mian/">
+        </link>
+        <updated>2020-02-20T08:04:20.000Z</updated>
+        <content type="html"><![CDATA[<p>1.配置网络（因为安装过程需要网络yum源。当然你这里如果有完整系统镜像做本地yum源或者其它本地yum源可以满足安装需求的话没有网络也是可以的。）</p>
+<p>2.查看yum源是否可用：</p>
+<p>yum repolist</p>
+<p>3.执行命令：</p>
+<p>yum grouplist  # 先检查一下系统支持哪些桌面安装类型，见下图<br>
+<img src="https://newdy.cf/post-images/1582185918274.png" alt="" loading="lazy"><br>
+yum groupinstall -y &quot;X Window System&quot;  # X Window System是执行在UNIX系统上的视窗系统，出现complete表示成功。据其它同行说此步骤不执行亦可。</p>
+<p>yum groupinstall -y &quot;GNOME Desktop&quot;  # 表示安装GNOME Desktop类型的桌面，出现complete表示成功；查阅其它经验贴发现也可以选择KDE Desktop，安装方法请参考其它资料。<br>
+报错：</p>
+<p>Transaction check error:</p>
+<p>file /boot/efi/EFI/redhat from install of fwupdate-efi-12-5.el7.x86_64 conflicts with file from package grub2-common-1:2.02-0.65.el7_4.2.noarch</p>
+<p>file /boot/efi/EFI/redhat from install of fwupdate-efi-12-5.el7.x86_64 conflicts with file from package grub2-efi-1:2.02-0.65.el7_4.2.x86_64</p>
+<p>解决：表示包的版本有冲突，貌似是系统bug；</p>
+<p>执行</p>
+<p>yum update grub2-common</p>
+<p>yum install grub2-efi</p>
+<p>yum install fwupdate</p>
+<p>再重新执行yum groupinstall -y &quot;GNOME Desktop&quot;即可，参考链接：https://www.createdpro.com/a/100006。</p>
+<p>startx  # 表示进入桌面</p>
+<p>报错：</p>
+<p>xauth: file /root/.serverauth.2669 does not exist  # 这只是报错的其中一条，还有几条同类型报错，因当时不便截图故不能一 一列出。</p>
+<p>解决：在有网的情况下执行yum upgrade 该命令表示安装新内核，重启后即可正常进入桌面。参考链接：https://www.cnblogs.com/rgqancy/p/5554814.html。</p>
+<p>4.进入桌面后按提示输入一步步执行完成即可。注意事项：走到如下图这一步时只能以英文字母开头不能以数字开头，你输入全名时下一行的用户名会跟着自动输入，当用户名不跟着全名自动输入时说明系统不支持该类名称，但系统并不报错，只是等你到最后会发现一切就绪后桌面无图标并且鼠标右键无效无法操作；到输入密码这一步时，要求密码不能和名称有相同的字母或数字，否则无法进入下一步。<br>
+<img src="https://newdy.cf/post-images/1582185962009.png" alt="" loading="lazy"><br>
+至此桌面安装完毕，以下为知识点扩展及经验总结：</p>
+<p>1.整个过程报错几次，当时没细看报错，导致操作了几遍才解决，差点有重新装系统的冲动了。首先遇到报错不要着急要看一下报错信息再解决，不能盲目解决导致效率低，遇到问题要自信沉稳。</p>
+<p>2.yum groupinstall 这个命令的新命令据说可以这样写yum groups install，本人未亲自验证。</p>
+<p>3.卸载命令yum groupremove</p>
+<p>4.设置开机启动模式为图形模式（是否需要操作这一步有待核实，因为我当时操作了，但与别人交流时他们并未操作该步骤）</p>
+<p>systemctl set-default graphical.target或者ln -sf /usr/lib/systemd/system/graphical.target /etc/systemd/system/default.target</p>
+<p>设置开机启动模式为文本模式（这一步在装桌面肯定是不用执行的啦，我在这里写出来只是为了知识点的扩展而已）：ln -sf/lib/systemd/system/multi-user.target /etc/systemd/system/default.target</p>
+<p>5.期间如果reboot后无法正常进入桌面，亦无法进入命令行模式时可以采用Xshell等远程工具连接进入命令行。（有人说可以在终端前用Ctrl+Alt+F*（*表示1-7）之间选择即可以进入控制台来操作，本人未亲自验证）</p>
+<p>6.这种情况建议最好安装everything ISO带桌面的系统，一步到位。选择系统时不要选最新的，求稳不求新，同事下载的就是目前最新的7.6版本，新版本难免有bug</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Dockerfile常用指令详解&镜像缓存特性]]></title>
+        <id>https://newdy.cf/post/dockerfile-chang-yong-zhi-ling-xiang-jie-andjing-xiang-huan-cun-te-xing/</id>
+        <link href="https://newdy.cf/post/dockerfile-chang-yong-zhi-ling-xiang-jie-andjing-xiang-huan-cun-te-xing/">
+        </link>
+        <updated>2020-02-20T05:52:02.000Z</updated>
+        <content type="html"><![CDATA[<p>Dockerfile简介<br>
+Dockerfile 是Docker中用于定义镜像自动化构建流程的配置文件。在Dockerfile中，包含了构建镜像过程中需要执行的命令和其他操作。通过Dockerfile可以更加清晰，明确的给定Docker镜像的制作过程，由于仅是简单，小体积的文件，在网络等介质中传递的速度快，能够更快的实现容器迁移和集群部署。<br>
+Dockerfile是一个文本文件，其内包含了一条条的指令，每一条指令构建一层，因此每一条指令的内容，就是描述该层应当如何构建。</p>
+<p>相对于提交容器修改在进行镜像迁移的方式相比，使用Dockerfile有很多优势：</p>
+<p>Dockerfile的体积远小于镜像包，更容易进行快速迁移和部署。<br>
+环境构建流程记录在Dockerfile中，能够直观的看到镜像构建的顺序和逻辑。<br>
+使用Dockerfile构建镜像能够更轻松的实现自动部署等自动化流程。<br>
+在修改环境搭建细节时，修改Dockerfile文件更加简单。<br>
+实际开发使用中很少会选择容器提交这种方法来构建镜像，而是几乎采用Dockerfile来制作镜像。</p>
+<p>Docker执行Dockerfile的大致流程：<br>
+（1）docker会从Dockerfile文件头FROM指定的基础镜像运行一个容器<br>
+（2）然后执行一条指令，对容器作出修改。<br>
+（3）接着执行类似于docker commit的操作，创建一个新的镜像层。<br>
+（4）在基于刚创建的镜像运行一个新的容器。<br>
+（4）执行dockerfile中的下一条指令，直到所有指令都执行完毕。<br>
+docker会删除中间层创建的容器，但不会删除中间层镜像，所以可以使用docker run运行一个中间层容器，从而查看每一步构建后的镜像状态，，这样就可以进行调试。</p>
+<p>Dockerfile 基本结构<br>
+Dockerfile 又一行行命令语句组成，并且支持以#开头的注释行。<br>
+Dockerfile 分为四部分：基础镜像信息，维护者信息，镜像操作指令，容器启动时执行指令。<br>
+例如，以下为一个完整的Dockerfile：</p>
+<h1 id="this-dockerfile-uses-the-ubuntu-image">This dockerfile uses the ubuntu image</h1>
+<h1 id="version-2-edition-1">VERSION 2 - EDITION 1</h1>
+<h1 id="author-docker_user">Author: docker_user</h1>
+<h1 id="command-format-instruction-arguments-command">Command format: Instruction [arguments / command] ..</h1>
+<h1 id="base-image-to-use-this-must-be-set-as-the-first-line">Base image to use, this must be set as the first line</h1>
+<p>1，第一行必须指定，基础镜像信息<br>
+FROM ubuntu</p>
+<h1 id="maintainer-docker_user-docker_user-at-emailcom-docker_user">Maintainer: docker_user &lt;docker_user at email.com&gt; (@docker_user)</h1>
+<p>2，维护者信息<br>
+MAINTAINER docker_user docker_user@email.com</p>
+<h1 id="commands-to-update-the-image">Commands to update the image</h1>
+<p>3，镜像操作指令<br>
+RUN echo &quot;deb http://archive.ubuntu.com/ubuntu/ raring main universe&quot; &gt;&gt; /etc/apt/sources.list<br>
+RUN apt-get update &amp;&amp; apt-get install -y nginx<br>
+RUN echo &quot;\ndaemon off;&quot; &gt;&gt; /etc/nginx/nginx.conf</p>
+<h1 id="commands-when-creating-a-new-container">Commands when creating a new container</h1>
+<p>4，容器启动执行指令<br>
+CMD /usr/sbin/nginx<br>
+其中，已开始必须要指明所基于的镜像名称，接下来一般会说明维护者信息；后面则是镜像操作指令，例如RUN指令。每执行一条RUN指令，镜像添加新的一层，并提交；最后是CMD指令，来指明运行容器时的操作命令。</p>
+<p>Dockerfile 常用指令<br>
+以下常见的dockerfile指令，基本包含常用的90%功能。</p>
+<p>常用指令目录：<br>
+1，FROM--指定基础镜像<br>
+2，MAINTAINER--指定维护者信息<br>
+3，RUN--运行指定的命令<br>
+4，CMD--容器启动时执行的命令<br>
+5， EXPOSE--声明容器的服务端口<br>
+6，ENV--设置环境变量<br>
+7，ARG--构建参数<br>
+8，COPY--复制文件或目录<br>
+9，ADD--更高级的复制文件/目录<br>
+10，ENTRYPOINT--入口点<br>
+11，ENTRYPOINT与CMD指令结合使用<br>
+12，VOLUME--定义匿名卷<br>
+13，WORKDIR--指定工作目录<br>
+14，USER--指定当前用户<br>
+15，ONBUILD--为镜像添加触发器<br>
+1，FROM--指定基础镜像<br>
+第一条指令必须为FROM指令。<br>
+如果不以任何镜像为基础，那么写法如下，同时意味着接下来所写的指令将作为镜像的第一层开始：<br>
+FROM nginx<br>
+FROM 指令支持三种格式：</p>
+<p>FROM <image><br>
+FROM <image>:<tag><br>
+FROM <image>:<digest></p>
+<p>三种写法，第二种和第三种是可选项，如果没有选择，那么默认为latest。</p>
+<p>在Dockerfile中可以多次出现FROM指令，当FROM第二次或者之后出现时，表示在此刻构建时，要将当前指出镜像的内容合并到此刻构建镜像的内容。</p>
+<p>ARG是唯一可以在FROM之前执行的参数：</p>
+<p>ARG  CODE_VERSION=latest<br>
+FROM base:${CODE_VERSION}<br>
+CMD  /code/run-app</p>
+<p>FROM extras:${CODE_VERSION}<br>
+CMD  /code/run-extras<br>
+2，MAINTAINER--指定维护者信息<br>
+格式为：MAINTAINER <name>，指定维护者信息（镜像维护者姓名或邮箱），可选项。<br>
+例如：<br>
+MAINTAINER docker_user docker_user@email.com<br>
+3，RUN--运行指定的命令<br>
+RUN有两种格式：</p>
+<p>RUN <command><br>
+RUN [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]</p>
+<p>前者将在shell终端运行命令，即/bin/sh -c; 后者则使用exec执行。指定使用其它终端可以通过第二种方式实现，例如使用bash终端： RUN [&quot;/bin/bash&quot;, &quot;-c&quot;, &quot;echo hello&quot;]。</p>
+<p>注意：多行命令不要写多个RUN，原因是Dockerfile中每一个指令都会建立一层，多少个RUN就构建了多少层镜像，会造成镜像的臃肿、多层，不仅仅增加了构件部署的时间，还容易出错。一般一个RUN指令后边可以跟多个要执行的命令（使用&amp;&amp;符即可），当命令较长时可以使用&quot;&quot;来换行。<br>
+例子如下：</p>
+<p>RUN yum -y install gcc* pcre-devel openssl-devel zlib-devel unzip make vim net-tools elinks tree <br>
+&amp;&amp; groupadd nginx <br>
+&amp;&amp;  useradd  nginx -g nginx  -s /sbin/nologin<br>
+4，CMD--容器启动时执行的命令<br>
+CMD支持三种格式：</p>
+<p>CMD [&quot;executable&quot;,&quot;param1&quot;,&quot;param2&quot;] 使用 exec 执行，推荐方式；<br>
+CMD command param1 param2 在 /bin/sh 中执行，提供给需要交互的应用；<br>
+CMD [&quot;param1&quot;,&quot;param2&quot;] 提供给 ENTRYPOINT 的默认参数；</p>
+<p>指定启动容器时执行的命令，每个dockerfile只能有一条CMD命令。如果指令了多条命令，只有最后一条会被执行。</p>
+<p>如果用户启动容器时候指定了运行的命令，则会覆盖掉CMD指定的命令。</p>
+<p>补充细节：如果不是使用shell（/bin/sh）这种方式，”[]“中括号这里边包括参数的一定要用双引号,千万不能写成单引号。原因是参数传递后，docker解析的是一个JSON array<br>
+例如：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos:latest<br>
+CMD echo hello world<br>
+CMD echo hello china<br>
+[root@sqm-docker01 dfs]# docker run --rm test:v1   #只有最后一条CMD命令会被执行<br>
+hello china<br>
+[root@sqm-docker01 dfs]# docker run --rm test:v1 echo &quot;hello friend&quot;  #在启动容器时指定运行命令，会将其覆盖<br>
+hello friend<br>
+采用exec格式，那么上面的例子改为：</p>
+<p>FROM centos:latest<br>
+CMD [&quot;/bin/bash&quot;,&quot;-c&quot;,&quot;echo hello world&quot;]<br>
+CMD [&quot;/bin/bash&quot;,&quot;-c&quot;,&quot;echo hello china&quot;]<br>
+还有一种情况下CMD会结合ENTRYPOINT指令使用，后面会讲到。</p>
+<p>5， EXPOSE--声明容器的服务端口<br>
+格式为 EXPOSE &lt;端口1&gt; [&lt;端口2&gt;...] 。</p>
+<p>EXPOSE 指令是声明运行时容器提供服务端口，这只是一个声明，在运行时并不会因为这个声明应用就会开启这个端口的服务。<br>
+在Dockerfile 中写入这样的声明有两个好处，一个是帮助镜像使用者理解这个镜像服务的守护端口，以方便配置映射；另一个用户则是运行时使用随机端口映射时，也就是docker run -P 时，会自动随机映射EXPOSE的端口。<br>
+要将 EXPOSE 和在运行时使用 -p &lt;宿主端口&gt;:&lt;容器端口&gt; 区分开来。-p，是映射宿主端口和容器端口，换句话说，就是将容器的对应端口服务公开给外界访问，而 EXPOSE 仅仅是声明容器打算使用什么端口而已，并不会自动在宿主进行端口映射。<br>
+例如：<br>
+EXPOSE 80 443</p>
+<p>6，ENV--设置环境变量<br>
+格式有两种：</p>
+<p>ENV <key> <value><br>
+ENV <key1>=<value1> <key2>=<value2>...</p>
+<p>两者的区别是第一种是一次设置一个，第二种是一次设置多个。</p>
+<p>ENV这个指令就是指定一个环境变量，会被后续RUN指定使用，并在容器运行时保持。</p>
+<p>ENV VERSION=1.0 DEBUG=on <br>
+NAME=&quot;Happy Feet&quot;<br>
+这个例子中演示了如何换行，以及对含有空格的值用双引号括起来的办法，这和shell下的行为是一致的。<br>
+举例如下：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM busybox:latest<br>
+ENV var1=haha var2=hehe<br>
+RUN echo $var1 &gt; a.txt &amp;&amp; echo $var2 &gt; b.txt<br>
+执行dockerfile后，进行容器查看文件：<br>
+[root@sqm-docker01 dfs]# docker run --rm test:v2 /bin/sh<br>
+/ # cat a.txt<br>
+haha<br>
+/ # cat b.txt<br>
+hehe<br>
+#并且定义的变量会在容器运行时保持：<br>
+/ # echo $var1<br>
+haha<br>
+/ # echo $var2<br>
+hehe<br>
+7，ARG--构建参数</p>
+<p>格式：<br>
+ARG <name>[=<default value>]</p>
+<p>构建参数和ENV的效果一样，都是设置环境变量。所不同的是，ARG所设置的构建环境的环境变量，在将来容器运行时是不会存在的这些环境变量的。但是不要因此就使用ARG保存密码之类的信息，因为docker history还是可以看到所有值的。</p>
+<p>#用法一：在执行docker build构建时传递参数</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM nginx:latest<br>
+ARG user<br>
+ARG password<br>
+RUN echo $user &gt; a.txt <br>
+&amp;&amp; echo $password &gt;&gt; a.txt<br>
+#传递两个参数时，则在每个参数中添加--build-arg。<br>
+[root@sqm-docker01 dfs]# docker build --build-arg user=sqm --build-arg password=123.com  -t arg:v1 .<br>
+#运行容器，参数传递成功<br>
+[root@sqm-docker01 dfs]# docker run -it --rm arg:v1 /bin/bash<br>
+root@4809b0c54f8d:/# cat a.txt<br>
+sqm<br>
+123.com<br>
+#与ENV不同，在容器中是不会存在这些变量的<br>
+root@9383b7d3d21e:/# echo $user</p>
+<p>root@9383b7d3d21e:/# echo $password</p>
+<p>root@9383b7d3d21e:/#<br>
+注意：如果指定了该参数，但Dockerfile中未使用，构建过程中会输出警告。</p>
+<p>#用法二：在dockerfile中设定一个默认值，如果ARG指令具有默认值，并且在构建时未传递任何参数，那么构建其将使用该默认值</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM nginx:latest<br>
+ARG user=zhangsan<br>
+ARG password=123456<br>
+RUN echo $user $password &gt; a.txt<br>
+#构建镜像且不传递任何参数：<br>
+[root@sqm-docker01 dfs]# docker build -t arg:v2 .<br>
+#运行容器，参数传递成功<br>
+[root@sqm-docker01 dfs]# docker run -it --rm arg:v2 /bin/bash<br>
+root@b52fa70086de:/# cat a.txt<br>
+zhangsan 123456<br>
+#多阶段构建中每个阶段都必须包含arg指令：</p>
+<p>FROM busybox<br>
+ARG user<br>
+RUN ./run/setup $user</p>
+<p>FROM busybox<br>
+ARG user<br>
+RUN ./run/other $user<br>
+#ENV变量会覆盖同名的ARG变量：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM nginx:latest<br>
+ARG user=zhangsan<br>
+ENV user lisi<br>
+RUN echo $user &gt; a.txt<br>
+[root@sqm-docker01 dfs]# docker build -t arg:v3 .<br>
+[root@sqm-docker01 dfs]# docker run -it --rm arg:v3 /bin/bash<br>
+root@a2aefd05efee:/# cat a.txt<br>
+lisi<br>
+#ARG和ENV指令结合使用：（一般这种用法，不常用）</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos<br>
+ARG var<br>
+ENV user=${var}<br>
+RUN echo $user &gt; a.txt<br>
+[root@sqm-docker01 dfs]# docker build --build-arg var=zhangsan -t arg:v4 .<br>
+[root@sqm-docker01 dfs]# docker run -it --rm arg:v4 /bin/bash<br>
+[root@26bf8c139a3f /]# cat a.txt<br>
+zhangsan<br>
+8，COPY--复制文件或目录‘’<br>
+格式：</p>
+<p>COPY [--chown=<user>:<group>] &lt;源路径&gt;... &lt;目标路径&gt;<br>
+COPY [--chown=<user>:<group>] [&quot;&lt;源路径1&gt;&quot;,... &quot;&lt;目标路径&gt;&quot;]</p>
+<p>和RUN指令一样，也有两种格式，前者在shell终端运行; 后者则使用exec执行。</p>
+<p>&lt;源路径&gt;为宿主机的上的路径，可以是多个，甚至可以是通配符，其通配符规则要满足 Go 的 filepath.Match 规则，如：</p>
+<p>COPY hom* /mydir/<br>
+COPY hom?.txt /mydir/<br>
+注意：&lt;源路径&gt;必须是在build上下文目录中，也就是Dockerfile配置文件所在的目录及下面的递归目录，如果拷贝上下文之外目录下的文件（不是Dockerfile所在的目录），则无法拷贝。<br>
+build上下文的概念可参考：https://www.cnblogs.com/sparkdev/p/9573248.html</p>
+<p>&lt;目标路径&gt;是容器中的路径，可以是绝对路径，也可以是相对于工作目录的相对路径（工作目录可以用 WORKDIR 指令来指定）。目标路径不需要事先创建，如果目录不存在会在复制文件前先行创建缺失目录。</p>
+<p>此外，还需要注意一点，使用 COPY 指令，源文件的各种元数据都会保留。比如读、写、执行权限、文件变更时间等。可以使用如下命令指定：</p>
+<p>COPY [--chown=:] ...<br>
+COPY [--chown=:] [&quot;&quot;,... &quot;&quot;] （包含空格的路径需要这种形式）<br>
+–chown功能仅在用于构建Linux容器的Dockerfiles上受支持<br>
+例如：<br>
+COPY --chown=nginx:nginx files* /somedir/</p>
+<p>举例：</p>
+<p>[root@sqm-docker01 dfs]# echo &quot;hello world&quot; &gt; index.html<br>
+[root@sqm-docker01 dfs]# echo aaaaaa &gt; a.txt<br>
+[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM nginx:latest<br>
+COPY ./index.html /usr/share/nginx/html/<br>
+COPY ./a.txt /test/<br>
+[root@sqm-docker01 dfs]# docker run --rm  nginx:v1  /bin/bash<br>
+root@8a1ee4925b43:/# cat /usr/share/nginx/html/index.html<br>
+hello world<br>
+#即使目标目录不存在，会自己事先创建<br>
+root@8a1ee4925b43:/# cat /test/a.txt<br>
+aaaaaa<br>
+##拷贝整个目录：<br>
+格式：COPY src WORKDIR/src<br>
+例如：</p>
+<p>[root@sqm-docker01 dfs]# cat test/a.txt<br>
+addddddddddddaaaaa<br>
+[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM nginx:latest<br>
+COPY ./test  /usr/share/nginx/test/<br>
+#必须要在目标路径下指定要拷贝的目录，不然只拷贝源目录中的文件，而不拷贝目录</p>
+<p>#进入容器查看整个目录及其目录下的文件<br>
+[root@sqm-docker01 dfs]# docker run --rm nginx:v2 /bin/bash<br>
+root@4eae96cbe364:/# cd /usr/share/nginx/<br>
+root@4eae96cbe364:/usr/share/nginx# ls<br>
+html  test<br>
+root@4eae96cbe364:/usr/share/nginx# cat test/a.txt<br>
+addddddddddddaaaaa<br>
+9，ADD--更高级的复制文件/目录<br>
+格式为：</p>
+<p>ADD [--chown=<user>:<group>] &lt;源路径&gt;... &lt;目标路径&gt;<br>
+ADD [--chown=<user>:<group>] [&quot;&lt;源路径1&gt;&quot;,... &quot;&lt;目标路径&gt;&quot;]</p>
+<p>ADD指令和COPY 的格式和性质基本一致。但是在 COPY`基础上增加了一些功能：可以是一个URL（通过URL下载下来自动设置权限600）；还可以是一个tar文件（自动解压为目录)。</p>
+<p>举例：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos<br>
+ADD nginx-1.8.0.tar.gz  /usr/src<br>
+[root@sqm-docker01 dfs]# docker run --rm  nginx:v3 /bin/bash<br>
+[root@0c8d6789aa4c /]# cd /usr/src/<br>
+[root@0c8d6789aa4c src]# ls<br>
+debug  kernels  nginx-1.8.0     #自动解压tar包<br>
+[root@0c8d6789aa4c src]# ls nginx-1.8.0/<br>
+CHANGES  CHANGES.ru  LICENSE  README  auto  conf  configure  contrib  html  man  src<br>
+#通过url下载链接文件放到目标路径下：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos<br>
+ADD http://nginx.org/download/nginx-1.9.0.tar.gz /</p>
+<p>[root@sqm-docker01 dfs]# docker run --rm  nginx:v4 /bin/bash<br>
+[root@b9d978e3a333 /]# ls -lh nginx-1.9.0.tar.gz<br>
+-rw------- 1 root root 835K Apr 28  2015 nginx-1.9.0.tar.gz<br>
+#默认权限600<br>
+#与COPY的区别：<br>
+用于与COPY类似，不同的是COPY的只能是本地文件/目录，如果src是归档文件（tar,zip,tgz,xz等），使用ADD命令文件会被自动解压到dest。</p>
+<p>因此在COPY和ADD指令中选择的时候，可以遵循这样的原则，所有的文件复制均使用COPY，仅在需要自动解压缩的场合使用 ADD。</p>
+<p>10，ENTRYPOINT--入口点<br>
+两种格式：</p>
+<p>ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;]（exec格式）<br>
+ENTRYPOINT command param1 param2（shell中执行）。</p>
+<p>ENTRYPOINT 的 目的和CMD一样，都是在指定容器启动程序及参数。ENTRYPOINT 在运行时也可以替代，不过比CMD要略显繁琐，需要通过docekr run的参数 --entrypoint 来指定。</p>
+<p>#与CMD比较说明：<br>
+1）相同点：只能写一条，如果写多条，那么只有最后一条生效。<br>
+容器启动时才运行，运行时机相同。<br>
+2）不同点： ENTRYPOINT不会被运行的命令覆盖，而CMD则会被覆盖。<br>
+例子：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos:latest<br>
+ENTRYPOINT echo hello world<br>
+ENTRYPOINT echo hello china<br>
+#与CMD一样，只有最后一条指令生效<br>
+[root@sqm-docker01 dfs]# docker run --rm  en:v1<br>
+hello china<br>
+#不同的是不会被运行时的命令覆盖<br>
+[root@sqm-docker01 dfs]# docker run ---rm  en:v1 echo &quot;test&quot;<br>
+hello china<br>
+#除非使用--entrypoint参数<br>
+[root@sqm-docker01 dfs]# docker run --rm --entrypoint hostname  en:v1<br>
+fa667d019ce5<br>
+#这里使用hostname命令将hello china覆盖了<br>
+11，ENTRYPOINT与CMD指令结合使用<br>
+#如果我们在Dockerfile中同时写了ENTRYPOINT和CMD，那么CMD指定的内容就会作为ENTRYPOINT的参数。<br>
+举例如下：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos:latest<br>
+ENTRYPOINT [&quot;/usr/bin/ping&quot;,&quot;baidu.com&quot;,&quot;-c&quot;]<br>
+CMD [&quot;4&quot;]<br>
+#运行一个容器：<br>
+[root@sqm-docker01 dfs]# docker run --rm en:v2<br>
+PING baidu.com (39.156.69.79): 56 data bytes<br>
+64 bytes from 39.156.69.79: seq=0 ttl=127 time=72.931 ms<br>
+64 bytes from 39.156.69.79: seq=1 ttl=127 time=62.366 ms<br>
+64 bytes from 39.156.69.79: seq=2 ttl=127 time=58.875 ms<br>
+64 bytes from 39.156.69.79: seq=3 ttl=127 time=50.662 ms</p>
+<p>--- baidu.com ping statistics ---<br>
+4 packets transmitted, 4 packets received, 0% packet loss<br>
+round-trip min/avg/max = 50.662/61.208/72.931 ms<br>
+此时容器中运行的命令为：ping baidu.com -c 4。</p>
+<p>#ENTRYPOINT中的参数始终会被使用，而CMD的额外参数可以在容器启动时动态替换掉，例子如下：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos:latest<br>
+ENTRYPOINT [&quot;/usr/bin/ping&quot;,&quot;baidu.com&quot;,&quot;-c&quot;]<br>
+CMD [&quot;4&quot;]<br>
+[root@sqm-docker01 dfs]# docker run --rm en:v2 2<br>
+PING baidu.com (39.156.69.79) 56(84) bytes of data.<br>
+64 bytes from 39.156.69.79 (39.156.69.79): icmp_seq=1 ttl=127 time=80.4 ms<br>
+64 bytes from 39.156.69.79 (39.156.69.79): icmp_seq=2 ttl=127 time=61.5 ms</p>
+<p>--- baidu.com ping statistics ---<br>
+2 packets transmitted, 2 received, 0% packet loss, time 3ms<br>
+rtt min/avg/max/mdev = 61.532/70.945/80.358/9.413 ms<br>
+此时容器运行的命为：ping baidu.com -c 2。</p>
+<p>#这两种指令结合起来使用，有什么好处呢？我们通过以场景来理解：（例子和上边例子大同小异）</p>
+<p>//假设我们需要一个得知自己当前公网IP的镜像，可以那么先用CMD来实现：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos:latest<br>
+RUN yum  -y install curl<br>
+CMD [&quot;/usr/bin/curl&quot;,&quot;-s&quot;,&quot;https://ip.cn&quot;]<br>
+#构建镜像并运行容器：<br>
+[root@sqm-docker01 dfs]# docker build -t myip:v1 .<br>
+[root@sqm-docker01 dfs]# docker run --rm myip:v1<br>
+{&quot;ip&quot;: &quot;117.136.60.216&quot;, &quot;country&quot;: &quot;江西省&quot;, &quot;city&quot;: &quot;移动&quot;}<br>
+看起来我们是可以把它当作命令使用了，不过命令总有参数，如果我们希望显示HTTP头信息，就需要加上-i参数。那么我们可以直接加-i参数给docker run myip么？</p>
+<p>[root@sqm-docker01 dfs]# docker run --rm myip:v1 -i<br>
+docker: Error response from daemon: OCI runtime create failed: container_linux.go:348: starting container process caused &quot;exec: &quot;-i&quot;: executable file not found in $PATH&quot;: unknown.<br>
+我们可以看到替换文件找不到的报错，executable file not found，之前我们说过，跟在上面名字后面的是command，运行时会替换为CMD的值。因此这里的-i替换了原来的CMD，而不是添加在原来的curl -s https://ip.cn 后面。-i根本不是命令，所以自然找不到。</p>
+<p>//为了有很好的解决这个问题，我们将CMD和ENTRYPOINT结合使用：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos:latest<br>
+RUN yum  -y install curl<br>
+ENTRYPOINT [&quot;/usr/bin/curl&quot;,&quot;-s&quot;,&quot;https://ip.cn&quot;]<br>
+CMD [&quot;-i&quot;]<br>
+#构建并运行容器：<br>
+[root@sqm-docker01 dfs]# docker build -t myip:v2 .<br>
+[root@sqm-docker01 dfs]# docker run --rm myip:v2<br>
+HTTP/2 200<br>
+date: Wed, 19 Feb 2020 07:10:48 GMT<br>
+content-type: application/json; charset=UTF-8<br>
+set-cookie: __cfduid=d1903fe7e93a885c6ae4890572cda42161582096248; expires=Fri, 20-Mar-20 07:10:48 GMT; path=/; domain=.ip.cn; HttpOnly; SameSite=Lax<br>
+cf-cache-status: DYNAMIC<br>
+expect-ct: max-age=604800, report-uri=&quot;https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct&quot;<br>
+alt-svc: h3-25=&quot;:443&quot;; ma=86400, h3-24=&quot;:443&quot;; ma=86400, h3-23=&quot;:443&quot;; ma=86400<br>
+server: cloudflare<br>
+cf-ray: 56766c505d6fb22e-HKG</p>
+<p>{&quot;ip&quot;: &quot;117.136.60.216&quot;, &quot;country&quot;: &quot;江西省&quot;, &quot;city&quot;: &quot;移动&quot;}<br>
+可以看到成功了，这是因为当存在ENTRYPOINT后，CMD的内容将会传递给ENTRYPOINT使用，从而达到了我们预期的效果。</p>
+<p>##总结几条规律：</p>
+<p>如果 ENTRYPOINT 使用了 shell 模式，CMD 指令会被忽略。<br>
+如果 ENTRYPOINT 使用了 exec 模式，CMD 指定的内容被追加为 ENTRYPOINT 指定命令的参数。<br>
+如果 ENTRYPOINT 使用了 exec 模式，CMD 也应该使用 exec 模式<br>
+12，VOLUME--定义匿名卷<br>
+格式为：</p>
+<p>VOLUME [&quot;&lt;路径1&gt;&quot;, &quot;&lt;路径2&gt;&quot;...]<br>
+VOLUME &lt;路径&gt;</p>
+<p>在Dockerfile中，我们可以预先指定某些目录挂载为匿名卷，这样在运行时如果用户不指定挂载，其应用也可以正常运行，不会向容器存储层写入大量数据。</p>
+<p>VOLUME /data</p>
+<p>这里的/data 目录就会在运行时自动挂载为匿名卷，任何向/data 中写入的信息都不会记录进容器存储层，从而保证了容器存储层的无状态化。当然，运行容器时可以覆盖这个挂载设置。</p>
+<p>docker run -d -v mydata:/data xxxx</p>
+<p>在上边命令中，就使用了mydata 这个命名卷挂载到了/data 这个位置，替代了Dockerfile 中定义的匿名卷的挂载配置。</p>
+<p>#注意：从该指令的支持的格式就可以知道，VOLUME只支持docker manager volume的挂载方式，而不支持bind mount的方式。</p>
+<p>docker manager volume：不需要指定源文件，只需要指定mount point。把容器里面的目录映射到了本地（宿主机）。</p>
+<p>举例如下：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM nginx:latest<br>
+VOLUME /usr/share/nginx/html/<br>
+#构建并运行容器：<br>
+[root@sqm-docker01 dfs]# docker build -t volume:v1 .<br>
+[root@sqm-docker01 dfs]# docker run -itd --name volume volume:v1<br>
+5d963fb3b51ae9ddcc3b55382e289e0447235676f8893900a440f5f9500f035e<br>
+我们通过docker inspect查看通过该dockerfile创建的大量生成的容器，可以看到挂载点的信息：</p>
+<p>[root@sqm-docker01 dfs]# docker inspect volume<br>
+&quot;Mounts&quot;: [<br>
+{<br>
+&quot;Type&quot;: &quot;volume&quot;,<br>
+&quot;Name&quot;: &quot;190c5a22df09462a9f5fd54209b8bc5ad06fc9382f9c8b9c665c734e4bcf95e0&quot;,<br>
+&quot;Source&quot;: &quot;/var/lib/docker/volumes/190c5a22df09462a9f5fd54209b8bc5ad06fc9382f9c8b9c665c734e4bcf95e0/_data&quot;,<br>
+&quot;Destination&quot;: &quot;/usr/share/nginx/html&quot;,<br>
+&quot;Driver&quot;: &quot;local&quot;,<br>
+&quot;Mode&quot;: &quot;&quot;,<br>
+&quot;RW&quot;: true,<br>
+&quot;Propagation&quot;: &quot;&quot;<br>
+}<br>
+],<br>
+从上面的信息可以看出默认挂载到本地的源路径为“/var/lib/docker/volumes/190c5a22df09462a9f5fd54209b8bc5ad06fc9382f9c8b9c665c734e4bcf95e0/_data” ，而目标路径（容器内的路径）为自定义的&quot;/usr/share/nginx/html&quot;。</p>
+<p>13，WORKDIR--指定工作目录<br>
+格式为：</p>
+<p>WORKDIR &lt;工作目录路径&gt;</p>
+<p>设置工作目录，对RUN，CMD，ENTRYPOINT,COPY,ADD生效。如果目录不存在，则会帮你创建，也可以设置多次,如：</p>
+<p>WORKDIR /a<br>
+WORKDIR b<br>
+WORKDIR c<br>
+RUN pwd<br>
+#则最终的路径为/a/b/c。<br>
+##WORKDIR也可以解析环境变量，如：</p>
+<p>ENV DIRPATH /usr/src<br>
+WORKDIR $DIRPATH<br>
+RUN pwd<br>
+#pwd的执行结果是/usr/src。<br>
+注意：千万不要把dockerfile等同于shell脚本来书写，例如：</p>
+<p>RUN cd /app<br>
+RUN echo &quot;hello&quot; &gt; world.txt<br>
+将这个dockerfile 进行构建镜像运行后，会发现找不到/app/world.txt 文件,或者其内容不是 hello。原因其实很简单，在dockerfile中这两行RUN命令的执行环境不同，是两个完全不同的容器。这就是对 Dockerfile 构建分层存储的概念不了解所导致的错误。<br>
+如果需要改变以后各层的工作目录的位置，那么应该使用 WORKDIR 指令。</p>
+<p>14，USER--指定当前用户</p>
+<p>格式： USER &lt;用户名&gt;[:&lt;用户组&gt;]</p>
+<p>USER指令和WORKDIR相似，都是改变环境状态并影响以后的层。<br>
+WORKDIR是改变工作目录，USER是改变之后层的执行RUN，CMD，以及ENTRYPOINT 这类命令的身份。<br>
+当然，和WORKDIR一样，USER只是帮助你切换到指定用户而已，这个用户必须是事先建立好的，否则无法切换：</p>
+<p>RUN groupadd -r redis &amp;&amp; useradd -r -g redis redis<br>
+USER redis<br>
+RUN [ &quot;redis-server&quot; ]<br>
+如果以root执行脚本，在执行期间希望改变身份，比如希望以某个已经建立好的用户来运行某个服务进程，不要使用su或者sudo，这些都需要比较麻烦的配置，而且在TTY缺失的环境下经常出错。一般使用 gosu。<br>
+举例如下：</p>
+<h1 id="建立-redis-用户并使用-gosu-换另一个用户执行命令">建立 redis 用户，并使用 gosu 换另一个用户执行命令</h1>
+<p>RUN groupadd -r redis &amp;&amp; useradd -r -g redis redis</p>
+<h1 id="下载-gosu">下载 gosu</h1>
+<p>RUN wget -O /usr/local/bin/gosu &quot;https://github.com/tianon/gosu/releases/download/1.7/gosu-amd64&quot; <br>
+&amp;&amp; chmod +x /usr/local/bin/gosu <br>
+&amp;&amp; gosu nobody true</p>
+<h1 id="设置-cmd并以另外的用户redis执行">设置 CMD，并以另外的用户（redis）执行</h1>
+<p>CMD [ &quot;exec&quot;, &quot;gosu&quot;, &quot;redis&quot;, &quot;redis-server&quot; ]<br>
+15，ONBUILD--为镜像添加触发器</p>
+<p>格式：ONBUILD &lt;其它指令&gt;</p>
+<p>ONBUILD 是一个特殊的指令，它后面跟的是其他指令，比如RUN，COPY等，而这些指令，在当前镜像构建时并不会被执行。<br>
+只有当以当前镜像为基础镜像，去构建下一级镜像的时候才会被执行。<br>
+Dockerfile中的其他指令都是为了定制当前镜像而准备的，唯有ONBUILD 是为了帮助别人定制自己而准备的。<br>
+举例如下：<br>
+//编写一个Dockerfile文件，内容如下：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM nginx:latest<br>
+ONBUILD COPY ./index.html /   #拷贝文件到容器内的 / 下<br>
+//利用上面的dockerfile文件构建镜像：<br>
+[root@sqm-docker01 dfs]# docker build -t image1 .</p>
+<p>//利用image1镜像创建容器：</p>
+<p>[root@sqm-docker01 dfs]# docker run --rm -it image1 /bin/bash<br>
+root@db8a068d9f30:/# ls<br>
+bin   dev  home  lib64  mnt  proc  run   srv  tmp  var<br>
+boot  etc  lib   media  opt  root  sbin  sys  usr<br>
+我们发现以image1镜像运行的容器/目录下并没有index.html文件，这说明ONBUILD指定的指令并不会在自己的镜像构建中执行。</p>
+<p>//再编写一个新的Dockerfile文件，内容如下：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM image1  #使用的基础镜像是上面构建的镜像image1<br>
+CMD echo hello world<br>
+//利用上面的dockerfile文件构建镜像：</p>
+<p>[root@sqm-docker01 dfs]# docker build -t image2 .<br>
+Sending build context to Docker daemon  102.6MB<br>
+Step 1/2 : FROM image1</p>
+<h1 id="executing-1-build-trigger">Executing 1 build trigger</h1>
+<p>---&gt; 796e32308d29<br>
+Step 2/2 : CMD echo hello world<br>
+---&gt; Running in 5c16f913f5e9<br>
+Removing intermediate container 5c16f913f5e9<br>
+---&gt; 4c0a45374727<br>
+Successfully built 4c0a45374727<br>
+Successfully tagged image2:latest<br>
+//利用image2镜像创建容器：</p>
+<p>[root@sqm-docker01 dfs]# docker run -it --rm image2 /bin/bash<br>
+root@3e3c1d0fe3f6:/# ls<br>
+bin   dev  home        lib    media  opt   root  sbin  sys  usr<br>
+boot  etc  index.html  lib64  mnt    proc  run   srv   tmp  var<br>
+root@3e3c1d0fe3f6:/# cat index.html<br>
+hello world<br>
+我们发现以image2镜像运行的容器根目录下有index.html文件，说明触发器执行了 COPY ./index.html / 指令。</p>
+<p>镜像缓存特性:<br>
+1）Docker 会缓存已有镜像的镜像层，构建新镜像时，如果某镜像层已经存在，就直接使用，无需重新创建，如下所示：<br>
+//创建一个新的dockerfile</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos<br>
+RUN yum -y install vim<br>
+//构建一个镜像<br>
+[root@sqm-docker01 dfs]# docker build -t a:v1 .<br>
+#往刚刚创建的dockerfile中添加一点新内容（在镜像中添加一条COPY指令）：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos<br>
+RUN yum -y install vim<br>
+COPY testfile /<br>
+#以同一个dockefile重新构建镜像：</p>
+<p>[root@sqm-docker01 dfs]# touch testfile<br>
+[root@sqm-docker01 dfs]# docker build -t a:v2 .<br>
+Sending build context to Docker daemon  102.6MB<br>
+Step 1/3 : FROM centos<br>
+---&gt; 0f3e07c0138f<br>
+Step 2/3 : RUN yum -y install vim<br>
+---&gt; Using cache<br>
+---&gt; 6467d4675159<br>
+Step 3/3 : COPY testfile /<br>
+---&gt; 6b92fe05882f<br>
+Successfully built 6b92fe05882f<br>
+Successfully tagged a:v2<br>
+(1）确保testfile文件已存在<br>
+(2）Using cache，重点在这里：之前已经运行过相同的RUN指令，这次直接使用缓存中的镜像层6467d4675159。<br>
+(3）执行COPY指令。<br>
+其过程是启动临时容器，复制testfile，提交新的镜像层6b92fe05882f，删除临时容器。</p>
+<p>如果我们希望在构建镜像时不使用缓存，可以在docker build命令中加上--no-cache参数。</p>
+<p>2）Dockerfile中每一个指令都会创建一个镜像层，上层是依赖于下层的。无论什么时候，只要某一层发生变化，其上面所有层的缓存都会失效。<br>
+也就是说，如果我们改变 Dockerfile 指令的执行顺序，或者修改或添加指令，都会使缓存失效。<br>
+举例说明，比如交换上面RUN和COPY指令的顺序：</p>
+<p>[root@sqm-docker01 dfs]# cat Dockerfile<br>
+FROM centos<br>
+COPY testfile /<br>
+RUN yum -y install vim<br>
+虽然在逻辑上这种改动对镜像的内容没有影响，但由于分层的结构特性，Docker 必须重建受影响的镜像层。</p>
+<p>//重新构建镜像:</p>
+<p>[root@sqm-docker01 dfs]# docker build -t a:v3 .<br>
+Sending build context to Docker daemon  102.6MB<br>
+Step 1/3 : FROM centos<br>
+---&gt; 0f3e07c0138f<br>
+Step 2/3 : COPY testfile /<br>
+---&gt; 97e725434a6b<br>
+Step 3/3 : RUN yum -y install vim<br>
+---&gt; Running in 5f30ff393047<br>
+......<br>
+Removing intermediate container 5f30ff393047<br>
+---&gt; 90ceae8b3638<br>
+Successfully built 90ceae8b3638<br>
+Successfully tagged a:v3<br>
+从上面的输出可以看到生成了新的镜像层97e725434a6b，缓存已经失效。</p>
+<p>除了构建时使用缓存，Docker 在下载镜像时也会使用。例如我们下载 httpd 镜像：</p>
+<p>[root@sqm-docker01 dfs]#docker pull httpd<br>
+Using default tag: latest<br>
+latest: Pulling from library/httpd<br>
+f17d81b4b692: Already exists<br>
+06fe09255c64: Already exists<br>
+0baf8127507d: Already exists<br>
+07b9730387a3: Already exists<br>
+6dbdee9d6fa5: Already exists<br>
+Digest: sha256:76954e59f23aa9845ed81146ef3cad4a78f5eb3daab9625874ebca0e416367e2<br>
+Status: Image is up to date for httpd:latest<br>
+docker pull 命令输出显示第一层（base 镜像）已经存在，不需要下载。</p>
+<p>简单了解镜像分层概念<br>
+Dockerfile中每行代码都会产生一个新的分层，一个镜像不能超过127层，每个层都会产生一个单独的id。<br>
+在已经存在image中的层，都是只读的。当一个image被运行成为一个container的时候，这个层是可读可写的，需要操作镜像层中的文件时，都是通过容器层复制一份，然后在进行操作，这个机制是copy on write（写时复制）。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[同时使用有线网上内网、无线网上外网]]></title>
+        <id>https://newdy.cf/post/tong-shi-shi-yong-you-xian-wang-shang-nei-wang-wu-xian-wang-shang-wai-wang/</id>
+        <link href="https://newdy.cf/post/tong-shi-shi-yong-you-xian-wang-shang-nei-wang-wu-xian-wang-shang-wai-wang/">
+        </link>
+        <updated>2020-02-20T05:43:15.000Z</updated>
+        <content type="html"><![CDATA[<p>方法一、</p>
+<p>利用有线访问局域网数据库等，用无线网络访问外网，这里提供一种方法可以实现，可编写bat文件，并在cmd中执行：</p>
+<p>route delete 0.0.0.0</p>
+<p>route add 0.0.0.0 mask 0.0.0.0 172.20.1.254</p>
+<p>route add 172.20.36.0 mask 255.255.255.0 172.20.36.254</p>
+<p>解释一下：</p>
+<p>其中172.20.1.254为无线网网关，172.20.36.254为有线网网关。这两句话的意思是：对于所有IP地址的访问，都从172.20.1.254走；但是，对于172.20.36开头的地址的访问，从172.20.36.254走。</p>
+<p>针对上述情况，实际应用中，遇到windows 7与windows xp两者不一样，windows 7中，除了上述命令外，在TCP/IP配置中，无线外网设置为自动获取，内网配置为内网IP，子网掩码，网关。</p>
+<p>widows xp中，除了上述命令外，在TCP/IP配置中，无线设置为手动输入IP，子网掩码，且网关留空，不填，内网配置为内网IP，子网掩码，网关。</p>
+<p>方法二、</p>
+<p>例1</p>
+<p>我的笔记本用无线 网卡联互联网，同时局域网使用的是有线 连接（网段 132.147.X.X，不提供接入Internet服务），同时提供无线 网络连接供客户使用（网段192.168.1.X，可连接互联网）。</p>
+<p>如果同时连接有线 网卡和 无线 网卡，因为有线 网卡的优先级较高，故仅有线 局域网能正常工作，无线 网卡可连接但却无法传送数据。要改变这种情况，需要对笔记本本地路由设置做出修改：访问132.147.X.X的请求均有有线 网卡处理，访问其它网络的则由无线 网卡处理。</p>
+<p>具体设置步骤如下：</p>
+<p>1. 设置无线 网卡为默认路由网关：无线 网络连接属性—Internet协议（TCP/IP）-属性-高级，手动输入无线 路由网关，我这里的是132.147.X.X，跃点数为“1”， 是最高优先级。到了这一步，如果有线 连接，无线 连接同时存在的话，所有的数据都是经由无线 网卡处理的。</p>
+<p>2. 设置排除信息，把132.147.X.X路段的网址连接请求交由优先网卡处理：在命令行输入以下命令</p>
+<p>route -p add 132.147.0.0 mask 255.255.0.0 132.147.160.1</p>
+<p>其中132.147.0.0是本地局域网网段，132.147.160.1是本机所处子网段的默认网关，需要根据具体情况填写。经过以上设置，在访问本地网段的时候均由有线 网卡处理，访问互联网的时候可交由无线 网卡处理，就不会产生冲突了。</p>
+<p>注意: 这里的172.16.x.x 和192.168.1.X 和你的局域网环境有关,可以命令行下ipconfig /all 查看</p>
+<p>例2</p>
+<p>局域网有线连接（网段172.16.X.X，不提供接入internet服务），WIFI连接（网段192.168.1.X，可连接互联网)。</p>
+<p>如 果同时连接有线网卡和无线网卡，因为有线网卡的优先级较高，故仅有线局域网能正常工作，无线网卡可连接但却无法传送数据。要改变这种情况，需要对笔记本本 地路由设置做出修改：访问172.16.X.X的请求均有有线网卡处理，访问其它网络的则由无线网卡处理。设置步骤如下：</p>
+<p>1》 设置无线网卡为默认路由网关：无线网络连接属性—Internet协议(TCP/IP)-属性-高级，手动输入无线路由网关，我这里的是 192.168.1.1，跃点数为“1”，是最高优先级。到了这一步，如果有线连接，无线连接同时存在的话，所有的数据都是经由无线网卡处理的。</p>
+<p>2》设置排除信息，把172.16.X.X路段的网址连接请求交由优先网卡处理：在命令行输入以下命令<br>
+route -p add 172.16.0.0 mask 255.255.0.0 172.16.6.1<br>
+其中172.16.0.0是本地局域网网段，172.16.6.1是本机所处子网段的默认网关，需要根据具体情况填写。</p>
+<p>经过以上设置，在访问本地网段的时候均由有线网卡处理，访问互联网的时候可交由无线网卡处理，就不会产生冲突了。</p>
+<p>其它信息(来自网络)</p>
+<p>不少公司的网管试图解决双网卡问题，下面我就给大家详细的讲解一下双网卡同时使用的方法，这样即可保障内网的安全，又能解决电脑访问外网的问题，一举两得。希望大家喜欢。</p>
+<p>首先你的机器需要有两块网卡，分别接到两台交换机上,</p>
+<p>internet地址：192.168.1.8，子网掩码：255.255.255.0，网关：192.168.1.1</p>
+<p>内部网地址：172.23.1.8，子网掩码：255.255.255.0，网关：172.23.1.1</p>
+<p>如果按正常的设置方法设置每块网卡的ip地址和网关，再cmd下使用route print查看时会看到</p>
+<p>Network Destination Netmask Gateway Interface Metric</p>
+<p>0.0.0.0 0.0.0.0 192.168.1.1 192.168.1.8</p>
+<p>0.0.0.0 0.0.0.0 172.23.1.1 172.23.1.8</p>
+<p>即指向0.0.0.0的有两个网关，这样就会出现路由冲突，两个网络都不能访问。</p>
+<p>如何实现同时访问两个网络？那要用到route命令</p>
+<p>第一步：route delete 0.0.0.0     &quot;删除所有0.0.0.0的路由&quot;</p>
+<p>第二步：route add 0.0.0.0 mask 0.0.0.0 192.168.1.1     &quot;添加0.0.0.0网络路由&quot;这个是主要的,意思就是你可以上外网.</p>
+<p>第三步：route add 172.23.0.0 mask 255.0.0.0 172.23.1.1    &quot;添加172.23.0.0网络路由&quot;，注意mask为255.0.0.0   ，而不是255.255.255.0 ，这样内部的多网段才可用。</p>
+<p>这时就可以同时访问两个网络了，但碰到一个问题，使用上述命令添加的路由在系统重新启动后会自动丢失，怎样保存现有的路由表呢？</p>
+<p>route add -p 添加静态路由，即重启后，路由不会丢失。注意使用前要在tcp/ip设置里去掉接在企业内部网的网卡的网关</p>
+<hr>
+<p>一些单位将内网和外网分开了。痛苦啊，偶单位就是如此。boss当然是基于安全性考虑了，可是没有笔记本的怎么办？又要办公，有得上网。没办法，发扬DIY精神偷偷装一块网卡，让聊天与工作同在。让你的主机内外兼顾。这是我在网上找到的，谢谢作者了。方法如下：<br>
+1.设置其中接internet的网卡的网关为10.0.0.1，启用后就是默认网关<br>
+--注：这是对应外网的网卡，按照你们单位外网的ip分配情况，在TCP/IP属性中配置好 ip、掩码、DNS</p>
+<p>2.将连接单位内部网的网卡IP配好后，设网关设置为空（即不设网关），启用后，此时内网无法通过网关路由</p>
+<p>3.进入CMD，运行：route -p add 192.0.0.0 mask 255.0.0.0 192.168.0.1 metric 1</p>
+<p>--注：意思是将192*的IP包的路由网关设为192.168.0.1 ，-P 参数代表永久写入路由表，建议先不加此参数，实践通过后在写上去</p>
+<ol start="4">
+<li>OK！同时启用两个网卡，两个网关可以同时起作用了，两个子网也可以同时访问了，关机重启后也不用重设！</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[NFS服务器搭建与配置]]></title>
         <id>https://newdy.cf/post/nfs-fu-wu-qi-da-jian-yu-pei-zhi/</id>
@@ -835,800 +1533,6 @@ Verifying - Enter Export Password:</p>
 <p>配置Nginx的客户端验证证书</p>
 <p>ssl_client_certificate /path/to/ca.pem;<br>
 ssl_verify_client optional; # or <code>on</code> if you require client key</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Nginx配置中location匹配规则详解]]></title>
-        <id>https://newdy.cf/post/nginx-pei-zhi-zhong-location-pi-pei-gui-ze-xiang-jie/</id>
-        <link href="https://newdy.cf/post/nginx-pei-zhi-zhong-location-pi-pei-gui-ze-xiang-jie/">
-        </link>
-        <updated>2020-02-19T04:48:02.000Z</updated>
-        <content type="html"><![CDATA[<p>Nginx 的语法形式是： location [=|<sub>|</sub><em>|^~|@] /uri/ { … } ，意思是可以以“ = ”或“ ~</em> ”或“ ~ ”或“ ^~ ”或“ @ ”符号为前缀，当然也可以没有前缀（因为 [A] 是表示可选的 A ； A|B 表示 A 和 B 选一个），紧接着是 /uri/ ，再接着是{…} 指令块，整个意思是对于满足这样条件的 /uri/ 适用指令块 {…} 的指令。</p>
-<p>上述各种 location 可分两大类，分别是：“普通 location ”，官方英文说法是 location using   literal strings 和“正则 location ”，英文说法是 location using regular expressions 。其中“普通 location ”是以“ = ”或“ ^~ ”为前缀或者没有任何前缀的 /uri/ ；“正则 location ”是以“ ~ ”或“ ~* ”为前缀的 /uri/ 。</p>
-<p>那么，当我们在一个 server 上下文编写了多个 location 的时候， Nginx 对于一个 HTTP 请求，是如何匹配到一个 location 做处理呢？用一句话简单概括 Nginx 的 location 匹配规则是：“正则 location ”让步 “普通 location”的严格精确匹配结果；但覆盖 “普通 location ”的最大前缀匹配结果。理解这句话，我想通过下面的实例来说明。</p>
-<p>#1 先普通 location ，再正则 location<br>
-周边不少童鞋告诉我， nginx 是“先匹配正则 location 再匹配普通 location ”，其实这是一个误区， nginx 其实是“先匹配普通 location ，再匹配正则 location ”，但是普通 location 的匹配结果又分两种：一种是“严格精确匹配”，官方英文说法是“ exact match ”；另一种是“最大前缀匹配”，官方英文说法是“ Literal strings match the beginning portion of the query – the most specific match will be used. ”。我们做个实验：</p>
-<p>例题 1 ：假设 nginx 的配置如下</p>
-<p>server {</p>
-<pre><code>   listen       9090;
-
-   server_name  localhost;
-
-              location / {
-
-       root   html;
-
-       index  index.html index.htm;
-
-       deny all;
-
-   }
-
-   location ~ \.html$ {
-
-       allow all;
-
-   }
-</code></pre>
-<p>}</p>
-<p>附录 nginx 的目录结构是： nginx-&gt;html-&gt;index.html</p>
-<p>上述配置的意思是： location / {… deny all;} 普通 location 以“ / ”开始的 URI 请求（注意任何 HTTP 请求都必然以“/ ”开始，所以“ / ”的意思是所有的请求都能被匹配上），都拒绝访问； location ~.html$ {allow all;} 正则 location以 .html 结尾的 URI 请求，都允许访问。</p>
-<p>测试结果：</p>
-<p>[root@web108 ~]# curl http://localhost:9090/</p>
-<html>
-<head><title>403 Forbidden</title></head>
-<body bgcolor=”white”>
-<center><h1>403 Forbidden</h1></center>
-<hr><center>nginx/1.1.0</center>
-</body>
-</html>
-<p>[root@web108 ~]# curl http://localhost:9090/index.html</p>
-<html>
-<head>
-<title>Welcome to nginx!</title>
-</head>
-<body bgcolor=”white” text=”black”>
-<center><h1>Welcome to nginx!</h1></center>
-</body>
-</html>
-<p>[root@web108 ~]# curl http://localhost:9090/index_notfound.html</p>
-<html>
-<head><title>404 Not Found</title></head>
-<body bgcolor=”white”>
-<center><h1>404 Not Found</h1></center>
-<hr><center>nginx/1.1.0</center>
-</body>
-</html>
-<p>[root@web108 ~]#</p>
-<p>测试结果如下：</p>
-<p>URI 请求	HTTP 响应<br>
-curl http://localhost:9090/	403 Forbidden<br>
-curl http://localhost:9090/index.html	Welcome to nginx!<br>
-curl http://localhost:9090/index_notfound.html	404 Not Found<br>
-curl http://localhost:9090/ 的结果是“ 403 Forbidden ”，说明被匹配到“ location / {..deny all;} ”了，原因很简单HTTP 请求 GET / 被“严格精确”匹配到了普通 location / {} ，则会停止搜索正则 location ；</p>
-<p>curl http://localhost:9090/index.html 结果是“ Welcome to nginx! ”，说明没有被“ location / {…deny all;} ”匹配，否则会 403 Forbidden ，但 /index.html 的确也是以“ / ”开头的，只不过此时的普通 location / 的匹配结果是“最大前缀”匹配，所以 Nginx 会继续搜索正则 location ， location ~ .html$ 表达了以 .html 结尾的都 allow all; 于是接着就访问到了实际存在的 index.html 页面。</p>
-<p>curl http://localhost:9090/index_notfound.html   同样的道理先匹配 location / {} ，但属于“普通 location 的最大前缀匹配”，于是后面被“正则 location ” location ~ .html$ {} 覆盖了，最终 allow all ； 但的确目录下不存在index_notfound.html 页面，于是 404 Not Found 。</p>
-<p>如果此时我们访问 http://localhost:9090/index.txt 会是什么结果呢？显然是 deny all ；因为先匹配上了 location / {..deny all;} 尽管属于“普通 location ”的最大前缀匹配结果，继续搜索正则 location ，但是 /index.txt 不是以 .html结尾的，正则 location 失败，最终采纳普通 location 的最大前缀匹配结果，于是 deny all 了。</p>
-<p>[root@web108 ~]# curl http://localhost:9090/index.txt</p>
-<html>
-<head><title>403 Forbidden</title></head>
-<body bgcolor=”white”>
-<center><h1>403 Forbidden</h1></center>
-<hr><center>nginx/1.1.0</center>
-</body>
-</html>
-<p>[root@web108 ~]#</p>
-<p>#2 普通 location 的“隐式”严格匹配<br>
-例题 2 ：我们在例题 1 的基础上增加精确配置</p>
-<p>server {</p>
-<pre><code>   listen       9090;
-
-   server_name  localhost;
-
-              location /exact/match.html {
-
-       allow all;
-
-   }
-
-              location / {
-
-       root   html;
-
-       index  index.html index.htm;
-
-       deny all;
-
-   }
-
-   location ~ \.html$ {
-
-       allow all;
-
-   }
-</code></pre>
-<p>}</p>
-<p>测试请求：</p>
-<p>[root@web108 ~]# curl http://localhost:9090/exact/match.html</p>
-<html>
-<head><title>404 Not Found</title></head>
-<body bgcolor=”white”>
-<center><h1>404 Not Found</h1></center>
-<hr><center>nginx/1.1.0</center>
-</body>
-</html>
-<p>[root@web108 ~]#</p>
-<p>结果进一步验证了“普通 location ”的“严格精确”匹配会终止对正则 location 的搜索。这里我们小结下“普通 location”与“正则 location ”的匹配规则：先匹配普通 location ，再匹配正则 location ，但是如果普通 location 的匹配结果恰好是“严格精确（ exact match ）”的，则 nginx 不再尝试后面的正则 location ；如果普通 location 的匹配结果是“最大前缀”，则正则 location 的匹配覆盖普通 location 的匹配。也就是前面说的“正则 location 让步普通location 的严格精确匹配结果，但覆盖普通 location 的最大前缀匹配结果”。</p>
-<p>#3 普通 location 的“显式”严格匹配和“ ^~ ” 前缀<br>
-上面我们演示的普通 location 都是不加任何前缀的，其实普通 location 也可以加前缀：“ ^~ ”和“ = ”。其中“ ^~”的意思是“非正则，不需要继续正则匹配”，也就是通常我们的普通 location ，还会继续搜索正则 location （恰好严格精确匹配除外），但是 nginx 很人性化允许配置人员告诉 nginx 某条普通 location ，无论最大前缀匹配，还是严格精确匹配都终止继续搜索正则 location ；而“ = ”则表达的是普通 location 不允许“最大前缀”匹配结果，必须严格等于，严格精确匹配。</p>
-<p>例题 3 ：“ ^~ ”前缀的使用</p>
-<p>server {</p>
-<pre><code>   listen       9090;
-
-   server_name  localhost;
-
-              location /exact/match.html {
-
-       allow all;
-
-   }
-
-             location ^~ / {
-
-       root   html;
-
-       index  index.html index.htm;
-
-       deny all;
-
-   }
-
-   location ~ \.html$ {
-
-       allow all;
-
-   }
-</code></pre>
-<p>}</p>
-<p>把例题 2 中的 location / {} 修改成 location ^~ / {} ，再看看测试结果：</p>
-<p>URI 请求	修改前	修改后<br>
-curl http://localhost:9090/	403 Forbidden	403 Forbidden<br>
-curl http://localhost:9090/index.html	Welcome to nginx!	403 Forbidden<br>
-curl http://localhost:9090/index_notfound.html	404 Not Found	403 Forbidden<br>
-curl http://localhost:9090/exact/match.html	404 Not Found	404 Not Found<br>
-除了 GET /exact/match.html 是 404 Not Found ，其余都是 403 Forbidden ，原因很简单所有请求都是以“ / ”开头，所以所有请求都能匹配上“ / ”普通 location ，但普通 location 的匹配原则是“最大前缀”，所以只有/exact/match.html 匹配到 location /exact/match.html {allow all;} ，其余都 location ^~ / {deny all;} 并终止正则搜索。</p>
-<p>例题 4 ：“ = ”前缀的使用</p>
-<p>server {</p>
-<pre><code>   listen       9090;
-
-   server_name  localhost;
-
-              location /exact/match.html {
-
-       allow all;
-
-   }
-
-             location = / {
-
-       root   html;
-
-       index  index.html index.htm;
-
-       deny all;
-
-   }
-
-   location ~ \.html$ {
-
-       allow all;
-
-   }
-</code></pre>
-<p>}</p>
-<p>例题 4 相对例题 2 把 location / {} 修改成了 location = / {} ，再次测试结果：</p>
-<p>URI 请求	修改前	修改后<br>
-curl http://localhost:9090/	403 Forbidden	403 Forbidden<br>
-curl http://localhost:9090/index.html	Welcome to nginx!	Welcome to nginx!<br>
-curl http://localhost:9090/index_notfound.html	404 Not Found	404 Not Found<br>
-curl http://localhost:9090/exact/match.html	404 Not Found	404 Not Found<br>
-curl http://localhost:9090/test.jsp	403 Forbidden	404 Not Found<br>
-最能说明问题的测试是 GET /test.jsp ，实际上 /test.jsp 没有匹配正则 location （ location ~.html$ ），也没有匹配 location = / {} ，如果按照 location / {} 的话，会“最大前缀”匹配到普通 location / {} ，结果是 deny all 。</p>
-<p>#4 正则 location 与编辑顺序<br>
-location 的指令与编辑顺序无关，这句话不全对。对于普通 location 指令，匹配规则是：最大前缀匹配（与顺序无关），如果恰好是严格精确匹配结果或者加有前缀“ ^~ ”或“ = ”（符号“ = ”只能严格匹配，不能前缀匹配），则停止搜索正则 location ；但对于正则 location 的匹配规则是：按编辑顺序逐个匹配（与顺序有关），只要匹配上，就立即停止后面的搜索。</p>
-<p>配置 3.1</p>
-<p>server {</p>
-<pre><code>   listen       9090;
-
-   server_name  localhost;
-
-   location ~ \.html$ {
-
-       allow all; 
-
-   } 
-
-   location ~ ^/prefix/.*\.html$ {
-
-       deny all; 
-
-   } 
-</code></pre>
-<p>}</p>
-<p>配置 3.2</p>
-<p>server {</p>
-<pre><code>   listen       9090;
-
-   server_name  localhost;
-
- 
-
-   location ~ ^/prefix/.*\.html$ {
-
-       deny all; 
-
-   } 
-
-             
-
-              location ~ \.html$ {
-
-       allow all; 
-
-   } 
-</code></pre>
-<p>}</p>
-<p>测试结果：</p>
-<p>URI 请求	配置 3.1	配置 3.2<br>
-curl http://localhost:9090/regextest.html	404 Not Found	404 Not Found<br>
-curl http://localhost:9090/prefix/regextest.html	404 Not Found	403 Forbidden<br>
-解释：</p>
-<p>Location ~ ^/prefix/.*.html$ {deny all;} 表示正则 location 对于以 /prefix/ 开头， .html 结尾的所有 URI 请求，都拒绝访问；   location ~.html<span class='katex-error' title='ParseError: KaTeX parse error: Can&#039;t use function &#039;\.&#039; in math mode at position 71: …实际上，prefix 的是 ~\̲.̲html'>{allow all;} 表示正则 location 对于以 .html 结尾的 URI 请求，都允许访问。 实际上，prefix 的是 ~\.html</span> 的子集。</p>
-<p>在“配置 3.1 ”下，两个请求都匹配上 location ~.html$ {allow all;} ，并且停止后面的搜索，于是都允许访问， 404 Not Found ；在“配置 3.2 ”下， /regextest.html 无法匹配 prefix ，于是继续搜索 ~.html$ ，允许访问，于是 404 Not Found ；然而 /prefix/regextest.html 匹配到 prefix ，于是 deny all ， 403 Forbidden 。</p>
-<p>配置 3.3</p>
-<p>server {</p>
-<pre><code>   listen       9090;
-
-   server_name  localhost;
-
-   location  /prefix/ {
-
-           deny all; 
-
-   } 
-
-     
-
-   location  /prefix/mid/ {
-
-           allow all; 
-
-   } 
-</code></pre>
-<p>}</p>
-<p>配置 3.4</p>
-<p>server {</p>
-<pre><code>   listen       9090;
-
-   server_name  localhost;
-
- 
-
-   location  /prefix/mid/ {
-
-           allow all; 
-
-   } 
-
-              location  /prefix/ {
-
-           deny all; 
-
-   } 
-</code></pre>
-<p>}</p>
-<p>测试结果：</p>
-<p>URI 请求	配置 3.1	配置 3.2<br>
-curl http://localhost:9090/prefix/t.html	  403 Forbidden    	403 Forbidden<br>
-curl http://localhost:9090/prefix/mid/t.html	404 Not Found	404 Not Found<br>
-测试结果表明：普通 location 的匹配规则是“最大前缀”匹配，而且与编辑顺序无关。</p>
-<p>#5 “@” 前缀 Named Location 使用<br>
-REFER:  http://wiki.nginx.org/HttpCoreModule#error_page</p>
-<p>假设配置如下：</p>
-<p>server {</p>
-<pre><code>   listen       9090;
-
-   server_name  localhost;
-
-    location  / {
-
-       root   html;
-
-       index  index.html index.htm;
-
-       allow all;
-
-   }
-
-   #error_page 404 http://www.baidu.com # 直接这样是不允许的
-
-   error_page 404 = @fallback;
-
-   location @fallback {
-
-       proxy_pass http://www.baidu.com;
-
-   }
-</code></pre>
-<p>}</p>
-<p>上述配置文件的意思是：如果请求的 URI 存在，则本 nginx 返回对应的页面；如果不存在，则把请求代理到baidu.com 上去做个弥补（注： nginx 当发现 URI 对应的页面不存在， HTTP_StatusCode 会是 404 ，此时error_page 404 指令能捕获它）。</p>
-<p>测试一：</p>
-<p>[root@web108 ~]# curl http://localhost:9090/nofound.html -i</p>
-<p>HTTP/1.1 302 Found</p>
-<p>Server: nginx/1.1.0</p>
-<p>Date: Sat, 06 Aug 2011 08:17:21 GMT</p>
-<p>Content-Type: text/html; charset=iso-8859-1</p>
-<p>Location: http://localhost:9090/search/error.html</p>
-<p>Connection: keep-alive</p>
-<p>Cache-Control: max-age=86400</p>
-<p>Expires: Sun, 07 Aug 2011 08:17:21 GMT</p>
-<p>Content-Length: 222</p>
-<!DOCTYPE HTML PUBLIC “-//IETF//DTD HTML 2.0//EN”>
-<html><head>
-<title>302 Found</title>
-</head><body>
-<h1>Found</h1>
-<p>The document has moved <a href=”http://www.baidu.com/search/error.html”>here</a>.</p>
-</body></html>
-<p>[root@web108 ~]#</p>
-<p>当我们 GET /nofound.html 发送给本 nginx ， nginx 找不到对应的页面，于是 error_page 404 = @fallback ，请求被代理到 http://www.baidu.com ，于是 nginx 给 http://www.baidu.com 发送了 GET /nofound.html ，但/nofound.html 页面在百度也不存在，百度 302 跳转到错误页。</p>
-<p>直接访问 http://www.baidu.com/nofound.html 结果：</p>
-<p>[root@web108 ~]# curl http://www.baidu.com/nofound.html -i</p>
-<p>HTTP/1.1 302 Found</p>
-<p>Date: Sat, 06 Aug 2011 08:20:05 GMT</p>
-<p>Server: Apache</p>
-<p>Location: http://www.baidu.com/search/error.html</p>
-<p>Cache-Control: max-age=86400</p>
-<p>Expires: Sun, 07 Aug 2011 08:20:05 GMT</p>
-<p>Content-Length: 222</p>
-<p>Connection: Keep-Alive</p>
-<p>Content-Type: text/html; charset=iso-8859-1</p>
-<!DOCTYPE HTML PUBLIC “-//IETF//DTD HTML 2.0//EN”>
-<html><head>
-<title>302 Found</title>
-</head><body>
-<h1>Found</h1>
-<p>The document has moved <a href=”http://www.baidu.com/search/error.html”>here</a>.</p>
-</body></html>
-<p>[root@web108 ~]#</p>
-<p>测试二：访问一个 nginx 不存在，但 baidu 存在的页面</p>
-<p>[root@web108 ~]# curl http://www.baidu.com/duty/ -i</p>
-<p>HTTP/1.1 200 OK</p>
-<p>Date: Sat, 06 Aug 2011 08:21:56 GMT</p>
-<p>Server: Apache</p>
-<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
-<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
-<p>Set-Cookie: BAIDUID=5C5D2B2FD083737A0C88CA7075A6601A:FG=1; expires=Sun, 05-Aug-12 08:21:56 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
-<p>Set-Cookie: BAIDUID=5C5D2B2FD083737A2337F78F909CCB90:FG=1; expires=Sun, 05-Aug-12 08:21:56 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
-<p>Last-Modified: Wed, 05 Jan 2011 06:44:53 GMT</p>
-<p>ETag: “d66-49913b8efe340″</p>
-<p>Accept-Ranges: bytes</p>
-<p>Content-Length: 3430</p>
-<p>Cache-Control: max-age=86400</p>
-<p>Expires: Sun, 07 Aug 2011 08:21:56 GMT</p>
-<p>Vary: Accept-Encoding,User-Agent</p>
-<p>Connection: Keep-Alive</p>
-<p>Content-Type: text/html</p>
-<!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN”
-
-“http://www.w3.org/TR/html4/loose.dtd”>
-<p>。。。。</p>
-</body>
-</html>
-<p>显示，的确百度这个页面是存在的。</p>
-<p>[root@web108 ~]# curl http://localhost:9090/duty/ -i</p>
-<p>HTTP/1.1 200 OK</p>
-<p>Server: nginx/1.1.0</p>
-<p>Date: Sat, 06 Aug 2011 08:23:23 GMT</p>
-<p>Content-Type: text/html</p>
-<p>Connection: keep-alive</p>
-<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
-<p>P3P: CP=” OTI DSP COR IVA OUR IND COM ”</p>
-<p>Set-Cookie: BAIDUID=8FEF0A3A2C31D277DCB4CC5F80B7F457:FG=1; expires=Sun, 05-Aug-12 08:23:23 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
-<p>Set-Cookie: BAIDUID=8FEF0A3A2C31D277B1F87691AFFD7440:FG=1; expires=Sun, 05-Aug-12 08:23:23 GMT; max-age=31536000; path=/; domain=.baidu.com; version=1</p>
-<p>Last-Modified: Wed, 05 Jan 2011 06:44:53 GMT</p>
-<p>ETag: “d66-49913b8efe340″</p>
-<p>Accept-Ranges: bytes</p>
-<p>Content-Length: 3430</p>
-<p>Cache-Control: max-age=86400</p>
-<p>Expires: Sun, 07 Aug 2011 08:23:23 GMT</p>
-<p>Vary: Accept-Encoding,User-Agent</p>
-<!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN”
-
-“http://www.w3.org/TR/html4/loose.dtd”>
-<html>
-<p>。。。</p>
-</body>
-</html>
-<p>当 curl http://localhost:9090/duty/ -i 时， nginx 没找到对应的页面，于是 error_page = @fallback ，把请求代理到 baidu.com 。注意这里的 error_page = @fallback 不是靠重定向实现的，而是所说的“ internally redirected （forward ）”。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Nginx七层负载均衡的几种调度算法]]></title>
-        <id>https://newdy.cf/post/nginx-qi-ceng-fu-zai-jun-heng-de-ji-chong-diao-du-suan-fa/</id>
-        <link href="https://newdy.cf/post/nginx-qi-ceng-fu-zai-jun-heng-de-ji-chong-diao-du-suan-fa/">
-        </link>
-        <updated>2020-02-19T04:44:25.000Z</updated>
-        <content type="html"><![CDATA[<p>Nginx是一款轻量级的高性能web服务器，同时也是一款非常优秀的负载均衡器和反向代理服务器。由于支持强大的正则匹配规则、动静分离、URLrewrite功能及安装配置简单且对网络稳定性依赖非常小等优点，所以常用来做为七层负载均衡使用。在硬件不差的情况下，通常可以稳定支持几万的并发连接，在硬件性能足够好，且对系统内核参数及Nginx配置进行优化甚至可以达到10万以上的并发。</p>
-<p>以下是Nginx作为七层负载均衡常用的几种调度算法和适用的业务场景</p>
-<p>1、轮询（默认调度算法）</p>
-<p>特点：每个请求按时间顺序逐一分配到不同的后端服务器处理。<br>
-适用业务场景：后端服务器硬件性能配置完全一致，业务无特殊要求时使用。<br>
-upstream backendserver {<br>
-server 192.168.0.14：80 max_fails=2 fail_timeout=10s;<br>
-server 192.168.0.15：80 max_fails=2 fail_timeout=10s;<br>
-}</p>
-<p>2、加权轮询</p>
-<p>特点：指定轮询几率，weight值(权重)和访问比例成正比，用户请求按权重比例分配。<br>
-适用业务场景：用于后端服务器硬件性处理能力不平均的情形。<br>
-upstream backendserver {<br>
-server 192.168.0.14:80 weight=5 max_fails=2 fail_timeout=10s;<br>
-server 192.168.0.15:80 weight=10 max_fails=2 fail_timeout=10s;<br>
-}</p>
-<p>3、ip_hash</p>
-<p>特点：每个请求按访问ip的hash结果分配，这样每个访客固定访问一个后端服务器，可以解决session会话保持问题。<br>
-适用业务场景：适用于需要账号登录的系统，会话连接保持的业务。<br>
-upstream backendserver {<br>
-ip_hash;<br>
-server 192.168.0.14:80 max_fails=2 fail_timeout=10s;<br>
-server 192.168.0.15:80 max_fails=2 fail_timeout=10s;<br>
-}</p>
-<p>4、最少连接数 least_conn</p>
-<p>特点：按nginx反向代理与后端服务器之间的连接数，连接数最少的优先分配。</p>
-<p>适用业务场景：适用于客户端与后端服务器需要保持长连接的业务。<br>
-upstream backendserver {<br>
-least_conn;<br>
-server 192.168.0.14:80 max_fails=2 fail_timeout=10s;<br>
-server 192.168.0.15:80 max_fails=2 fail_timeout=10s;<br>
-}</p>
-<p>5、fair（需编译安装第三方模块 ngx_http_upstream_fair_module）</p>
-<p>特点：按后端服务器的响应时间来分配请求，响应时间短的优先分配。<br>
-适用业务场景：对访问响应速度有一定要求的业务。<br>
-upstream backendserver {<br>
-fair;<br>
-server 192.168.0.14:80 max_fails=2 fail_timeout=10s;<br>
-server 192.168.0.15:80 max_fails=2 fail_timeout=10s;<br>
-}</p>
-<p>6、url_hash（需编译安装第三方模块 ngx_http_upstream_hash_module）</p>
-<p>特点：按访问url的hash结果来分配请求，使同一个url访问到同一个后端服务器。<br>
-适用业务场景：适用于后端服务器为缓存服务器时比较有效。<br>
-upstream backendserver {<br>
-server 192.168.0.14:80 max_fails=2 fail_timeout=10s;<br>
-server 192.168.0.15:80 max_fails=2 fail_timeout=10s;<br>
-hash $request_uri;<br>
-}</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Linux CentOS 7 非root用户安装源码版Docker]]></title>
-        <id>https://newdy.cf/post/linux-centos-7-fei-root-yong-hu-an-zhuang-yuan-ma-ban-docker/</id>
-        <link href="https://newdy.cf/post/linux-centos-7-fei-root-yong-hu-an-zhuang-yuan-ma-ban-docker/">
-        </link>
-        <updated>2020-02-19T04:37:46.000Z</updated>
-        <content type="html"><![CDATA[<p>注意:非root用户必须要有sudo权限</p>
-<p>一、安装前的准备</p>
-<p>1.查看当前主机是否有docker组</p>
-<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582087080673.png" alt="" loading="lazy"></figure>
-<p>若没有输出结果则新建</p>
-<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582087086554.png" alt="" loading="lazy"></figure>
-<p>再次查看,发现已经有了docker组</p>
-<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582087091705.png" alt="" loading="lazy"></figure>
-<p>2.新增拥有sudo权限的用户(若知道root和其他拥有sudo权限的系统用户密码,跳到3;若都没有,必做)</p>
-<figure data-type="image" tabindex="4"><img src="https://newdy.cf/post-images/1582087133234.png" alt="" loading="lazy"></figure>
-<p>修改该用户的密码<br>
-<img src="https://newdy.cf/post-images/1582087138797.png" alt="" loading="lazy"></p>
-<p>为新增的用户添加sudo权限</p>
-<p>sudo vi /etc/sudoers<br>
-　　在92行下一行添加<br>
-　　test    　　ALL=(ALL)    　　ALL<br>
-3.把当前用户加入到docker组 （此时用户并没有加入进docker组）</p>
-<figure data-type="image" tabindex="5"><img src="https://newdy.cf/post-images/1582087165679.png" alt="" loading="lazy"></figure>
-<p>切换至sudo权限用户，然后再切换回当前用户（此时可以看到用户已经加入docker组）</p>
-<figure data-type="image" tabindex="6"><img src="https://newdy.cf/post-images/1582087175735.png" alt="" loading="lazy"></figure>
-<p>3.删除新增的用户和它的sudo权限（第2步没做请忽略此步）</p>
-<p>sudo vi /etc/sudoers<br>
-　　在92行下一行添加<br>
-　　test　　ALL=(ALL)  ALL<br>
-两次退出，不然删除用户时会报错</p>
-<figure data-type="image" tabindex="7"><img src="https://newdy.cf/post-images/1582087195961.png" alt="" loading="lazy"></figure>
-<p>二、安装docker</p>
-<p>1.下载docker源码包并上传至虚拟机</p>
-<p>https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/static/stable/x86_64/docker-18.09.0.tgz</p>
-<p>2.解压源码包至指定目录下</p>
-<figure data-type="image" tabindex="8"><img src="https://newdy.cf/post-images/1582087215827.png" alt="" loading="lazy"></figure>
-<p>3.将解压出来的docker目录下的指令复制到 /usr/bin/ 目录下</p>
-<p>sudo cp docker/* /usr/bin/<br>
-4./usr/bin/目录下docker有关指令的所属用户和所属组(必做,不然非root用户使用docker指令报错:权限不够)</p>
-<p>sudo chown root:docker /usr/bin/docker*<br>
-sudo chown root:docker /usr/bin/containerd*<br>
-sudo chown root:docker /usr/bin/runc<br>
-sudo chown root:docker /usr/bin/ctr<br>
-5.查看一下是否改变所属用户和所属组(得到和解压出来的docker目录下的一样的8个指令)</p>
-<figure data-type="image" tabindex="9"><img src="https://newdy.cf/post-images/1582087235444.png" alt="" loading="lazy"></figure>
-<p>6.将docker注册为service服务</p>
-<p>新建该文件<br>
-sudo vi /etc/systemd/system/docker.service<br>
-加入以下内容：<br>
-[Unit]<br>
-Description=Docker Application Container Engine<br>
-Documentation=https://docs.docker.com<br>
-After=network-online.target firewalld.service<br>
-Wants=network-online.target</p>
-<p>[Service]<br>
-Type=notify<br>
-ExecStart=/usr/bin/dockerd<br>
-ExecReload=/bin/kill -s HUP $MAINPID<br>
-LimitNOFILE=infinity<br>
-LimitNPROC=infinity<br>
-LimitCORE=infinity<br>
-TimeoutStartSec=0<br>
-Delegate=yes<br>
-KillMode=process<br>
-Restart=on-failure<br>
-StartLimitBurst=3<br>
-StartLimitInterval=60s</p>
-<p>[Install]<br>
-WantedBy=multi-user.target<br>
-7.添加执行权限并重新加载配置文件</p>
-<p>sudo chmod a+x /etc/systemd/system/docker.service<br>
-sudo systemctl daemon-reloa<br>
-8.docker镜像加速(可以不做,但是docker pull会很慢,由于docker官网在海外)</p>
-<p>新建该文件<br>
-sudo vi /etc/docker/daemon.json<br>
-加入以下内容<br>
-{<br>
-&quot;registry-mirrors&quot;: [&quot;http://hub-mirror.c.163.com&quot;]<br>
-}</p>
-<p>9.启动docker</p>
-<p>sudo systemctl start docker<br>
-三、docker基础命令</p>
-<p>docker启/停/重启/查看状态<br>
-sudo systemctl  start/stop/restart/status</p>
-<p>查看docker已有镜像<br>
-docker images</p>
-<p>在docker官网搜寻指定镜像<br>
-docker search 镜像</p>
-<p>下载镜像(不加标签默认下载最新版本的镜像)<br>
-docker pull 镜像名字:tag(即标签)</p>
-<p>启动容器(以xxx名字运行基于镜像的容器，并映射容器端口到本机端口，容器目录文件储存在本机目录)<br>
-docker run -d -name xxx -p 本机端口:容器端口 -v 本机目录:容器目录 镜像name:tag(或ID)</p>
-<p>进入正在运行的容器内部<br>
-docker exec -it 容器name(或ID) /bin/bash</p>
-<p>容器的启/停/重启/信息/删除<br>
-docker start/stop/restart/inspect/rm 容器name(或ID)</p>
-<p>查看正在运行的容器<br>
-docker ps</p>
-<p>查看所有容器(包括正在运行的、停止的,不包括删除的)<br>
-docker ps -a</p>
-<p>镜像的删除(删除镜像前请删除所有与该镜像有关的容器)<br>
-docker rmi 镜像name:tag(或ID)</p>
-<p>查看当前安装的docker有关信息<br>
-docker info<br>
-dd</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Windows10下nginx的rtmp服务器搭建]]></title>
-        <id>https://newdy.cf/post/windows10-xia-nginx-de-rtmp-fu-wu-qi-da-jian/</id>
-        <link href="https://newdy.cf/post/windows10-xia-nginx-de-rtmp-fu-wu-qi-da-jian/">
-        </link>
-        <updated>2020-02-19T04:28:12.000Z</updated>
-        <content type="html"><![CDATA[<ol>
-<li>下载 nginx 1.7.11.3 Gryphon<br>
-    下载链接: http://nginx-win.ecsds.eu/download/nginx 1.7.11.3 Gryphon.zip，下载完成后解压， 将解压后的目录命名为</li>
-</ol>
-<p>nginx-1.7.11.3-Gryphon<br>
-2. 下载服务器状态检查程序 stat.xsl（注：直接clone到nginx-1.7.11.3-Gryphon目录下）</p>
-<p>下载地址https://github.com/arut/nginx-rtmp-module/</p>
-<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582086527036.png" alt="" loading="lazy"></figure>
-<ol>
-<li>配置文件 conf\nginx-win-rtmp.conf 内容如下:（注：用记事本打开直接复制粘贴，避免编码格式引起错误）</li>
-</ol>
-<p>#user  nobody;</p>
-<h1 id="multiple-workers-works">multiple workers works !</h1>
-<p>worker_processes  2;</p>
-<p>#error_log  logs/error.log;<br>
-#error_log  logs/error.log  notice;<br>
-#error_log  logs/error.log  info;</p>
-<p>#pid        logs/nginx.pid;</p>
-<p>events {<br>
-worker_connections  8192;<br>
-# max value 32768, nginx recycling connections+registry optimization =<br>
-#   this.value * 20 = max concurrent connections currently tested with one worker<br>
-#   C1000K should be possible depending there is enough ram/cpu power<br>
-# multi_accept on;<br>
-}</p>
-<p>rtmp {<br>
-server {<br>
-listen 1935;<br>
-chunk_size 4000;<br>
-application live {<br>
-live on;</p>
-<pre><code>         # record first 1K of stream
-         record all;
-         record_path /tmp/av;
-         record_max_size 1K;
-
-         # append current timestamp to each flv
-         record_unique on;
-
-         # publish only from localhost
-         allow publish 127.0.0.1;
-         deny publish all;
-
-         #allow play all;
-    }
-}
-</code></pre>
-<p>}</p>
-<p>http {<br>
-#include      /nginx/conf/naxsi_core.rules;<br>
-include       mime.types;<br>
-default_type  application/octet-stream;</p>
-<pre><code>#log_format  main  '$remote_addr:$remote_port - $remote_user [$time_local] &quot;$request&quot; '
-#                  '$status $body_bytes_sent &quot;$http_referer&quot; '
-#                  '&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;';
-
-#access_log  logs/access.log  main;
-</code></pre>
-<h1 id="loadbalancing-php"># loadbalancing PHP</h1>
-<h1 id="upstream-myloadbalancer">upstream myLoadBalancer {</h1>
-<h1 id="server-1270019001-weight1-fail_timeout5">server 127.0.0.1:9001 weight=1 fail_timeout=5;</h1>
-<h1 id="server-1270019002-weight1-fail_timeout5">server 127.0.0.1:9002 weight=1 fail_timeout=5;</h1>
-<h1 id="server-1270019003-weight1-fail_timeout5">server 127.0.0.1:9003 weight=1 fail_timeout=5;</h1>
-<h1 id="server-1270019004-weight1-fail_timeout5">server 127.0.0.1:9004 weight=1 fail_timeout=5;</h1>
-<h1 id="server-1270019005-weight1-fail_timeout5">server 127.0.0.1:9005 weight=1 fail_timeout=5;</h1>
-<h1 id="server-1270019006-weight1-fail_timeout5">server 127.0.0.1:9006 weight=1 fail_timeout=5;</h1>
-<h1 id="server-1270019007-weight1-fail_timeout5">server 127.0.0.1:9007 weight=1 fail_timeout=5;</h1>
-<h1 id="server-1270019008-weight1-fail_timeout5">server 127.0.0.1:9008 weight=1 fail_timeout=5;</h1>
-<h1 id="server-1270019009-weight1-fail_timeout5">server 127.0.0.1:9009 weight=1 fail_timeout=5;</h1>
-<h1 id="server-1270019010-weight1-fail_timeout5">server 127.0.0.1:9010 weight=1 fail_timeout=5;</h1>
-<h1 id="least_conn">least_conn;</h1>
-<h1 id="">}</h1>
-<pre><code>sendfile        off;
-#tcp_nopush     on;
-
-server_names_hash_bucket_size 128;
-</code></pre>
-<h2 id="start-timeouts">Start: Timeouts</h2>
-<pre><code>client_body_timeout   10;
-client_header_timeout 10;
-keepalive_timeout     30;
-send_timeout          10;
-keepalive_requests    10;
-</code></pre>
-<h2 id="end-timeouts">End: Timeouts</h2>
-<pre><code>#gzip  on;
-
-server {
-    listen       80;
-    server_name  localhost;
-
-
-    location /stat {
-        rtmp_stat all;
-        rtmp_stat_stylesheet stat.xsl;
-    }
-    location /stat.xsl {
-        root nginx-rtmp-module/;
-    }
-    location /control {
-        rtmp_control all;
-    }
-
-    #charset koi8-r;
-    #access_log  logs/host.access.log  main;
-
-    ## Caching Static Files, put before first location
-    #location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
-    #    expires 14d;
-    #    add_header Vary Accept-Encoding;
-    #}
-</code></pre>
-<h1 id="for-naxsi-remove-the-single-line-for-learn-mode-or-the-lines-for-full-waf-mode">For Naxsi remove the single # line for learn mode, or the ## lines for full WAF mode</h1>
-<pre><code>    location / {
-        #include    /nginx/conf/mysite.rules; # see also http block naxsi include line
-        ##SecRulesEnabled;
-     ##DeniedUrl &quot;/RequestDenied&quot;;
-     ##CheckRule &quot;$SQL &gt;= 8&quot; BLOCK;
-     ##CheckRule &quot;$RFI &gt;= 8&quot; BLOCK;
-     ##CheckRule &quot;$TRAVERSAL &gt;= 4&quot; BLOCK;
-     ##CheckRule &quot;$XSS &gt;= 8&quot; BLOCK;
-        root   html;
-        index  index.html index.htm;
-    }
-</code></pre>
-<h1 id="for-naxsi-remove-the-lines-for-full-waf-mode-redirect-location-block-used-by-naxsi">For Naxsi remove the ## lines for full WAF mode, redirect location block used by naxsi</h1>
-<pre><code>    ##location /RequestDenied {
-    ##    return 412;
-    ##}
-</code></pre>
-<h2 id="lua-examples">Lua examples !</h2>
-<h1 id="location-robotstxt">location /robots.txt {</h1>
-<h1 id="rewrite_by_lua">rewrite_by_lua '</h1>
-<h1 id="if-ngxvarhttp_host-~-localhost-then">if ngx.var.http_host ~= &quot;localhost&quot; then</h1>
-<h1 id="return-ngxexecrobots_disallowtxt">return ngx.exec(&quot;/robots_disallow.txt&quot;);</h1>
-<h1 id="end">end</h1>
-<h1 id="-2">';</h1>
-<h1 id="-3">}</h1>
-<pre><code>    #error_page  404              /404.html;
-    # redirect server error pages to the static page /50x.html
-    #
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   html;
-    }
-    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
-    #
-    #location ~ \.php$ {
-    #    proxy_pass   http://127.0.0.1;
-    #}
-    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-    #
-    #location ~ \.php$ {
-    #    root           html;
-    #    fastcgi_pass   127.0.0.1:9000; # single backend process
-    #    fastcgi_pass   myLoadBalancer; # or multiple, see example above
-    #    fastcgi_index  index.php;
-    #    fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-    #    include        fastcgi_params;
-    #}
-    # deny access to .htaccess files, if Apache's document root
-    # concurs with nginx's one
-    #
-    #location ~ /\.ht {
-    #    deny  all;
-    #}
-}
-# another virtual host using mix of IP-, name-, and port-based configuration
-#
-#server {
-#    listen       8000;
-#    listen       somename:8080;
-#    server_name  somename  alias  another.alias;
-#    location / {
-#        root   html;
-#        index  index.html index.htm;
-#    }
-#}
-# HTTPS server
-#
-#server {
-#    listen       443 ssl spdy;
-#    server_name  localhost;
-#    ssl                  on;
-#    ssl_certificate      cert.pem;
-#    ssl_certificate_key  cert.key;
-#    ssl_session_timeout  5m;
-#    ssl_prefer_server_ciphers On;
-#    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-#    ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:ECDH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!eNULL:!MD5:!DSS:!EXP:!ADH:!LOW:!MEDIUM;
-#    location / {
-#        root   html;
-#        index  index.html index.htm;
-#    }
-#}
-</code></pre>
-<p>}<br>
-4. 启动服务器</p>
-<p>nginx.exe -c conf\nginx-win-rtmp.conf<br>
-5.使用ffmpeg、ffplay进行推流拉流验证（直接ffmpeg官方下载windows下的可执行文件）</p>
-<p>5.1推流测试，使用ffmpeg命令完成即可</p>
-<p>ffmpeg.exe -re -i inputfile.mp4 -vcodec libx264 -acodec aac -f flv rtmp://localhost:1935/live/home<br>
-5.2拉流测试，使用ffplay命令完成即可<br>
-—————————————<br>
-ffplay.exe rtmp://localhost:1935/live/home<br>
-<img src="https://newdy.cf/post-images/1582086643460.png" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
