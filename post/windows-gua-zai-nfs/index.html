@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动 | Gridea</title>
+<title>windows挂载nfs | Gridea</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,11 @@
 
 
 
-    <meta name="description" content="ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，..." />
+    <meta name="description" content="
+注意：Win10 Creators Update前只有Win10企业版可以挂载NFS， Creators Update后专业版也可挂载NFS了。
+安装
+按Win+R输入OptionalFeatures，勾选”NFS服务”
+不需要勾选“管理..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -94,30 +98,57 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动</h2>
-            <div class="post-date">2020-02-11</div>
+            <h2 class="post-title">windows挂载nfs</h2>
+            <div class="post-date">2020-02-20</div>
             
             <div class="post-content" v-pre>
-              <p>ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，自 ESXi 5.5 版本起 VMware 移除了大量家用 PC 机的驱动，其中就包含 RTL8168/8111 网卡以及 Intel SATA 控制器。</p>
-<p>不过天无绝人之路，我们仍然可以使用第三方工具 ESXi-Customizer-PS 对安装镜像进行修改，加载我们想要的驱动，从而继续正常使用。</p>
-<p>在使用 ESXi-Customizer-PS 之前，我们需要先安装 VMware PowerCLI，可以在网络搜索下载。安装完成后，在这个网址下载 ESXi-Customizer-PS。</p>
-<p>随后我们打开 VMware PowerCLI ，并且定位到 ESXi-Customizer-PS 所在的目录，执行：</p>
-<p>##.\ESXi-Customizer-PS-v2.5.ps1 -v65 -vft -load net55-r8168,net51-r8169,sata-xahci<br>
-<img src="https://newdy.cf/post-images/1581431304708.png" alt="" loading="lazy"></p>
-<pre><code>随后脚本会自动连接到 VMware 下载安装镜像并加载对应的驱动。其中 net55-r8168 对应 RTL8168/8111 ，net51-r8169 对应 RTL8169 ，sata-xahci 对应常见 SATA 控制器。如果你还有特殊的硬件驱动需要加载的话，可以到 V-Front 的官方源按照硬件 id 来查找，只需在 load 后继续添加并用逗号分隔即可。
-</code></pre>
-<p>经过漫长的等待后，对应版本的 ESXi 安装镜像便会保存在 ESXi-Customizer-PS 同目录中。当然你也可以使用 -v60 -v55 来生成6.0或是5.5版本的安装镜像。<br>
-<img src="https://newdy.cf/post-images/1581431377324.png" alt="" loading="lazy"><br>
-如不清楚硬件 id ，可先引导至 Windows 并通过设备管理器查看。如图所示，这个 Intel USB 3.0 控制器的硬件 id 为：8086:A12F。</p>
+              <p><img src="https://newdy.cf/post-images/1582176250349.png" alt="" loading="lazy"><br>
+注意：Win10 Creators Update前只有Win10企业版可以挂载NFS， Creators Update后专业版也可挂载NFS了。</p>
+<p>安装<br>
+按Win+R输入OptionalFeatures，勾选”NFS服务”</p>
+<p>不需要勾选“管理工具”，那玩意是个废物，非WinServer只能靠命令行挂载NFS。</p>
+<p>装好后按Win+R输入cmd</p>
+<p>查看远程电脑NFS共享的目录<br>
+showmount -e 远程电脑的IP<br>
+完整的用法：<br>
+用法: showmount -e [server] 显示 NFS 服务器导出的所有共享。<br>
+showmount -a [server] 列出客户端主机名或 IP 地址，以及使用“主机:目录”格式显示的安装目录。<br>
+showmount -d [server] 显示 NFS 服务器上当前由某些 NFS 客户端安装的目录。<br>
+挂载<br>
+mount \远程电脑的IP\共享的目录 盘符<br>
+<strong>例如：</strong><br>
+mount \192.168.1.2\root V:<br>
+关于如何配置远程电脑上的NFS请自行Google 完整的用法：<br>
+用法: mount [-o options] [-u:username] [-p:&lt;password | *&gt;] &lt;\computername\sharename&gt; &lt;devicename | *&gt;</p>
+<p>-o rsize=size 设置读取缓冲区的大小(以 KB 为单位)。<br>
+-o wsize=size 设置写入缓冲区的大小(以 KB 为单位)。<br>
+-o timeout=time 设置 RPC 调用的超时值(以秒为单位)。<br>
+-o retry=number 设置软装载的重试次数。<br>
+-o mtype=soft|hard 设置装载类型。<br>
+-o lang=euc-jp|euc-tw|euc-kr|shift-jis|big5|ksc5601|gb2312-80|ansi<br>
+指定用于文件和目录名称的编码。<br>
+-o fileaccess=mode 指定文件的权限模式。<br>
+这些模式用于在 NFS 服务器上创建的<br>
+新文件。使用 UNIX 样式模式位指定。<br>
+-o anon 作为匿名用户装载。<br>
+-o nolock 禁用锁定。<br>
+-o casesensitive=yes|no 指定在服务器上执行区分大小写的文件查找。<br>
+-o sec=sys|krb5|krb5i|krb5p<br>
+卸载</p>
+<p>umount 盘符</p>
+<p>例如：umount V:\</p>
+<p>如果要卸载全部的NFS挂载：</p>
+<p>umount -f -a</p>
+<p>不要使用资源管理器的“断开网络驱动器”！！！</p>
 
             </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix/">
+                <a href="https://newdy.cf/post/homeassistantfrpnginxhttps-shi-xian-wu-duan-kou-jia-mi-yuan-cheng-fang-wen/">
                   <h3 class="post-title">
-                    搭建 DNS 服务解锁 Netflix
+                    HomeAssistant+frp+NGINX+HTTPS实现无端口加密远程访问 
                   </h3>
                 </a>
               </div>

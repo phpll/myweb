@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-19T09:38:38.802Z</updated>
+    <updated>2020-02-20T05:25:01.484Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,334 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[windows挂载nfs]]></title>
+        <id>https://newdy.cf/post/windows-gua-zai-nfs/</id>
+        <link href="https://newdy.cf/post/windows-gua-zai-nfs/">
+        </link>
+        <updated>2020-02-20T05:24:03.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://newdy.cf/post-images/1582176250349.png" alt="" loading="lazy"><br>
+注意：Win10 Creators Update前只有Win10企业版可以挂载NFS， Creators Update后专业版也可挂载NFS了。</p>
+<p>安装<br>
+按Win+R输入OptionalFeatures，勾选”NFS服务”</p>
+<p>不需要勾选“管理工具”，那玩意是个废物，非WinServer只能靠命令行挂载NFS。</p>
+<p>装好后按Win+R输入cmd</p>
+<p>查看远程电脑NFS共享的目录<br>
+showmount -e 远程电脑的IP<br>
+完整的用法：<br>
+用法: showmount -e [server] 显示 NFS 服务器导出的所有共享。<br>
+showmount -a [server] 列出客户端主机名或 IP 地址，以及使用“主机:目录”格式显示的安装目录。<br>
+showmount -d [server] 显示 NFS 服务器上当前由某些 NFS 客户端安装的目录。<br>
+挂载<br>
+mount \远程电脑的IP\共享的目录 盘符<br>
+<strong>例如：</strong><br>
+mount \192.168.1.2\root V:<br>
+关于如何配置远程电脑上的NFS请自行Google 完整的用法：<br>
+用法: mount [-o options] [-u:username] [-p:&lt;password | *&gt;] &lt;\computername\sharename&gt; &lt;devicename | *&gt;</p>
+<p>-o rsize=size 设置读取缓冲区的大小(以 KB 为单位)。<br>
+-o wsize=size 设置写入缓冲区的大小(以 KB 为单位)。<br>
+-o timeout=time 设置 RPC 调用的超时值(以秒为单位)。<br>
+-o retry=number 设置软装载的重试次数。<br>
+-o mtype=soft|hard 设置装载类型。<br>
+-o lang=euc-jp|euc-tw|euc-kr|shift-jis|big5|ksc5601|gb2312-80|ansi<br>
+指定用于文件和目录名称的编码。<br>
+-o fileaccess=mode 指定文件的权限模式。<br>
+这些模式用于在 NFS 服务器上创建的<br>
+新文件。使用 UNIX 样式模式位指定。<br>
+-o anon 作为匿名用户装载。<br>
+-o nolock 禁用锁定。<br>
+-o casesensitive=yes|no 指定在服务器上执行区分大小写的文件查找。<br>
+-o sec=sys|krb5|krb5i|krb5p<br>
+卸载</p>
+<p>umount 盘符</p>
+<p>例如：umount V:\</p>
+<p>如果要卸载全部的NFS挂载：</p>
+<p>umount -f -a</p>
+<p>不要使用资源管理器的“断开网络驱动器”！！！</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[HomeAssistant+frp+NGINX+HTTPS实现无端口加密远程访问 ]]></title>
+        <id>https://newdy.cf/post/homeassistantfrpnginxhttps-shi-xian-wu-duan-kou-jia-mi-yuan-cheng-fang-wen/</id>
+        <link href="https://newdy.cf/post/homeassistantfrpnginxhttps-shi-xian-wu-duan-kou-jia-mi-yuan-cheng-fang-wen/">
+        </link>
+        <updated>2020-02-19T12:10:35.000Z</updated>
+        <content type="html"><![CDATA[<p>等到IPV6和5G（678910G）普及了，才真的叫互联。<br>
+一个公网IP就可以带来很多完全别样的感受</p>
+<p>一般来说，HomeAssistant都是运行在家中的网络中，LZ想了想似乎没啥特别的需求要在外面访问它。</p>
+<p>LZ家中用的北京联通，有公网IP（自己申请的）。老家的中国电信也有公网IP（也是一个电话到客服就行）<br>
+这样一来就可以做很多事情。</p>
+<p>一.北京出租屋：<br>
+1.小米路由器3G，刷Padavan，<br>
+2.北京联通宽带，公网IP（可以申请），破解光猫取得超级权限，开桥接（淘宝远程，几十块钱）可以双开，即获取两条线路和两个ip，然并卵，lz就租了个主卧。没那么多需求</p>
+<ol>
+<li>光纤接光猫，光猫LAN口拉网线到小米路由器WAN口。在路由器里拨号。</li>
+<li>显示器HKC C340（34寸，21:9 100hz）</li>
+<li>PS4 pro 不支持21:9 ，网线接路由器，NAT2的连接类型。</li>
+<li>PS4输出HDMI接一个音视频分离的设备，即一边是HDMI, 另一边是HDMI，和3.5mm音频。不这样做PS4没声音。</li>
+<li>PC，网线接路由器，DP接显示器。PC挂了三个固态和两个机械。分别装了windows，macOS和Ubuntu。macOS买了个有线蓝牙加网卡，隔空投送很安逸。就是最新的系统不支持N卡了。</li>
+<li>有线蓝牙音箱Bose Soundlink Mini2，音频口接一个二分转接口，一个接PS4，一个接PC。可以同时播两路输入。叠加在一起。</li>
+<li>信号切换器（DP+HDMI+miniDP输入，HDMI输出）。没有用。因为PC只能用DP才能获得全分辨率+100Hz。</li>
+<li>支持iOS的MFI手柄，xbox one手柄</li>
+<li>Surface GO</li>
+<li>iPad， iPhone</li>
+</ol>
+<p>单位<br>
+13. 笔记本，装FRP客户端bat自启，在任何地方可以应急访问。手机通过远程桌面看看公司笔记本摄像头什么的<br>
+14. PC（基本不用）<br>
+15. 瞎眼显示器<br>
+16. Xbox one手柄</p>
+<ol start="17">
+<li>iOS和PC都装了Moonlight串流工具，PS4官方串流工具（iOS得切到非大陆账号）。  iOS还装了r-play（国区商店有，68rmb）</li>
+<li>NVIDIA串流需要打开（默认关闭）</li>
+<li>Steam串流（好像只能局域网）</li>
+</ol>
+<p>路由器上面<br>
+20. ss （买了VPS）<br>
+21.FTP+SMB+NFS<br>
+22.VPN（PPTP）</p>
+<p>二.老家：<br>
+1 路由器设置相同<br>
+2 中国电信+公网ip<br>
+3 路由器DMZ电脑的ip<br>
+4 iPad iPhone</p>
+<p>实现功能：<br>
+1.iOS装nplayer（十几块钱好像）可以在任何地方直接访问家里的移动硬盘看电影，非常流畅。<br>
+2.于是我妈想看啥告诉我就直接下载，lz在教育网有ipv6可以下载，然后直接拖进硬盘（远程拖每秒10M左右）相当于通过公网ip造了一个私有的视频点播网站。无广告又高速233333    nplayer真的太好用了，支持各种协议<br>
+3.Potplayer建远程专辑看，或者windows资源管理器映射远程磁盘<br>
+4.PS4 Pro在公司PC远程串流玩。装了VDX驱动和映射， 直接用xbox手柄即可，也可插usb接ps4手柄。<br>
+5.在公司远程moonlight串流家里PC的steam<br>
+6 远程家里桌面。有公网ip加持，几乎体会不到是远程桌面，和在本地体验是一样的。lz远程剪辑视频也毫无差别感。<br>
+7 手机也有远程mstsc官方工具<br>
+8 在家中趴床上用surface go串流（坑，surface go高配版串流很卡，同样网络下e520就完美，iPad也可以）<br>
+9 老家电脑有问题，直接mstsc输入域名即可秒连。<br>
+10 公司也可以直接连vpn到家里，获取了一个子网地址，但是steam串流好像仍然检测不到。</p>
+<ol>
+<li>
+<p>背景</p>
+<p>使用https将本地的HomeAssistant服务转发到公网上，实现远程https和无端口访问。当然也可以转发任意其他服务。<br>
+阿里云ECS Ubuntu 16.04  分配有公网IP &lt;A.B.C.D&gt;    //有公网IP的服务器均可<br>
+本地树莓派在局域网内运行HomeAssistant &lt;192.168.1.233:8123&gt;<br>
+网上教程比较杂乱。专门针对HomeAssistant的还没有。于是我尽可能详细的写一下。如果有问题可以回帖交流。</p>
+</li>
+</ol>
+<p>FRP介绍：<br>
+直白的说的话，<br>
+frp有服务端frps和客户端frpc。<br>
+服务端一般运行在有公网IP的机器上，如云服务器、VPS等。<br>
+frpc可以放在任意能联网的设备上面，但本身不必具有公网地址。比如树莓派、电脑等等。进行ssh、远程桌面等访问。一个服务端可以有多个客户端。<br>
+因为公网ip是在任何地方都可以访问的到的，<br>
+而且通过frp的服务，通过服务端又可以访问到任意的客户端。<br>
+这样就实现了你在任意能联网的设备上，通过访问公网ip，来访问任何运行了frpc客户端的设备。</p>
+<ol>
+<li>安装配置FRPS<br>
+项目地址：GitHub - fatedier/frp: A fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet.<br>
+在ECS上执行：</li>
+</ol>
+<p>cd ~<br>
+mkdir software<br>
+cd software<br>
+wget [url=https://github.com/fatedier/frp/]https://github.com/fatedier/frp/[/url] ... _linux_amd64.tar.gz<br>
+tar -xzvf frp_0.22.0_linux_amd64.tar.gz<br>
+mv frp_0.22.0_linux_amd64.tar.gz frps<br>
+cd frps<br>
+nano frps.ini</p>
+<pre><code>frps.ini 文件配置：
+</code></pre>
+<p>[common]</p>
+<p>bind_addr = 0.0.0.0</p>
+<p>bind_port = 7000</p>
+<p>vhost_http_port = 7080</p>
+<p>vhost_https_port = 7443</p>
+<p>dashboard_port = 7500</p>
+<p>dashboard_user = your_account</p>
+<p>dashboard_pwd = your_pwd</p>
+<p>authentication_timeout = 900</p>
+<p>token = your_token</p>
+<p>frps开机自动启动：（引用：FRP自启动）</p>
+<p>cd ~<br>
+apt install supervisor<br>
+cd /etc/supervisor/conf.d<br>
+nano frps.conf</p>
+<pre><code>frps.conf文件内容：
+</code></pre>
+<p>[program:frp]<br>
+command = /home/software/frps/frps -c /home/software/frps/frps.ini<br>
+autostart = true</p>
+<h1 id="重启supervisor">重启supervisor</h1>
+<p>systemctl restart supervisor</p>
+<h1 id="查看supervisor运行状态">查看supervisor运行状态</h1>
+<p>supervisorctl status</p>
+<ol>
+<li>安装配置FRPC<br>
+在本地运行HomeAssistant的树莓派上执行：</li>
+</ol>
+<p>cd ~ mkdir software cd software wget https://github.com/fatedier/frp/... _linux_amd64.tar.gz tar -xzvf frp_0.22.0_linux_amd64.tar.gz mv frp_0.22.0_linux_amd64.tar.gz frpc cd frpc nano frpc.ini</p>
+<p>[common]<br>
+bind_addr = 0.0.0.0<br>
+bind_port = 7000<br>
+vhost_http_port = 7080<br>
+vhost_https_port = 7443<br>
+dashboard_port = 7500<br>
+dashboard_user = your_account<br>
+dashboard_pwd = your_pwd<br>
+authentication_timeout = 900<br>
+token = your_token</p>
+<p>frps开机自动启动：（引用：FRP自启动）</p>
+<p>cd ~<br>
+apt install supervisor<br>
+cd /etc/supervisor/conf.d<br>
+nano frps.conf</p>
+<pre><code>frps.conf文件内容：
+</code></pre>
+<p>[program:frp]<br>
+command = /home/software/frps/frps -c /home/software/frps/frps.ini<br>
+autostart = true</p>
+<h1 id="重启supervisor-2">重启supervisor</h1>
+<p>systemctl restart supervisor</p>
+<h1 id="查看supervisor运行状态-2">查看supervisor运行状态</h1>
+<p>supervisorctl status</p>
+<ol>
+<li>安装配置FRPC<br>
+在本地运行HomeAssistant的树莓派上执行：</li>
+</ol>
+<p>frps.ini 文件配置：<br>
+[common]</p>
+<p>server_addr = &lt;A.B.C.D&gt;</p>
+<p>server_port = 7000</p>
+<p>token = your_token</p>
+<p>[homeassistant]</p>
+<p>type = tcp</p>
+<p>local_ip = 127.0.0.1</p>
+<p>local_port = 8123</p>
+<p>remote_port = 9000</p>
+<p>custom_domains = your_website.com  //自己的域名，并且解析到ECS的公网IP</p>
+<ol>
+<li>安装配置NGINX<br>
+在ECS上执行：</li>
+</ol>
+<p>cd ~<br>
+cd software<br>
+apt update<br>
+apt upgrade<br>
+apt install nginx<br>
+#NGINX开机启动<br>
+systemctl enable nginx<br>
+#NGINX的配置文件在/etc/nginx下<br>
+cd /etc/nginx<br>
+cd sites-enabled<br>
+#新建一个配置文件，文件名可以为网站的域名<br>
+touch your_website.com<br>
+nano your_website.com</p>
+<p>在阿里云申请域名ssl证书：<br>
+your_website.com文件的配置：<br>
+server {<br>
+listen 80;<br>
+server_name your_website.com;<br>
+location / {<br>
+rewrite ^ https://your_website.com$request_uri? permanent;<br>
+}<br>
+}<br>
+server {<br>
+listen 443;<br>
+server_name your_website.com;<br>
+ssl on;<br>
+ssl_certificate cert/your_website.com.pem;<br>
+ssl_certificate_key cert/your_website.com.key;<br>
+ssl_session_timeout 5m;<br>
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;<br>
+ssl_ciphers AESGCM:ALL:!DH:!EXPORT:!RC4:+HIGH:!MEDIUM:!LOW:!aNULL:!eNULL;<br>
+ssl_prefer_server_ciphers on;<br>
+proxy_set_header X-Forwarded-For $remote_addr;</p>
+<pre><code>location  /api/websocket  {
+    proxy_pass http://127.0.0.1:9000/api/websocket;
+    proxy_read_timeout 60s;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real_IP $remote_addr;
+    proxy_set_header X-Forwarded-for $remote_addr;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'Upgrade';
+}
+
+location  / {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_buffering off;
+    proxy_pass http://127.0.0.1:9000;
+}
+</code></pre>
+<p>}</p>
+<p>#检查NGINX配置文件是否正确 nginx -t #加载NGINX配置文件 nginx -s reload</p>
+<p>[common]<br>
+server_addr = &lt;A.B.C.D&gt;<br>
+server_port = 7000<br>
+token = your_token<br>
+[homeassistant]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 8123<br>
+remote_port = 9000<br>
+custom_domains = your_website.com  //自己的域名，并且解析到ECS的公网IP</p>
+<ol>
+<li>安装配置NGINX<br>
+在ECS上执行：</li>
+</ol>
+<p>cd ~<br>
+cd software<br>
+apt update<br>
+apt upgrade<br>
+apt install nginx<br>
+#NGINX开机启动<br>
+systemctl enable nginx<br>
+#NGINX的配置文件在/etc/nginx下<br>
+cd /etc/nginx<br>
+cd sites-enabled<br>
+#新建一个配置文件，文件名可以为网站的域名<br>
+touch your_website.com<br>
+nano your_website.com</p>
+<p>在阿里云申请域名ssl证书：（可参考：为阿里云域名配置免费SSL支持https加密访问简单教程 )</p>
+<p>your_website.com文件的配置：</p>
+<p>server {<br>
+listen 80;<br>
+server_name your_website.com;<br>
+location / {<br>
+rewrite ^ [url=https://your_website.com]https://your_website.com[/url]$request_uri? permanent;<br>
+}<br>
+}<br>
+server {<br>
+listen 443;<br>
+server_name your_website.com;<br>
+ssl on;<br>
+ssl_certificate cert/your_website.com.pem;<br>
+ssl_certificate_key cert/your_website.com.key;<br>
+ssl_session_timeout 5m;<br>
+ssl_protocols TLSv1 TLSv1.1 TLSv1.2;<br>
+ssl_ciphers AESGCM:ALL:!DH:!EXPORT:!RC4:+HIGH:!MEDIUM:!LOW:!aNULL:!eNULL;<br>
+ssl_prefer_server_ciphers on;<br>
+proxy_set_header X-Forwarded-For $remote_addr;<br>
+location /api/websocket {<br>
+#端口写的和frpc.ini中一致<br>
+proxy_pass [url=http://127.0.0.1:9000/api/websocket;]http://127.0.0.1:9000/api/websocket;[/url]<br>
+proxy_read_timeout 60s;<br>
+proxy_set_header Host $host;<br>
+proxy_set_header X-Real_IP $remote_addr;<br>
+proxy_set_header X-Forwarded-for $remote_addr;<br>
+proxy_http_version 1.1;<br>
+proxy_set_header Upgrade $http_upgrade;<br>
+proxy_set_header Connection 'Upgrade';<br>
+}<br>
+location / {<br>
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>
+proxy_set_header Host $http_host;<br>
+proxy_buffering off;<br>
+proxy_pass [url=http://127.0.0.1:9000;]http://127.0.0.1:9000;[/url]<br>
+}<br>
+}</p>
+<p>5.访问https://your_website.com<br>
+<img src="https://newdy.cf/post-images/1582114764896.png" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[黑群晖通过frps，实现quick connect功能]]></title>
         <id>https://newdy.cf/post/hei-qun-hui-tong-guo-frpsshi-xian-quick-connect-gong-neng/</id>
@@ -1237,254 +1565,6 @@ cnpm install videojs-contrib-hls</p>
 </script>
 <p>效果如下：<br>
 <img src="https://newdy.cf/post-images/1582086327475.jpg" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[EasyProxy-又一款有管理面板的内网穿透代理服务器]]></title>
-        <id>https://newdy.cf/post/easyproxy-you-yi-kuan-you-guan-li-mian-ban-de-nei-wang-chuan-tou-dai-li-fu-wu-qi/</id>
-        <link href="https://newdy.cf/post/easyproxy-you-yi-kuan-you-guan-li-mian-ban-de-nei-wang-chuan-tou-dai-li-fu-wu-qi/">
-        </link>
-        <updated>2020-02-17T02:11:45.000Z</updated>
-        <content type="html"><![CDATA[<p>easyProxy是一款轻量级、高性能、功能最为强大的内网穿透代理服务器。目前支持tcp、udp流量转发，可支持任何tcp、udp上层协议（访问内网网站、本地支付接口调试、ssh访问、远程桌面，内网dns解析等等……），此外还支持内网http代理、内网socks5代理，可实现在非内网环境下如同使用vpn一样访问内网资源和设备的效果，同时支持socks5验证，gzip、snnapy压缩（节省带宽和流量）。</p>
-<p>目前市面上提供类似服务的有花生壳、TeamView、GoToMyCloud等等，但要使用第三方的公网服务器就必须为第三方付费，并且这些服务都有各种各样的限制，此外，由于数据包会流经第三方，因此对数据安全也是一大隐患。<br>
-支持客户端与服务端连接中断自动重连，多路传输，大大的提高请求处理速度，go语言编写，无第三方依赖。<br>
-<img src="https://newdy.cf/post-images/1581905568218.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1581905601275.png" alt="" loading="lazy"><br>
-一、简介<br>
-web管理模式，可配置多条tcp、udp隧道，多个域名代理等等—-&gt; web管理模式<br>
-内网多站点配合代理。—-&gt; http反向代理请求<br>
-想在外网通过ssh连接内网的机器，做云服务器到内网服务器端口的映射，或者做微信公众号开发、小程序开发等—-&gt;tcp隧道模式<br>
-在非内网环境下使用内网dns，或者需要通过udp访问内网机器等—-&gt;udp隧道模式<br>
-在外网使用HTTP代理访问内网站点—-&gt;http代理模式<br>
-搭建一个内网穿透ss，在外网如同使用内网vpn一样访问内网资源或者设备—-&gt; socks5代理模式<br>
-二、特点<br>
-支持gzip、snappy压缩,减小传输过程流量消耗<br>
-支持多站点配置,兼容多个内网网站，可处理相互之间的跳转包含关系<br>
-断线自动重连<br>
-支持多路传输,提高并发<br>
-跨站自动匹配替换<br>
-支持tcp隧道,提升访问效率<br>
-支持udp隧道<br>
-支持http代理<br>
-支持内网穿透sock5代理，配合proxifer可达到vpn的效果，在外网访问内网资源或者设备，同时可以设置用户名和密码验证<br>
-强大的web管理界面，可方便的设置的和管理隧道<br>
-支持同时开多条tcp、udp隧道等等，且只需要开一个客户端和服务端<br>
-支持一个服务端，多个客户端模式<br>
-三、安装方法<br>
-release安装<br>
-https://github.com/cnlh/easyProxy/releases</p>
-<p>下载对应的系统版本即可（目前linux和windows只编译了64位的），服务端和客户端共用一个程序，go语言开发，无需任何第三方依赖</p>
-<p>源码安装<br>
-安装源码<br>
-go get github.com/cnlh/easyProxy</p>
-<p>编译（无第三方模块）<br>
-go build</p>
-<p>四、使用方法<br>
-有两种模式：</p>
-<p>1、单客户端模式，所有的隧道流量均从这个单客户端转发。</p>
-<p>服务端<br>
-./easyProxy -mode=webServer -tcpport=8284 -vkey=DKibZF5TXvic1g3kY<br>
-名称	含义<br>
-mode	运行模式<br>
-vkey	验证密钥<br>
-tcpport	服务端与客户端通信端口<br>
-客户端<br>
-./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
-配置<br>
-进入web界面，公网ip:web界面端口（默认8080），密码为123</p>
-<p>2、多客户端模式，不同的隧道流量均从不同的客户端转发。</p>
-<p>服务端<br>
-./easyProxy -mode=webServer -tcpport=8284<br>
-名称	含义<br>
-mode	运行模式<br>
-tcpport	服务端与客户端通信端口<br>
-客户端<br>
-进入web管理界面，有详细的命令</p>
-<p>配置<br>
-进入web界面，公网ip:web界面端口（默认8080），密码为123</p>
-<p>配置文件/conf/app.conf<br>
-名称	含义<br>
-httpport	web管理端口<br>
-password	web界面管理密码<br>
-hostPort	域名代理模式监听端口<br>
-TCP隧道模式<br>
-场景及原理<br>
-较为适用于处理tcp连接，例如ssh，同时也适用于http等，访问服务端的8024端口相当于访问内网10.1.50.202机器的4000端口，构成如下所示的隧道。<br>
-<img src="https://newdy.cf/post-images/1581905662220.jpg" alt="" loading="lazy"><br>
-例如：</p>
-<p>背景:</p>
-<p>内网机器10.1.50.203提供了web服务80端口<br>
-有VPS一个,公网IP:123.206.77.88<br>
-需求:</p>
-<p>在家里能够通过访问VPS的8024端口访问到内网机器A的80端口</p>
-<p>使用<br>
-服务端<br>
-./easyProxy -mode=tunnelServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024 -target=10.1.50.203:80<br>
-名称	含义<br>
-mode	运行模式(client、server不写默认client)<br>
-vkey	验证密钥<br>
-tcpport	服务端与客户端通信端口<br>
-httpport	外部访问端口<br>
-target	目标地址，格式如上<br>
-客户端<br>
-./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
-udp隧道模式<br>
-场景及原理<br>
-背景</p>
-<p>内网机器A提供了DNS解析服务,10.1.50.210:53端口<br>
-有VPS一个,公网IP:123.206.77.88<br>
-需求: 在家里能够通过设置本地dns为123.206.77.88,使用内网机器A进行域名解析服务.</p>
-<p>访问vps的53端口相当于访问10.1.50.210的53端口，构成如下所示的隧道。<br>
-<img src="https://newdy.cf/post-images/1581905725788.png" alt="" loading="lazy"><br>
-使用<br>
-服务端<br>
-./easyProxy -mode=udpServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=53 -target=10.1.50.210:53<br>
-名称	含义<br>
-mode	运行模式(client、server不写默认client)<br>
-vkey	验证密钥<br>
-tcpport	服务端与客户端通信端口<br>
-httpport	公网vps的访问端口<br>
-target	目标地址，格式如上<br>
-客户端<br>
-./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
-HTTP代理请求<br>
-场景及原理<br>
-较为适用于http，也就是web站点的穿透，服务端与客户端之间建立连接，服务端收到http请求后，将请求发送到客户端，客户端再执行这个请求，并将结果返回给服务端，服务端收到后再返回。特点：支持同时代理多个站点，不同站点之间有联系还可以实现匹配替换<br>
-<img src="https://newdy.cf/post-images/1581905766574.png" alt="" loading="lazy"><br>
-最终效果：</p>
-<p>访问a.server.com和访问10.1.50.203的80端口相同<br>
-访问b.server.com和访问10.1.50.202的80端口相同<br>
-访问c.server.com和访问10.1.50.201的80端口相同<br>
-使用<br>
-服务端<br>
-./easyProxy -mode=httpServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024<br>
-名称	含义<br>
-mode	运行模式(client、server不写默认client)<br>
-vkey	验证密钥<br>
-tcpport	服务端与客户端通信端口<br>
-httpport	代理的http端口（与nginx配合使用）<br>
-客户端<br>
-建立配置文件 config.json<br>
-./easyProxy -server=ip:port -config=config.json -vkey=DKibZF5TXvic1g3kY<br>
-名称	含义<br>
-config	配置文件路径<br>
-配置文件config.json<br>
-{<br>
-&quot;SiteList&quot;: [<br>
-{<br>
-&quot;host&quot;: &quot;a.ourcauc.com&quot;,<br>
-&quot;url&quot;: &quot;10.1.50.203&quot;,<br>
-&quot;port&quot;: 80<br>
-},<br>
-{<br>
-&quot;host&quot;: &quot;b.ourcauc.com&quot;,<br>
-&quot;url&quot;: &quot;10.1.50.202&quot;,<br>
-&quot;port&quot;: 80<br>
-},<br>
-{<br>
-&quot;host&quot;: &quot;c.ourcauc.com&quot;,<br>
-&quot;url&quot;: &quot;10.1.50.203&quot;,<br>
-&quot;port&quot;: 80<br>
-}<br>
-],<br>
-&quot;Replace&quot;: 0<br>
-}<br>
-名称	含义<br>
-SiteList	本地解析的域名列表<br>
-host	域名地址<br>
-url	内网代理的地址<br>
-port	内网代理的地址对应的端口<br>
-Replace	是否自动匹配替换（查看场景）<br>
-nginx代理配置示例<br>
-upstream nodejs {<br>
-server 127.0.0.1:8024;<br>
-keepalive 64;<br>
-}<br>
-server {<br>
-listen 80;<br>
-server_name a.ourcauc.com b.ourcauc.com c.ourcauc.com ;<br>
-location / {<br>
-proxy_set_header X-Real-IP $remote_addr;<br>
-proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>
-proxy_set_header Host  $http_host;<br>
-proxy_set_header X-Nginx-Proxy true;<br>
-proxy_set_header Connection &quot;&quot;;<br>
-proxy_pass      http://nodejs;<br>
-}<br>
-}<br>
-域名配置示例<br>
--a	A	123.206.77.88</p>
-<p>-b	A	123.206.77.88</p>
-<p>-c	A	123.206.77.88</p>
-<p>跨站自动匹配替换说明<br>
-例如，访问：a.ourcauc.com，该页面里面有一个超链接为10.1.50.202:80,将根据配置文件自动该将url替换为b.ourcauc.com，以达到跨站也可访问的效果，但需要提前在配置文件中配置这些站点。</p>
-<p>如需开启，请加配置文件Replace值设置为1</p>
-<p>注意：开启可能导致不应该被替换的内容被替换，请谨慎开启</p>
-<p>socks5代理模式<br>
-场景及原理<br>
-原理</p>
-<p>主要用于socks5代理，也就是和ss类似，不过是代理内网。使用此模式时，可在非内网环境下配置本机的socks5代理（服务器ip、sock5代理端口），即可实现socks5代理，达到访问内网的网站的效果，配合proxifer等全局代理软件，即可如同使用内网vpn一样，访问内网网站，通过ssh连接内网机器等等……。<br>
-<img src="https://newdy.cf/post-images/1581905816245.png" alt="" loading="lazy"><br>
-使用<br>
-服务端<br>
-./easyProxy -mode=sock5ServerServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024<br>
-名称	含义<br>
-mode	运行模式(client、server不写默认client)<br>
-vkey	验证密钥<br>
-tcpport	服务端与客户端通信端口<br>
-httpport	代理的http端口（socks5连接端口）<br>
-u	验证的用户名<br>
-p	验证的密码<br>
-说明：用户名和密码验证模式，仅部分socks5客户端支持，例如proxifer。 如需验证，在服务端命令后加上</p>
-<p>-u=user -p=password<br>
-即可</p>
-<p>客户端<br>
-./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
-需要使用内网代理的机器<br>
-配置sock5代理即可，ip为外网服务器ip，端口为httpport，即可在外网环境使用内网啦！也可使用proxifer等全局代理软件。<br>
-如果设置了用户名和密码，记得填上用户名和密码</p>
-<p>http代理模式<br>
-场景及原理<br>
-<img src="https://newdy.cf/post-images/1581905912887.png" alt="" loading="lazy"><br>
-主要用于HTTP代理，区别也就是HTTP代理和sock5代理的区别。使用此模式时，可在非内网环境下配置本机的HTTP代理（服务器ip、HTTP代理端口），即可实现HTTP代理，达到访问内网的网站的效果。</p>
-<p>使用<br>
-服务端<br>
-./easyProxy -mode=httpProxyServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024<br>
-名称	含义<br>
-mode	运行模式(client、server不写默认client)<br>
-vkey	验证密钥<br>
-tcpport	服务端与客户端通信端口<br>
-httpport	http代理连接端口<br>
-客户端<br>
-./easyProxy -server=ip:port -vkey=DKibZF5TXvic1g3kY<br>
-需要使用内网代理的机器<br>
-配置HTTP代理即可，ip为外网服务器ip，端口为httpport，即可在外网环境访问内网啦！<br>
-数据压缩支持<br>
-场景及原理<br>
-由于是内网穿透，内网客户端与服务端之间的隧道存在大量的数据交换，为节省流量，加快传输速度，由此本程序支持GZIP、SNNAPY两种形式的压缩，两者差异请自行选择。</p>
-<p>注意点<br>
-所有模式均支持数据压缩<br>
-如何使用<br>
-GZIP压缩</p>
-<p>在server端加上参数 -compress=gzip，例如在TCP隧道模式<br>
-./easyProxy -mode tunnelServer -vkey DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024 -target=10.1.50.203:80 -compress=gzip<br>
-SNAPPY压缩</p>
-<p>将参数修改为snappy即可</p>
-<p>操作系统支持<br>
-支持Windows、Linux、MacOSX等，无第三方依赖库。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[ 群晖上监控插件SurveillanceStation 破解255]]></title>
-        <id>https://newdy.cf/post/surveillancestation-po-jie-255/</id>
-        <link href="https://newdy.cf/post/surveillancestation-po-jie-255/">
-        </link>
-        <updated>2020-02-17T01:25:11.000Z</updated>
-        <content type="html"><![CDATA[<p>安装好群晖的监控工具后！先不要启动把这三个附件解压后<br>
-<img src="https://newdy.cf/post-images/1581902779887.jpg" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1581902848427.jpg" alt="" loading="lazy"><br>
-sscored权限应该是 755</p>
-<p>chmod 755 /var/packages/SurveillanceStation/target/sbin/sscored</p>
 ]]></content>
     </entry>
 </feed>
