@@ -1,305 +1,294 @@
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8"/>
-<meta name="description" content=""/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Gridea</title>
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582176529094">
-<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+  <head>
+    <meta charset="utf-8" >
+
+<title>文章归档 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582176605505">
 <link rel="stylesheet" href="https://newdy.cf/styles/main.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
-<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-
-<!-- DEMO JS -->
-<script src="media/scripts/index.js"></script>
 
 
 
-</head>
-<body>
-<div class="main gt-bg-theme-color-first">
-    <div class="main-content">
-        <nav class="navbar navbar-expand-lg">
-    <div class="navbar-brand">
-        <img class="user-avatar" src="/images/avatar.png" alt="头像">
-        <div class="site-name gt-c-content-color-first">
-            Gridea
-        </div>
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="温故而知新">
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582176605505" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
     </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="navbar-nav mr-auto" style="text-align: center">
-            
-                <div class="nav-item">
-                    
-                        <a href="/" class="menu gt-a-link">
-                            首页
-                        </a>
-                    
-                </div>
-            
-                <div class="nav-item">
-                    
-                        <a href="/archives" class="menu gt-a-link">
-                            归档
-                        </a>
-                    
-                </div>
-            
-                <div class="nav-item">
-                    
-                        <a href="/tags" class="menu gt-a-link">
-                            标签
-                        </a>
-                    
-                </div>
-            
-                <div class="nav-item">
-                    
-                        <a href="/post/about" class="menu gt-a-link">
-                            关于
-                        </a>
-                    
-                </div>
-            
-        </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
     </div>
-</nav>
-
-        
-
-<div class="archives-container">
-    
-        <h2 class="year gt-c-cotent-color-first">2020</h2>
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/windows-gua-zai-nfs/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-20&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            windows挂载nfs
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/homeassistantfrpnginxhttps-shi-xian-wu-duan-kou-jia-mi-yuan-cheng-fang-wen/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-19&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            HomeAssistant+frp+NGINX+HTTPS实现无端口加密远程访问 
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/hei-qun-hui-tong-guo-frpsshi-xian-quick-connect-gong-neng/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-19&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            黑群晖通过frps，实现quick connect功能
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/nginx-ssl-shuang-xiang-ren-zheng/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-19&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            Nginx SSL 双向认证
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/sheng-cheng-nginx-fu-wu-qi-ssl-zheng-shu-he-ke-hu-duan-zheng-shu/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-19&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            生成Nginx服务器SSL证书和客户端证书
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/nginx-pei-zhi-zhong-location-pi-pei-gui-ze-xiang-jie/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-19&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            Nginx配置中location匹配规则详解
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/nginx-qi-ceng-fu-zai-jun-heng-de-ji-chong-diao-du-suan-fa/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-19&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            Nginx七层负载均衡的几种调度算法
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/linux-centos-7-fei-root-yong-hu-an-zhuang-yuan-ma-ban-docker/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-19&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            Linux CentOS 7 非root用户安装源码版Docker
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/windows10-xia-nginx-de-rtmp-fu-wu-qi-da-jian/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-19&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            Windows10下nginx的rtmp服务器搭建
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/nginx-rtmp-ffmpeg-docker-vuejs-zhi-bo-xi-tong-da-jian/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-19&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            Nginx-rtmp+ FFmpeg +Docker + vue.js 直播系统搭建
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/easyproxy-you-yi-kuan-you-guan-li-mian-ban-de-nei-wang-chuan-tou-dai-li-fu-wu-qi/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-17&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            EasyProxy-又一款有管理面板的内网穿透代理服务器
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/surveillancestation-po-jie-255/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-17&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                             群晖上监控插件SurveillanceStation 破解255
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/qun-hui-cun-chu-kong-jian-sun-hui-btrfs-shu-ju-hui-fu-jiao-cheng/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-11&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            群晖存储空间损毁 Btrfs 数据恢复教程
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/qun-hui-kai-qi-smb3-duo-tong-dao-die-jia-wang-qia-su-du/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-11&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            群晖开启 SMB3 多通道叠加网卡速度
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/wei-esxi-tian-jia-rtl81688111-ji-sata-kong-zhi-qi-qu-dong/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-11&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动
-                        </div>
-                    </a>
-                </article>
-            
-        
-            
-                <article class="post">
-                    <a href="https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix/">
-                        <div class="post-title gt-c-content-color-first">
-                            <small><b>2020-02-11&nbsp;&nbsp;·&nbsp;&nbsp;</b></small>
-                            搭建 DNS 服务解锁 Netflix
-                        </div>
-                    </a>
-                </article>
-            
-        
-    
-</div>
-
-        <div class="pagination-container">
-    
-    
-</div>
-
-
-        <div class="site-footer gt-c-content-color-first">
-    <div class="slogan gt-c-content-color-first">温故而知新</div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
     <div class="social-container">
+      
         
-            
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
         
-            
+      
         
-            
+      
         
-            
+      
         
-            
+      
         
-            
-        
+      
     </div>
-    Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
 </div>
 
-<script>
-    hljs.initHighlightingOnLoad()
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          
+
+          <h2 class="archives-title">文章归档</h2>
+          <div class="archives-container">
+            
+              <h2 class="year" data-aos="fade-in" data-aos-delay="500">2020</h2>
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/windows-gua-zai-nfs/">
+                      <h2 class="post-title">
+                        windows挂载nfs
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/homeassistantfrpnginxhttps-shi-xian-wu-duan-kou-jia-mi-yuan-cheng-fang-wen/">
+                      <h2 class="post-title">
+                        HomeAssistant+frp+NGINX+HTTPS实现无端口加密远程访问 
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/hei-qun-hui-tong-guo-frpsshi-xian-quick-connect-gong-neng/">
+                      <h2 class="post-title">
+                        黑群晖通过frps，实现quick connect功能
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/nginx-ssl-shuang-xiang-ren-zheng/">
+                      <h2 class="post-title">
+                        Nginx SSL 双向认证
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/sheng-cheng-nginx-fu-wu-qi-ssl-zheng-shu-he-ke-hu-duan-zheng-shu/">
+                      <h2 class="post-title">
+                        生成Nginx服务器SSL证书和客户端证书
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/nginx-pei-zhi-zhong-location-pi-pei-gui-ze-xiang-jie/">
+                      <h2 class="post-title">
+                        Nginx配置中location匹配规则详解
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/nginx-qi-ceng-fu-zai-jun-heng-de-ji-chong-diao-du-suan-fa/">
+                      <h2 class="post-title">
+                        Nginx七层负载均衡的几种调度算法
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/linux-centos-7-fei-root-yong-hu-an-zhuang-yuan-ma-ban-docker/">
+                      <h2 class="post-title">
+                        Linux CentOS 7 非root用户安装源码版Docker
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/windows10-xia-nginx-de-rtmp-fu-wu-qi-da-jian/">
+                      <h2 class="post-title">
+                        Windows10下nginx的rtmp服务器搭建
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/nginx-rtmp-ffmpeg-docker-vuejs-zhi-bo-xi-tong-da-jian/">
+                      <h2 class="post-title">
+                        Nginx-rtmp+ FFmpeg +Docker + vue.js 直播系统搭建
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/easyproxy-you-yi-kuan-you-guan-li-mian-ban-de-nei-wang-chuan-tou-dai-li-fu-wu-qi/">
+                      <h2 class="post-title">
+                        EasyProxy-又一款有管理面板的内网穿透代理服务器
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/surveillancestation-po-jie-255/">
+                      <h2 class="post-title">
+                         群晖上监控插件SurveillanceStation 破解255
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/qun-hui-cun-chu-kong-jian-sun-hui-btrfs-shu-ju-hui-fu-jiao-cheng/">
+                      <h2 class="post-title">
+                        群晖存储空间损毁 Btrfs 数据恢复教程
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/qun-hui-kai-qi-smb3-duo-tong-dao-die-jia-wang-qia-su-du/">
+                      <h2 class="post-title">
+                        群晖开启 SMB3 多通道叠加网卡速度
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/wei-esxi-tian-jia-rtl81688111-ji-sata-kong-zhi-qi-qu-dong/">
+                      <h2 class="post-title">
+                        为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+                
+                  <article class="post">
+                    <a href="https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix/">
+                      <h2 class="post-title">
+                        搭建 DNS 服务解锁 Netflix
+                      </h2>
+                    </a>
+                  </article>
+                
+              
+            
+          </div>
+
+          <div class="pagination-container">
+  
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
 </script>
 
-    </div>
-</div>
-</body>
+
+
+
+
+
+  </body>
 </html>

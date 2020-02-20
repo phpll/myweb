@@ -1,102 +1,104 @@
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8"/>
-<meta name="description" content=""/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <head>
+    <meta charset="utf-8" >
+
 <title>为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动 | Gridea</title>
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582176529094">
-<link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582176605505">
 <link rel="stylesheet" href="https://newdy.cf/styles/main.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/highlight.min.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
-<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/go.min.js"></script>
-<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
-
-<!-- DEMO JS -->
-<script src="media/scripts/index.js"></script>
 
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-</head>
-<body>
-<div class="main gt-bg-theme-color-first">
-    <nav class="navbar navbar-expand-lg">
-    <div class="navbar-brand">
-        <img class="user-avatar" src="/images/avatar.png" alt="头像">
-        <div class="site-name gt-c-content-color-first">
-            Gridea
-        </div>
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582176605505" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
     </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="navbar-nav mr-auto" style="text-align: center">
-            
-                <div class="nav-item">
-                    
-                        <a href="/" class="menu gt-a-link">
-                            首页
-                        </a>
-                    
-                </div>
-            
-                <div class="nav-item">
-                    
-                        <a href="/archives" class="menu gt-a-link">
-                            归档
-                        </a>
-                    
-                </div>
-            
-                <div class="nav-item">
-                    
-                        <a href="/tags" class="menu gt-a-link">
-                            标签
-                        </a>
-                    
-                </div>
-            
-                <div class="nav-item">
-                    
-                        <a href="/post/about" class="menu gt-a-link">
-                            关于
-                        </a>
-                    
-                </div>
-            
-        </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
     </div>
-</nav>
-    <div class="post-container">
-        <div class="post-detail gt-bg-theme-color-second">
-            <article class="gt-post-content">
-                <h2 class="post-title">
-                    为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动
-                </h2>
-                <div class="post-info">
-                    <time class="post-time gt-c-content-color-first">
-                        · 2020-02-11 ·
-                    </time>
-                    
-                </div>
-                <div class="post-content">
-                    <p>ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，自 ESXi 5.5 版本起 VMware 移除了大量家用 PC 机的驱动，其中就包含 RTL8168/8111 网卡以及 Intel SATA 控制器。</p>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动</h2>
+            <div class="post-date">2020-02-11</div>
+            
+            <div class="post-content" v-pre>
+              <p>ESXi 是 VMware 旗下的一款硬件虚拟化产品，用于快速搭建虚拟化平台。由于其免费易用的特点，ESXi 受到了个人玩家、开发者及小型公司的广泛好评。不过也许是考虑到产品线与 Workstation 和 Fusion 有或多或少的重合，自 ESXi 5.5 版本起 VMware 移除了大量家用 PC 机的驱动，其中就包含 RTL8168/8111 网卡以及 Intel SATA 控制器。</p>
 <p>不过天无绝人之路，我们仍然可以使用第三方工具 ESXi-Customizer-PS 对安装镜像进行修改，加载我们想要的驱动，从而继续正常使用。</p>
 <p>在使用 ESXi-Customizer-PS 之前，我们需要先安装 VMware PowerCLI，可以在网络搜索下载。安装完成后，在这个网址下载 ESXi-Customizer-PS。</p>
 <p>随后我们打开 VMware PowerCLI ，并且定位到 ESXi-Customizer-PS 所在的目录，执行：</p>
@@ -108,47 +110,45 @@
 <img src="https://newdy.cf/post-images/1581431377324.png" alt="" loading="lazy"><br>
 如不清楚硬件 id ，可先引导至 Windows 并通过设备管理器查看。如图所示，这个 Intel USB 3.0 控制器的硬件 id 为：8086:A12F。</p>
 
-                </div>
-            </article>
-        </div>
-
-        
-            <div class="next-post">
-                <div class="next gt-c-content-color-first">下一篇</div>
-                <a href="https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix/" class="post-title gt-a-link">
-                    搭建 DNS 服务解锁 Netflix
-                </a>
             </div>
-        
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/da-jian-dns-fu-wu-jie-suo-netflix/">
+                  <h3 class="post-title">
+                    搭建 DNS 服务解锁 Netflix
+                  </h3>
+                </a>
+              </div>
+            
 
-        
+            
 
-        <div class="site-footer gt-c-content-color-first">
-    <div class="slogan gt-c-content-color-first">温故而知新</div>
-    <div class="social-container">
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
-            
-        
+          </div>
+
+        </div>
+      </div>
     </div>
-    Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
-</div>
 
-<script>
-    hljs.initHighlightingOnLoad()
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
 </script>
 
 
-    </div>
-</div>
-</body>
+
+
+
+
+  </body>
 </html>
