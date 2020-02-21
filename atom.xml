@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-21T18:31:28.624Z</updated>
+    <updated>2020-02-21T19:10:51.309Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,343 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[unraid的优点及缺点大全]]></title>
+        <id>https://newdy.cf/post/unraid-de-you-dian-ji-que-dian-da-quan/</id>
+        <link href="https://newdy.cf/post/unraid-de-you-dian-ji-que-dian-da-quan/">
+        </link>
+        <updated>2020-02-21T19:10:13.000Z</updated>
+        <content type="html"><![CDATA[<p>UNRAID的介绍：</p>
+<p>什么是UNRAID，UNRAID是基于LINUX slackware的RAID系统，其本质总结成一句话就是带有校验盘（即容错功能）的JBOD。</p>
+<p>UNRAID的优点:</p>
+<p>1.unraid有现成的很多plugin支持 支持docker 也支持 vm 虚拟机，还有现成的应用市场直接下载. 同时作为nas服务器 docker服务器 虚拟机服务器 插件 应用 等多种功能。</p>
+<p>2.web界面管理，非常轻量（一个u盘加载到内存运行) ，直接samba共享，windows连接nas很方便</p>
+<p>3.有现成的Deluge和Plex的docker，Linux新手也能很快运用，比Ubuntu用VNC方便很多（VNC或者teamviewer不流畅而且经常有些莫名其妙的问题）<br>
+4.最重要硬盘的管理方式是随便加硬盘，可以不同大小不同速度(我爱帮助网)，最后都是一个存储池，但比windows好处只要一个硬盘做冗余就行，有硬盘坏了就从那个冗余盘，对我来说比折腾RAID可靠多了。缺点是60美元的价格。<br>
+5.支持硬盘无访问自动休眠（SPINDOWN）省电，毕竟一个10/20块硬盘的家用阵列，不是每时每刻都有访问需求的。节能、降噪。<br>
+6.阵列中每个硬盘容量可以不一样。</p>
+<p>7.只需要一个校验盘，要求其容量是阵列里面最大的(即：容量≥阵列中任意一个硬盘)。</p>
+<p>8.允许1个硬盘倒下，不影响阵列数据完整。即使第2个硬盘倒下，也只损失这个硬盘上的数据。而不会损失整个阵列数据。举例：一个阵列ABCD 4块硬盘+校验盘E。如果A-E盘中的任意一块坏了，对数据没有影响，用同容量或者更大容量（容量≤校验盘）的硬盘替换坏的硬盘即可。如果两块硬盘坏了，如A/E，那只会丢失A盘中的内容，B/C/D盘中的内容仍然可以访问，只要把盘拿出来，用LINUX LIVE CD启动，即可访问其中内容。<br>
+9.扩容方便，直接往阵列里添加硬盘就可以了。唯一要求是容量≤校验盘。此外对容量没有要求（见第6点）。如果新加入的硬盘容量比校验盘大，需要先用这个硬盘替换校验盘，然后再把替换下来的校验盘作为新盘加入以增大阵列容量。</p>
+<p>10.UNRAID，不仅可以快速的组磁盘阵列、快速的创建共享文件夹、快速的使用DOCKER容器跑各种服务，还可以创建各种各样的虚拟机，而且占用率极低<br>
+11.使用体验比PVE好。比vmware esxi 使用简单，比黑群晖安装方便，且对硬盘要求不高</p>
+<p>官网列出的Unraid的优点（tmtony翻译）</p>
+<ol>
+<li>unRAIDServer可以确保您的数据安全<br>
+unRAID与传统RAID有所不同，原因有很多。在大多数情况下，RAID是在将文件写入RAID阵列时旋转的多个驱动器，并且数据分布在多个驱动器中。因此，即使一个文件也可以存在于多个磁盘上。<br>
+unRAID中的共享网络资源可以跨越多个磁盘，但是它以与传统RAID完全不同的方式管理数据（tmtony翻译）。可以将unRAID配置为最多使用两个奇偶校验磁盘。与传统RAID一样，如果最多两个驱动器死机，这将防止数据丢失，从而确保数据安全。</li>
+<li>unRAID有效<br>
+unRAID可能不如传统RAID有效，但效率更高。由于所有驱动器都不会旋转以读取和写入数据，因此大大降低了功耗。<br>
+unRAID对增加阵列的大小也有效。您可以添加任何大小的磁盘，即使该磁盘与其他磁盘的大小不匹配，也会以该大小增加阵列的大小。只要确保您的奇偶校验磁盘等于或大于阵列中的最大磁盘，数据就将是安全的。<br>
+3.虚拟机支持<br>
+unRAID具有内置的虚拟化支持，因此计算机上任何剩余的资源都可用于启动虚拟机。</li>
+<li>unRAID具有出色的应用程序支持<br>
+unRAID是从支持Docker的组中编译的。简而言之，Docker是一个容器平台(我爱帮助网)，允许应用程序在自己的安全环境中运行。它是目前全球数百万开发人员中最广泛使用的容器平台，它为数以千计的应用程序提供了UnRAID破解访问。<br>
+5.硬件预算较低<br>
+unRAID Server Pro最重要的好处之一就是它可以在常规PC硬件上运行。这意味着，只要您有适当的预算，就可以使自己的装配多么强大。如果您需要没有虚拟化或资源密集型应用程序的NAS，您甚至可以重新分配您拥有的旧计算机。</li>
+</ol>
+<p>unRAID Server Pro的适应场景</p>
+<p>unRAID Server Pro是用于个人和小型企业的操作系统，它具有企业级功能，可让您使用应用程序，VM，存储设备和硬件的任意组合来配置计算机系统，以最大化性能和容量。<br>
+突出优点<br>
+简单性。柔韧性 可扩展性。模块化 Unraid使您能够使用首选的硬件，软件和操作系统来构建您一直想要的系统。<br>
+控制您的数据<br>
+打破单个操作系统的局限。Unraid允许您对系统资源进行分区，以存储和保护数据（tmtony翻译），运行任何应用程序和/或在隔离的环境中创建虚拟机。<br>
+网络附加存储<br>
+我们采用与硬件无关的方法来连接网络存储。在几乎所有具有x86 64位功能的系统上引导(我爱帮 助网)，并管理大小，速度，品牌和协议不同的磁盘阵列。按需缩放。添加更多磁盘，而无需重新平衡数据。通过运行更少的麻烦，运行更多应用程序，<br>
+Application Server<br>
+Unraid可使您从硬件中获得更多价值。使用任何基于Linux或Windows的x86应用程序。将应用程序放置在隔离的运行时环境中以防止冲突。通过我们的Web界面轻松控制应用程序。<br>
+虚拟主机<br>
+Unraid作为虚拟化主机运行，利用管理程序以安全和隔离的方式将资源划分给虚拟化来宾（tmtony翻译）。与Docker容器相比，可以为VM分配更多的资源，但仍提供隔离的访问。<br>
+使您的系统专业化<br>
+数字媒体特立独行者<br>
+视频制作人，带有大量视频库的流媒体，媒体编辑，摄影师，音乐家和音乐收藏家使用Unraid降低了初始成本。从最少两个驱动器开始，然后一次使用一个或多个驱动器进行扩展。<br>
+硬核游戏<br>
+玩家也拥有媒体服务器并喜欢构建自己的自定义系统的游戏玩家使用Unraid来做所有事情而不会失去优势（tmtony翻译）。<br>
+数据存储用户<br>
+需要大量存储空间的设计师，3D动画师，开发人员，摄影师和其他用户使用Unraid在本地存储资产以便快速访问。与Apple Time Machine和Windows备份服务一起使用，可以从本地设备中存档大量不经常访问的数据。<br>
+多操作系统用户<br>
+软件工程师，游戏开发工作室，AR / VR设计师和大学实验室使用Unraid在多个平台上以及跨操作系统和设备上测试软件，并允许多个用户访问一个系统。</p>
+<p>UNRAID的缺点：<br>
+1.UNRAID是要授权的，一个Pro版本授权119美刀，可支持21块硬盘（7月10日的RC6版本支持24块硬盘，正好适合24盘位的机箱）。免费版本支持3块硬盘（1校验盘+2数据盘）。<br>
+2. 读写速度不快，在30-40MB/S。个人认为家用够了。（有网友测试可达到70-90Mb/s左右，不同的硬件配置速度不同）</p>
+<p>有网友 弄一个8盘位的服务器。软件方面决定用UnRaid系统<br>
+而unRAID可以掉盘以后实时模拟故障盘上的数据</p>
+<p>网友们的相关讨论</p>
+<p>1 我感觉unraid还是有两把刷子的 系统非常轻量，现成的docker也很丰富，阵列设置也非常傻瓜<br>
+2.玩 一样跑了Plex和PT之类的玩意 我现在觉得Docker真的很不错，我那些虚拟机太笨重了<br>
+unRAID在U盘上只占用几百MB，内存也吃的很少 (我爱帮助网) 另外unRAID硬解编解码可以用8700k的核显，我发现那张1050Ti完全是浪费（不过可以Steam串流用）ESXi只要设置了初始化核显，独显直通必定Code 43报错，不知道unRAID这种基于KVM的虚拟化会不会有这个问题<br>
+3.远程的话 unraid 和plex本来就都是网页图形界面管理的 本机和远程管理没区别 你就理解成unraid跟群晖差不多的一个nas操作系统 也能安装app 灵活度更高 但没有那么傻瓜而已<br>
+4.docker好评，之前一直不理解，用了之后才发现让linux易用性提高了太多，本来一堆东西要装<br>
+5.这个要看实时功耗，纸面并不准确。我有个朋友也是8700k做的nas，读取时，功耗44w，有下载任务的话再涨几w。<br>
+plex 观看原盘负载也会增加，不过没有单独测试过。<br>
+6.unraid 是挺好的方案。我是分批搞的，现在 nas 和 plex server 分开俩机器，nas负责下载和存储，pc干粗活<br>
+7.unraid可以为vm和docker单独配置vlan，但我失败了，不知道问题在哪里<br>
+8.请教下，unRaid能挂载 白群晖iSCSI 硬盘吗？</p>
+<p>可点击链接加入群聊【Nas及矿渣交流】有更多交流和免费资源：</p>
+<p>https://jq.qq.com/?_wv=1027&amp;k=5aw6p1W</p>
+<p>相关扩展知识：</p>
+<ol>
+<li>
+<p>unRAID Server nas的优点介绍及教程帮助<br>
+http://www.52help.net/unraid/286.html</p>
+</li>
+<li>
+<p>unRAIDServer 6.8.1 最新版本-unRAID NAS Server Pro 6.8.1 开心版以及保姆级安装教程帮助<br>
+http://www.52help.net/unraid/266.html</p>
+</li>
+<li>
+<p>unRAID Server-6.8.1-x86_64 汉化包<br>
+http://www.52help.net/unraid/282.html</p>
+</li>
+<li>
+<p>Unraid Server安装 apps 应用中心（Community Applications）以及apps及VMS虚拟机菜单不出现解决办法<br>
+http://www.52help.net/unraid/270.html</p>
+</li>
+<li>
+<p>unraid docker加速-修改unraid docker的镜像源（含国内网易等镜像源）<br>
+http://www.52help.net/unraid/251.html</p>
+</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[unRAIDServer 6.8.1 最新版本-unRAID NAS Server Pro 6.8.1 开心版以及保姆级安装教程帮助]]></title>
+        <id>https://newdy.cf/post/unraidserver-681-zui-xin-ban-ben-unraid-nas-server-pro-681-kai-xin-ban-yi-ji-bao-mu-ji-an-zhuang-jiao-cheng-bang-zhu/</id>
+        <link href="https://newdy.cf/post/unraidserver-681-zui-xin-ban-ben-unraid-nas-server-pro-681-kai-xin-ban-yi-ji-bao-mu-ji-an-zhuang-jiao-cheng-bang-zhu/">
+        </link>
+        <updated>2020-02-21T18:57:29.000Z</updated>
+        <content type="html"><![CDATA[<p>unraid server启动盘详细制作过程如下，总结一下主要几个关键步骤：</p>
+<p>一、当然是先下载unRaidServer 6.8.1安装包</p>
+<p>unRaidServer681（unRAID NAS Server Pro 6.8.1 专业版) 安装文件直接下载（无须从国外网站低速下载）国内网盘直接下载，网速快</p>
+<p>外链:https://www.lanzous.com/b00z7ufjc 密码:hqb5<br>
+因为云盘不支持 分卷压缩上传，所以改名了。</p>
+<p>切记：下载后, 请将<br>
+unRAIDServer-6.8.1-x86_64_k_fu11.A.rar 修改为 unRAIDServer-6.8.1-x86_64_k_fu11.part1.rar<br>
+unRAIDServer-6.8.1-x86_64_k_fu11.B.rar 修改为 unRAIDServer-6.8.1-x86_64_k_fu11.part2.rar<br>
+unRAIDServer-6.8.1-x86_64_k_fu11.C.rar 修改为 unRAIDServer-6.8.1-x86_64_k_fu11.part3.rar</p>
+<p>然后打开任何一个 文件即可解压了。解压密码：52help.net</p>
+<p>二、unRaidServer 6.8.1 启动优盘制作 及详细安装步骤要点，以及经验总强</p>
+<p>1.尽量使用真正的优盘（U盘）（不要使用读卡器+TF卡），优盘容量要大于1G，一般选用8G 16G 即可。<br>
+因为优盘只是用于启动和插件配置，其它是保存在你的机械硬盘中。<br>
+2.如果你的优盘不是windows文件格式，请先将优盘(U盘）格式化 Fat32 分区，并且将U盘名称改为 UNRAID  (大写）<br>
+3.如果你的优盘已经是Fat32分区格式，但有文件内容，请先清空内容<br>
+4.将unRAIDServer-6.8.1-x86_64_k_fu11解压出来，将整个目录下的所有文件复制到U盘<br>
+5.用管理员身份运行U盘上的 make_bootable.bat  （右键，选择用管理员身份执行）这样就可设置U盘可以启动<br>
+正常你提示是选择 Y/N  选择 Y,  如果出错，则建议使用win7 系统来打开这个优盘(我爱帮助网源创)，右键管理员身份执行这个文件<br>
+在win10下有部分优盘执行提示拒绝写入，但多数可以。而在win7下基本上都可以<br>
+6. 将优盘插入要安装UnRaid的电脑USB接口，设置U盘启动或选择U盘启动<br>
+7. 开机时可选择默认第1项（命令界面） 或第2项 （带UI界面），默认是不选择 ，2秒后自动加载第1项<br>
+8. 如果正常的话，最后会显示启动完成，显示Unraid的版本号，并显示ipv4的IP地址<br>
+如果是选择第2项 图形UI界面，需要输入 root 用户名，密码为空，登录后自动打开 unraid webUi 管理界面<br>
+9.在其他电脑网页浏览器上(我爱帮助网源创) 输入刚才的IP地下，如http://192.168.0.114   登录这个IP, 也可直接输入http://tower （其中tower为unraid 服务器的默认名称）<br>
+打开UnRaid server 管理界面（我是绑定了域名，直接用www.52help.net域名登录），进去后，就会提示激活，这时候不要选择试用及一个试用注册码</p>
+<pre><code>只需要记录下来U盘的GUID：即Flash GUID即可，复制下来
+</code></pre>
+<p>10.在第一个页面 选择 关机按钮，把unRAID Server关机，把U盘再插回其它windows电脑，在dos命令状态<br>
+使用keymaker.exe  你的flash guid号， 如  keymaker 0951-1643-3504-BB50F70D0138<br>
+会在根目录 生成注册文件，将这个注册文件 改名为 BTRS.key  剪切到到U盘的config目录下即可</p>
+<p>11.再把优盘重新插回需要使用unRaid Server的电脑，启动后，UNRAID就会显示 Pro版本了</p>
+<ol start="12">
+<li>如果优盘 有多个分区，则要将所有分区删除，重新分为一个分区才行</li>
+</ol>
+<p>Dos下注册的步骤<br>
+1.用制作 了的优盘启动<br>
+2. 抄下flash guid<br>
+3. 关机拔下优盘<br>
+4. 将优盘插入其它电脑<br>
+5. 进入dos界面（管理员身份）如win10 不行，建议win7<br>
+6. 输入 keymaker 你的GUID<br>
+7. 把生成的key文件复制到config目录 下</p>
+<p>按以上步骤即可安装成功。非常简单</p>
+<p>安装成功后的界面<br>
+<img src="https://newdy.cf/post-images/1582311539932.png" alt="" loading="lazy"><br>
+使用的界面<br>
+<img src="https://newdy.cf/post-images/1582311646140.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311653539.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311663424.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311669736.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311674921.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311682772.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311687825.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311693257.png" alt="" loading="lazy"><br>
+三、unRAID Server 6.8.1 版本更新内容</p>
+<p>Changes</p>
+<p>Version 6.8.1 2020-01-10</p>
+<p>Base distro:</p>
+<ul>
+<li>
+<p>libuv: version 1.34.0</p>
+</li>
+<li>
+<p>libvirt: version 5.10.0</p>
+</li>
+<li>
+<p>mozilla-firefox: version 72.0.1 (CVE-2019-17026, CVE-2019-17015, CVE-2019-17016, CVE-2019-17017, CVE-2019-17018, CVE-2019-17019, CVE-2019-17020, CVE-2019-17021, CVE-2019-17022, CVE-2019-17023, CVE-2019-17024, CVE-2019-17025)</p>
+</li>
+<li>
+<p>php: version 7.3.13 (CVE-2019-11044 CVE-2019-11045 CVE-2019-11046 CVE-2019-11047 CVE-2019-11049 CVE-2019-11050)</p>
+</li>
+<li>
+<p>qemu: version 4.2.0</p>
+</li>
+<li>
+<p>samba: version 4.11.4</p>
+</li>
+<li>
+<p>ttyd: version 20200102</p>
+</li>
+<li>
+<p>wireguard-tools: version 1.0.20200102</p>
+</li>
+</ul>
+<p>Linux kernel:</p>
+<ul>
+<li>
+<p>version 4.19.94</p>
+</li>
+<li>
+<p>kernel_firmware: version 20191218_c4586ff (with additional Intel BT firmware)</p>
+</li>
+<li>
+<p>CONFIG_THUNDERBOLT: Thunderbolt support</p>
+</li>
+<li>
+<p>CONFIG_INTEL_WMI_THUNDERBOLT: Intel WMI thunderbolt force power driver</p>
+</li>
+<li>
+<p>CONFIG_THUNDERBOLT_NET: Networking over Thunderbolt cable</p>
+</li>
+<li>
+<p>oot: Highpoint rr3740a: version v1.19.0_19_04_04</p>
+</li>
+<li>
+<p>oot: Highpoint r750: version v1.2.11-18_06_26 [restored]</p>
+</li>
+<li>
+<p>oot: wireguard: version 0.0.20200105</p>
+</li>
+</ul>
+<p>Management:</p>
+<ul>
+<li>
+<p>add cache-busting params for noVNC url assets</p>
+</li>
+<li>
+<p>emhttpd: fix cryptsetup passphrase input</p>
+</li>
+<li>
+<p>network: disable IPv6 for an interface when its settings is &quot;IPv4 only&quot;.</p>
+</li>
+<li>
+<p>webgui: Management page: fixed typos in help text</p>
+</li>
+<li>
+<p>webgui: VM settings: fixed Apply button sometimes not working</p>
+</li>
+<li>
+<p>webgui: Dashboard: display CPU load full width when no HT</p>
+</li>
+<li>
+<p>webgui: Docker: show 'up-to-date' when status is unknown</p>
+</li>
+<li>
+<p>webgui: Fixed: handle race condition when updating share access rights in Edit User</p>
+</li>
+<li>
+<p>webgui: Docker: allow to set container port for custom bridge networks</p>
+</li>
+<li>
+<p>webgui: Better support for custom themes (not perfect yet)</p>
+</li>
+<li>
+<p>webgui: Dashboard: adjusted table positioning</p>
+</li>
+<li>
+<p>webgui: Add user name and user description verification</p>
+</li>
+<li>
+<p>webgui: Edit User: fix share access assignments</p>
+</li>
+<li>
+<p>webgui: Management page: remove UPnP conditional setting</p>
+</li>
+<li>
+<p>webgui: Escape shell arg when logging csrf mismatch</p>
+</li>
+<li>
+<p>webgui: Terminal button: give unsupported warning when Edge/MSIE is used</p>
+</li>
+<li>
+<p>webgui: Patched vulnerability in auth_request</p>
+</li>
+<li>
+<p>webgui: Docker: added new setting &quot;Host access to custom networks&quot;</p>
+</li>
+<li>
+<p>webgui: Patched vulnerability in template.php</p>
+</li>
+</ul>
+<p>版本变化 中文说明</p>
+<pre><code> 变化
+</code></pre>
+<p>版本6.8.1 2020-01-10</p>
+<p>发行版基础：<br>
+-libuv：版本1.34.0</p>
+<p>-libvirt：版本5.10.0</p>
+<p>-mozilla-firefox：版本72.0.1（CVE-2019-17026，CVE-2019-17015，CVE-2019-17016，CVE-2019-17017，CVE-2019-17018，CVE-2019-17019，CVE-2019- 17020，CVE-2019-17021，CVE-2019-17022，CVE-2019-17023，CVE-2019-17024，CVE-2019-17025）</p>
+<p>-php：版本7.3.13（CVE-2019-11044 CVE-2019-11045 CVE-2019-11046 CVE-2019-11047 CVE-2019-11049 CVE-2019-11050）</p>
+<p>-qemu：版本4.2.0</p>
+<p>-samba：版本4.11.4</p>
+<p>-ttyd：版本20200102</p>
+<p>-线卫工具：版本1.0.20200102</p>
+<p>Linux内核：<br>
+-版本4.19.94</p>
+<p>-kernel_firmware：版本20191218_c4586ff（带有其他Intel BT固件）</p>
+<p>-CONFIG_THUNDERBOLT：Thunderbolt支持</p>
+<p>-CONFIG_INTEL_WMI_THUNDERBOLT：英特尔WMI雷电强制电源驱动器</p>
+<p>-CONFIG_THUNDERBOLT_NET：通过Thunderbolt电缆联网</p>
+<p>-oot：Highpoint rr3740a：版本v1.19.0_19_04_04</p>
+<p>-oot：Highpoint r750：v1.2.11-18_06_26版[已恢复]</p>
+<p>-等待：wireguard：版本0.0.20200105</p>
+<p>管理：<br>
+-为noVNC网址资产添加缓存清除参数</p>
+<p>-emhttpd：修复cryptsetup密码输入</p>
+<p>-网络：当接口的设置为“仅IPv4”时，禁用该接口的IPv6。</p>
+<p>-webgui：管理页面：修复了帮助文本中的错别字</p>
+<p>-webgui：VM设置：修复了“应用”按钮有时不起作用</p>
+<p>-webgui：仪表板：无HT时显示CPU负载全宽</p>
+<p>-webgui：Docker：状态未知时显示“最新”</p>
+<p>-webgui：已修复：在“编辑用户”中更新共享访问权限时处理竞争情况</p>
+<p>-webgui：Docker：允许为自定义桥网络设置容器端口</p>
+<p>-webgui：更好地支持自定义主题（尚不完善）</p>
+<p>-webgui：控制板：调整表位置</p>
+<p>-webgui：添加用户名和用户描述验证</p>
+<p>-webgui：编辑用户：修复共享访问分配</p>
+<p>-webgui：管理页面：删除UPnP条件设置</p>
+<p>-webgui：记录csrf不匹配时转义shell arg</p>
+<p>-webgui：终端按钮：使用Edge / MSIE时发出不受支持的警告</p>
+<p>-webgui：auth_request中的修补漏洞</p>
+<p>-webgui：Docker：添加了新设置“对自定义网络的主机访问”</p>
+<p>-webgui：template.php中的已修补漏洞</p>
+<p>注意：使用usb3.0 usb3.1 的u盘可能不支持。建议用2.0的优盘</p>
+<p>unRAID Server-6.8.1-x86_64 汉化包</p>
+<ol>
+<li>
+<p>先下载 unRAID Server-6.8.1-x86_64 汉化包 网盘下载地址</p>
+<p>外链: https://www.lanzous.com/b00z80brc  密码:e9qr</p>
+</li>
+<li>
+<p>切记，下载后请将：</p>
+<p>unRAIDServer-6.8.1-x86_64汉化包.A.rar   改为 unRAIDServer-6.8.1-x86_64汉化包.part1.rar<br>
+unRAIDServer-6.8.1-x86_64汉化包.B.rar   改为 unRAIDServer-6.8.1-x86_64汉化包.part2.rar</p>
+</li>
+<li>
+<p>然后再进行解压. 把2个汉化包文件 解压覆盖原文件即可（最好先备份旧英文版文件，以防万一）</p>
+</li>
+</ol>
+<p>压缩包解压密码为：52help.net</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[unraid6.7.2安装]]></title>
         <id>https://newdy.cf/post/unraid672-an-zhuang/</id>
@@ -989,384 +1326,6 @@ mount \192.168.1.2\root V:<br>
 <p>如果要卸载全部的NFS挂载：</p>
 <p>umount -f -a</p>
 <p>不要使用资源管理器的“断开网络驱动器”！！！</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[HomeAssistant+frp+NGINX+HTTPS实现无端口加密远程访问 ]]></title>
-        <id>https://newdy.cf/post/homeassistantfrpnginxhttps-shi-xian-wu-duan-kou-jia-mi-yuan-cheng-fang-wen/</id>
-        <link href="https://newdy.cf/post/homeassistantfrpnginxhttps-shi-xian-wu-duan-kou-jia-mi-yuan-cheng-fang-wen/">
-        </link>
-        <updated>2020-02-19T12:10:35.000Z</updated>
-        <content type="html"><![CDATA[<p>等到IPV6和5G（678910G）普及了，才真的叫互联。<br>
-一个公网IP就可以带来很多完全别样的感受</p>
-<p>一般来说，HomeAssistant都是运行在家中的网络中，LZ想了想似乎没啥特别的需求要在外面访问它。</p>
-<p>LZ家中用的北京联通，有公网IP（自己申请的）。老家的中国电信也有公网IP（也是一个电话到客服就行）<br>
-这样一来就可以做很多事情。</p>
-<p>一.北京出租屋：<br>
-1.小米路由器3G，刷Padavan，<br>
-2.北京联通宽带，公网IP（可以申请），破解光猫取得超级权限，开桥接（淘宝远程，几十块钱）可以双开，即获取两条线路和两个ip，然并卵，lz就租了个主卧。没那么多需求</p>
-<ol>
-<li>光纤接光猫，光猫LAN口拉网线到小米路由器WAN口。在路由器里拨号。</li>
-<li>显示器HKC C340（34寸，21:9 100hz）</li>
-<li>PS4 pro 不支持21:9 ，网线接路由器，NAT2的连接类型。</li>
-<li>PS4输出HDMI接一个音视频分离的设备，即一边是HDMI, 另一边是HDMI，和3.5mm音频。不这样做PS4没声音。</li>
-<li>PC，网线接路由器，DP接显示器。PC挂了三个固态和两个机械。分别装了windows，macOS和Ubuntu。macOS买了个有线蓝牙加网卡，隔空投送很安逸。就是最新的系统不支持N卡了。</li>
-<li>有线蓝牙音箱Bose Soundlink Mini2，音频口接一个二分转接口，一个接PS4，一个接PC。可以同时播两路输入。叠加在一起。</li>
-<li>信号切换器（DP+HDMI+miniDP输入，HDMI输出）。没有用。因为PC只能用DP才能获得全分辨率+100Hz。</li>
-<li>支持iOS的MFI手柄，xbox one手柄</li>
-<li>Surface GO</li>
-<li>iPad， iPhone</li>
-</ol>
-<p>单位<br>
-13. 笔记本，装FRP客户端bat自启，在任何地方可以应急访问。手机通过远程桌面看看公司笔记本摄像头什么的<br>
-14. PC（基本不用）<br>
-15. 瞎眼显示器<br>
-16. Xbox one手柄</p>
-<ol start="17">
-<li>iOS和PC都装了Moonlight串流工具，PS4官方串流工具（iOS得切到非大陆账号）。  iOS还装了r-play（国区商店有，68rmb）</li>
-<li>NVIDIA串流需要打开（默认关闭）</li>
-<li>Steam串流（好像只能局域网）</li>
-</ol>
-<p>路由器上面<br>
-20. ss （买了VPS）<br>
-21.FTP+SMB+NFS<br>
-22.VPN（PPTP）</p>
-<p>二.老家：<br>
-1 路由器设置相同<br>
-2 中国电信+公网ip<br>
-3 路由器DMZ电脑的ip<br>
-4 iPad iPhone</p>
-<p>实现功能：<br>
-1.iOS装nplayer（十几块钱好像）可以在任何地方直接访问家里的移动硬盘看电影，非常流畅。<br>
-2.于是我妈想看啥告诉我就直接下载，lz在教育网有ipv6可以下载，然后直接拖进硬盘（远程拖每秒10M左右）相当于通过公网ip造了一个私有的视频点播网站。无广告又高速233333    nplayer真的太好用了，支持各种协议<br>
-3.Potplayer建远程专辑看，或者windows资源管理器映射远程磁盘<br>
-4.PS4 Pro在公司PC远程串流玩。装了VDX驱动和映射， 直接用xbox手柄即可，也可插usb接ps4手柄。<br>
-5.在公司远程moonlight串流家里PC的steam<br>
-6 远程家里桌面。有公网ip加持，几乎体会不到是远程桌面，和在本地体验是一样的。lz远程剪辑视频也毫无差别感。<br>
-7 手机也有远程mstsc官方工具<br>
-8 在家中趴床上用surface go串流（坑，surface go高配版串流很卡，同样网络下e520就完美，iPad也可以）<br>
-9 老家电脑有问题，直接mstsc输入域名即可秒连。<br>
-10 公司也可以直接连vpn到家里，获取了一个子网地址，但是steam串流好像仍然检测不到。</p>
-<ol>
-<li>
-<p>背景</p>
-<p>使用https将本地的HomeAssistant服务转发到公网上，实现远程https和无端口访问。当然也可以转发任意其他服务。<br>
-阿里云ECS Ubuntu 16.04  分配有公网IP &lt;A.B.C.D&gt;    //有公网IP的服务器均可<br>
-本地树莓派在局域网内运行HomeAssistant &lt;192.168.1.233:8123&gt;<br>
-网上教程比较杂乱。专门针对HomeAssistant的还没有。于是我尽可能详细的写一下。如果有问题可以回帖交流。</p>
-</li>
-</ol>
-<p>FRP介绍：<br>
-直白的说的话，<br>
-frp有服务端frps和客户端frpc。<br>
-服务端一般运行在有公网IP的机器上，如云服务器、VPS等。<br>
-frpc可以放在任意能联网的设备上面，但本身不必具有公网地址。比如树莓派、电脑等等。进行ssh、远程桌面等访问。一个服务端可以有多个客户端。<br>
-因为公网ip是在任何地方都可以访问的到的，<br>
-而且通过frp的服务，通过服务端又可以访问到任意的客户端。<br>
-这样就实现了你在任意能联网的设备上，通过访问公网ip，来访问任何运行了frpc客户端的设备。</p>
-<ol>
-<li>安装配置FRPS<br>
-项目地址：GitHub - fatedier/frp: A fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet.<br>
-在ECS上执行：</li>
-</ol>
-<p>cd ~<br>
-mkdir software<br>
-cd software<br>
-wget [url=https://github.com/fatedier/frp/]https://github.com/fatedier/frp/[/url] ... _linux_amd64.tar.gz<br>
-tar -xzvf frp_0.22.0_linux_amd64.tar.gz<br>
-mv frp_0.22.0_linux_amd64.tar.gz frps<br>
-cd frps<br>
-nano frps.ini</p>
-<pre><code>frps.ini 文件配置：
-</code></pre>
-<p>[common]</p>
-<p>bind_addr = 0.0.0.0</p>
-<p>bind_port = 7000</p>
-<p>vhost_http_port = 7080</p>
-<p>vhost_https_port = 7443</p>
-<p>dashboard_port = 7500</p>
-<p>dashboard_user = your_account</p>
-<p>dashboard_pwd = your_pwd</p>
-<p>authentication_timeout = 900</p>
-<p>token = your_token</p>
-<p>frps开机自动启动：（引用：FRP自启动）</p>
-<p>cd ~<br>
-apt install supervisor<br>
-cd /etc/supervisor/conf.d<br>
-nano frps.conf</p>
-<pre><code>frps.conf文件内容：
-</code></pre>
-<p>[program:frp]<br>
-command = /home/software/frps/frps -c /home/software/frps/frps.ini<br>
-autostart = true</p>
-<h1 id="重启supervisor">重启supervisor</h1>
-<p>systemctl restart supervisor</p>
-<h1 id="查看supervisor运行状态">查看supervisor运行状态</h1>
-<p>supervisorctl status</p>
-<ol>
-<li>安装配置FRPC<br>
-在本地运行HomeAssistant的树莓派上执行：</li>
-</ol>
-<p>cd ~ mkdir software cd software wget https://github.com/fatedier/frp/... _linux_amd64.tar.gz tar -xzvf frp_0.22.0_linux_amd64.tar.gz mv frp_0.22.0_linux_amd64.tar.gz frpc cd frpc nano frpc.ini</p>
-<p>[common]<br>
-bind_addr = 0.0.0.0<br>
-bind_port = 7000<br>
-vhost_http_port = 7080<br>
-vhost_https_port = 7443<br>
-dashboard_port = 7500<br>
-dashboard_user = your_account<br>
-dashboard_pwd = your_pwd<br>
-authentication_timeout = 900<br>
-token = your_token</p>
-<p>frps开机自动启动：（引用：FRP自启动）</p>
-<p>cd ~<br>
-apt install supervisor<br>
-cd /etc/supervisor/conf.d<br>
-nano frps.conf</p>
-<pre><code>frps.conf文件内容：
-</code></pre>
-<p>[program:frp]<br>
-command = /home/software/frps/frps -c /home/software/frps/frps.ini<br>
-autostart = true</p>
-<h1 id="重启supervisor-2">重启supervisor</h1>
-<p>systemctl restart supervisor</p>
-<h1 id="查看supervisor运行状态-2">查看supervisor运行状态</h1>
-<p>supervisorctl status</p>
-<ol>
-<li>安装配置FRPC<br>
-在本地运行HomeAssistant的树莓派上执行：</li>
-</ol>
-<p>frps.ini 文件配置：<br>
-[common]</p>
-<p>server_addr = &lt;A.B.C.D&gt;</p>
-<p>server_port = 7000</p>
-<p>token = your_token</p>
-<p>[homeassistant]</p>
-<p>type = tcp</p>
-<p>local_ip = 127.0.0.1</p>
-<p>local_port = 8123</p>
-<p>remote_port = 9000</p>
-<p>custom_domains = your_website.com  //自己的域名，并且解析到ECS的公网IP</p>
-<ol>
-<li>安装配置NGINX<br>
-在ECS上执行：</li>
-</ol>
-<p>cd ~<br>
-cd software<br>
-apt update<br>
-apt upgrade<br>
-apt install nginx<br>
-#NGINX开机启动<br>
-systemctl enable nginx<br>
-#NGINX的配置文件在/etc/nginx下<br>
-cd /etc/nginx<br>
-cd sites-enabled<br>
-#新建一个配置文件，文件名可以为网站的域名<br>
-touch your_website.com<br>
-nano your_website.com</p>
-<p>在阿里云申请域名ssl证书：<br>
-your_website.com文件的配置：<br>
-server {<br>
-listen 80;<br>
-server_name your_website.com;<br>
-location / {<br>
-rewrite ^ https://your_website.com$request_uri? permanent;<br>
-}<br>
-}<br>
-server {<br>
-listen 443;<br>
-server_name your_website.com;<br>
-ssl on;<br>
-ssl_certificate cert/your_website.com.pem;<br>
-ssl_certificate_key cert/your_website.com.key;<br>
-ssl_session_timeout 5m;<br>
-ssl_protocols TLSv1 TLSv1.1 TLSv1.2;<br>
-ssl_ciphers AESGCM:ALL:!DH:!EXPORT:!RC4:+HIGH:!MEDIUM:!LOW:!aNULL:!eNULL;<br>
-ssl_prefer_server_ciphers on;<br>
-proxy_set_header X-Forwarded-For $remote_addr;</p>
-<pre><code>location  /api/websocket  {
-    proxy_pass http://127.0.0.1:9000/api/websocket;
-    proxy_read_timeout 60s;
-    proxy_set_header Host $host;
-    proxy_set_header X-Real_IP $remote_addr;
-    proxy_set_header X-Forwarded-for $remote_addr;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection 'Upgrade';
-}
-
-location  / {
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $http_host;
-    proxy_buffering off;
-    proxy_pass http://127.0.0.1:9000;
-}
-</code></pre>
-<p>}</p>
-<p>#检查NGINX配置文件是否正确 nginx -t #加载NGINX配置文件 nginx -s reload</p>
-<p>[common]<br>
-server_addr = &lt;A.B.C.D&gt;<br>
-server_port = 7000<br>
-token = your_token<br>
-[homeassistant]<br>
-type = tcp<br>
-local_ip = 127.0.0.1<br>
-local_port = 8123<br>
-remote_port = 9000<br>
-custom_domains = your_website.com  //自己的域名，并且解析到ECS的公网IP</p>
-<ol>
-<li>安装配置NGINX<br>
-在ECS上执行：</li>
-</ol>
-<p>cd ~<br>
-cd software<br>
-apt update<br>
-apt upgrade<br>
-apt install nginx<br>
-#NGINX开机启动<br>
-systemctl enable nginx<br>
-#NGINX的配置文件在/etc/nginx下<br>
-cd /etc/nginx<br>
-cd sites-enabled<br>
-#新建一个配置文件，文件名可以为网站的域名<br>
-touch your_website.com<br>
-nano your_website.com</p>
-<p>在阿里云申请域名ssl证书：（可参考：为阿里云域名配置免费SSL支持https加密访问简单教程 )</p>
-<p>your_website.com文件的配置：</p>
-<p>server {<br>
-listen 80;<br>
-server_name your_website.com;<br>
-location / {<br>
-rewrite ^ [url=https://your_website.com]https://your_website.com[/url]$request_uri? permanent;<br>
-}<br>
-}<br>
-server {<br>
-listen 443;<br>
-server_name your_website.com;<br>
-ssl on;<br>
-ssl_certificate cert/your_website.com.pem;<br>
-ssl_certificate_key cert/your_website.com.key;<br>
-ssl_session_timeout 5m;<br>
-ssl_protocols TLSv1 TLSv1.1 TLSv1.2;<br>
-ssl_ciphers AESGCM:ALL:!DH:!EXPORT:!RC4:+HIGH:!MEDIUM:!LOW:!aNULL:!eNULL;<br>
-ssl_prefer_server_ciphers on;<br>
-proxy_set_header X-Forwarded-For $remote_addr;<br>
-location /api/websocket {<br>
-#端口写的和frpc.ini中一致<br>
-proxy_pass [url=http://127.0.0.1:9000/api/websocket;]http://127.0.0.1:9000/api/websocket;[/url]<br>
-proxy_read_timeout 60s;<br>
-proxy_set_header Host $host;<br>
-proxy_set_header X-Real_IP $remote_addr;<br>
-proxy_set_header X-Forwarded-for $remote_addr;<br>
-proxy_http_version 1.1;<br>
-proxy_set_header Upgrade $http_upgrade;<br>
-proxy_set_header Connection 'Upgrade';<br>
-}<br>
-location / {<br>
-proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>
-proxy_set_header Host $http_host;<br>
-proxy_buffering off;<br>
-proxy_pass [url=http://127.0.0.1:9000;]http://127.0.0.1:9000;[/url]<br>
-}<br>
-}</p>
-<p>5.访问https://your_website.com<br>
-<img src="https://newdy.cf/post-images/1582114764896.png" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[黑群晖通过frps，实现quick connect功能]]></title>
-        <id>https://newdy.cf/post/hei-qun-hui-tong-guo-frpsshi-xian-quick-connect-gong-neng/</id>
-        <link href="https://newdy.cf/post/hei-qun-hui-tong-guo-frpsshi-xian-quick-connect-gong-neng/">
-        </link>
-        <updated>2020-02-19T08:35:45.000Z</updated>
-        <content type="html"><![CDATA[<p>一、申请免费的vps：https://cloud.google.com/free/</p>
-<p>二、申请完vps后， 安装frps服务端：</p>
-<p>第一步：</p>
-<p>1、获取root 权限<br>
-sudo su -<br>
-2、#安装git客户端<br>
-yum install -y git<br>
-3、获取一键安装frps脚本<br>
-git clone https://github.com/clangcn/onekey-install-shell.git<br>
-4、进去frps目录安装<br>
-cd onekey-install-shell/frps<br>
-sh version.sh<br>
-sh install-frps.sh install</p>
-<p>然后选择2，就可以一直往下按回车</p>
-<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582101396279.jpg" alt="" loading="lazy"></figure>
-<p>安装完后，会看到相关的账户密码信息，请记录下来。</p>
-<p>第二步：</p>
-<p>开通vps上的防火墙，在vpc网络–&gt; 防火墙策略下新建一条防火墙，放开所有端口和所有来源ip（假如要安全的话，按需开通端口）,如下图</p>
-<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582101413068.jpg" alt="" loading="lazy"></figure>
-<p>第三步：</p>
-<p>启动frps</p>
-<p>frps start</p>
-<p>三、申请域名</p>
-<p>1、在godaddy网站：https://www.godaddy.com/， 申请一级域名，如： nayfeng.com</p>
-<p>2、新建一条A记录指向刚才新建vps的外网ip，如nas。那么我们访问nas.nafeng.com，就是指向刚才新建的vps上</p>
-<p>四、在vps上配置frps 服务端</p>
-<p>1、进入fprs的配置模式<br>
-frps config<br>
-2、新增配置信息，在配置文件最下面，新增subdomain_host = nayfeng.com，然后按esc，:，x 来保存配置信息</p>
-<p>3、重启fprs服务使其生效<br>
-frps restart<br>
-如下图所示的配置信息，</p>
-<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582101434713.jpg" alt="" loading="lazy"></figure>
-<p>五、在群晖nas上配置frp 客户端</p>
-<p>1、通过security crt 或者xshell的客户端，远程登录我们的nas</p>
-<p>2、下载frps客户端 wget https://github.com/fatedier/frp/releases/download/v0.21.0/frp_0.21.0_linux_amd64.tar.gz<br>
-3、解压<br>
-tar zxvf frp_0.21.0_linux_amd64.tar.gz<br>
-4、修改配置文件<br>
-cd frp_0.20.0_linux_amd64<br>
-vi frpc.ini</p>
-<p>frpc.ini的参考配置信息如下，只要把我们的中文说明的两行根据实际情况填写就可以了，部分人发现配置文件有异常的话，请把中文的备注信息删除：</p>
-<p>[common]<br>
-server_addr = 1.1.1.1   #用个人vps公网ip代替<br>
-server_port = 5443<br>
-token = tian-xie-token    #填写自己vps上frps的token配置代替</p>
-<p>admin_addr = 127.0.0.1<br>
-admin_port = 7001<br>
-admin_user = admin<br>
-admin_pwd = admin</p>
-<p>[ssh]<br>
-type = tcp<br>
-local_ip = 127.0.0.1<br>
-local_port = 22<br>
-remote_port = 6000</p>
-<p>[plex]<br>
-type = tcp<br>
-local_ip = 127.0.0.1<br>
-local_port = 32400<br>
-remote_port = 32400</p>
-<p>[nas_5000]<br>
-type = tcp<br>
-local_ip = 127.0.0.1<br>
-local_port = 5000<br>
-remote_port = 5000</p>
-<p>[nas_5001]<br>
-type = tcp<br>
-local_ip = 127.0.0.1<br>
-local_port = 5001<br>
-remote_port = 5001</p>
-<p>[nas_web]<br>
-type = http<br>
-local_ip = 127.0.0.1<br>
-local_port = 5000<br>
-subdomain = nas</p>
-<p>[nas_webs]<br>
-type = https<br>
-local_ip = 127.0.0.1<br>
-local_port = 5001<br>
-subdomain = nas<br>
-5、启动frpc 客户端服务</p>
-<p>nohup ./frpc -c frpc.ini &amp;<br>
-在此你就可以在外网连你家的黑群晖了。</p>
-<p>六、使其更完美。</p>
-<p>1、在黑群晖上装一个dns server套件</p>
-<p>2、在dns server 上添加刚申请的域名，并新建一条A记录，指向我们家里的nas ip</p>
-<p>3、在路由器上设置分配dns server 的ip  为我们nas 存储的ip</p>
-<p>4、黑群晖开机启动frps</p>
 ]]></content>
     </entry>
 </feed>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>unraid的优点及缺点大全 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582312248498">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="UNRAID的介绍：
+什么是UNRAID，UNRAID是基于LINUX slackware的RAID系统，其本质总结成一句话就是带有校验盘（即容错功能）的JBOD。
+UNRAID的优点:
+1.unraid有现成的很多plugin支持 支持d..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582312248498" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">unraid的优点及缺点大全</h2>
+            <div class="post-date">2020-02-22</div>
+            
+            <div class="post-content" v-pre>
+              <p>UNRAID的介绍：</p>
+<p>什么是UNRAID，UNRAID是基于LINUX slackware的RAID系统，其本质总结成一句话就是带有校验盘（即容错功能）的JBOD。</p>
+<p>UNRAID的优点:</p>
+<p>1.unraid有现成的很多plugin支持 支持docker 也支持 vm 虚拟机，还有现成的应用市场直接下载. 同时作为nas服务器 docker服务器 虚拟机服务器 插件 应用 等多种功能。</p>
+<p>2.web界面管理，非常轻量（一个u盘加载到内存运行) ，直接samba共享，windows连接nas很方便</p>
+<p>3.有现成的Deluge和Plex的docker，Linux新手也能很快运用，比Ubuntu用VNC方便很多（VNC或者teamviewer不流畅而且经常有些莫名其妙的问题）<br>
+4.最重要硬盘的管理方式是随便加硬盘，可以不同大小不同速度(我爱帮助网)，最后都是一个存储池，但比windows好处只要一个硬盘做冗余就行，有硬盘坏了就从那个冗余盘，对我来说比折腾RAID可靠多了。缺点是60美元的价格。<br>
+5.支持硬盘无访问自动休眠（SPINDOWN）省电，毕竟一个10/20块硬盘的家用阵列，不是每时每刻都有访问需求的。节能、降噪。<br>
+6.阵列中每个硬盘容量可以不一样。</p>
+<p>7.只需要一个校验盘，要求其容量是阵列里面最大的(即：容量≥阵列中任意一个硬盘)。</p>
+<p>8.允许1个硬盘倒下，不影响阵列数据完整。即使第2个硬盘倒下，也只损失这个硬盘上的数据。而不会损失整个阵列数据。举例：一个阵列ABCD 4块硬盘+校验盘E。如果A-E盘中的任意一块坏了，对数据没有影响，用同容量或者更大容量（容量≤校验盘）的硬盘替换坏的硬盘即可。如果两块硬盘坏了，如A/E，那只会丢失A盘中的内容，B/C/D盘中的内容仍然可以访问，只要把盘拿出来，用LINUX LIVE CD启动，即可访问其中内容。<br>
+9.扩容方便，直接往阵列里添加硬盘就可以了。唯一要求是容量≤校验盘。此外对容量没有要求（见第6点）。如果新加入的硬盘容量比校验盘大，需要先用这个硬盘替换校验盘，然后再把替换下来的校验盘作为新盘加入以增大阵列容量。</p>
+<p>10.UNRAID，不仅可以快速的组磁盘阵列、快速的创建共享文件夹、快速的使用DOCKER容器跑各种服务，还可以创建各种各样的虚拟机，而且占用率极低<br>
+11.使用体验比PVE好。比vmware esxi 使用简单，比黑群晖安装方便，且对硬盘要求不高</p>
+<p>官网列出的Unraid的优点（tmtony翻译）</p>
+<ol>
+<li>unRAIDServer可以确保您的数据安全<br>
+unRAID与传统RAID有所不同，原因有很多。在大多数情况下，RAID是在将文件写入RAID阵列时旋转的多个驱动器，并且数据分布在多个驱动器中。因此，即使一个文件也可以存在于多个磁盘上。<br>
+unRAID中的共享网络资源可以跨越多个磁盘，但是它以与传统RAID完全不同的方式管理数据（tmtony翻译）。可以将unRAID配置为最多使用两个奇偶校验磁盘。与传统RAID一样，如果最多两个驱动器死机，这将防止数据丢失，从而确保数据安全。</li>
+<li>unRAID有效<br>
+unRAID可能不如传统RAID有效，但效率更高。由于所有驱动器都不会旋转以读取和写入数据，因此大大降低了功耗。<br>
+unRAID对增加阵列的大小也有效。您可以添加任何大小的磁盘，即使该磁盘与其他磁盘的大小不匹配，也会以该大小增加阵列的大小。只要确保您的奇偶校验磁盘等于或大于阵列中的最大磁盘，数据就将是安全的。<br>
+3.虚拟机支持<br>
+unRAID具有内置的虚拟化支持，因此计算机上任何剩余的资源都可用于启动虚拟机。</li>
+<li>unRAID具有出色的应用程序支持<br>
+unRAID是从支持Docker的组中编译的。简而言之，Docker是一个容器平台(我爱帮助网)，允许应用程序在自己的安全环境中运行。它是目前全球数百万开发人员中最广泛使用的容器平台，它为数以千计的应用程序提供了UnRAID破解访问。<br>
+5.硬件预算较低<br>
+unRAID Server Pro最重要的好处之一就是它可以在常规PC硬件上运行。这意味着，只要您有适当的预算，就可以使自己的装配多么强大。如果您需要没有虚拟化或资源密集型应用程序的NAS，您甚至可以重新分配您拥有的旧计算机。</li>
+</ol>
+<p>unRAID Server Pro的适应场景</p>
+<p>unRAID Server Pro是用于个人和小型企业的操作系统，它具有企业级功能，可让您使用应用程序，VM，存储设备和硬件的任意组合来配置计算机系统，以最大化性能和容量。<br>
+突出优点<br>
+简单性。柔韧性 可扩展性。模块化 Unraid使您能够使用首选的硬件，软件和操作系统来构建您一直想要的系统。<br>
+控制您的数据<br>
+打破单个操作系统的局限。Unraid允许您对系统资源进行分区，以存储和保护数据（tmtony翻译），运行任何应用程序和/或在隔离的环境中创建虚拟机。<br>
+网络附加存储<br>
+我们采用与硬件无关的方法来连接网络存储。在几乎所有具有x86 64位功能的系统上引导(我爱帮 助网)，并管理大小，速度，品牌和协议不同的磁盘阵列。按需缩放。添加更多磁盘，而无需重新平衡数据。通过运行更少的麻烦，运行更多应用程序，<br>
+Application Server<br>
+Unraid可使您从硬件中获得更多价值。使用任何基于Linux或Windows的x86应用程序。将应用程序放置在隔离的运行时环境中以防止冲突。通过我们的Web界面轻松控制应用程序。<br>
+虚拟主机<br>
+Unraid作为虚拟化主机运行，利用管理程序以安全和隔离的方式将资源划分给虚拟化来宾（tmtony翻译）。与Docker容器相比，可以为VM分配更多的资源，但仍提供隔离的访问。<br>
+使您的系统专业化<br>
+数字媒体特立独行者<br>
+视频制作人，带有大量视频库的流媒体，媒体编辑，摄影师，音乐家和音乐收藏家使用Unraid降低了初始成本。从最少两个驱动器开始，然后一次使用一个或多个驱动器进行扩展。<br>
+硬核游戏<br>
+玩家也拥有媒体服务器并喜欢构建自己的自定义系统的游戏玩家使用Unraid来做所有事情而不会失去优势（tmtony翻译）。<br>
+数据存储用户<br>
+需要大量存储空间的设计师，3D动画师，开发人员，摄影师和其他用户使用Unraid在本地存储资产以便快速访问。与Apple Time Machine和Windows备份服务一起使用，可以从本地设备中存档大量不经常访问的数据。<br>
+多操作系统用户<br>
+软件工程师，游戏开发工作室，AR / VR设计师和大学实验室使用Unraid在多个平台上以及跨操作系统和设备上测试软件，并允许多个用户访问一个系统。</p>
+<p>UNRAID的缺点：<br>
+1.UNRAID是要授权的，一个Pro版本授权119美刀，可支持21块硬盘（7月10日的RC6版本支持24块硬盘，正好适合24盘位的机箱）。免费版本支持3块硬盘（1校验盘+2数据盘）。<br>
+2. 读写速度不快，在30-40MB/S。个人认为家用够了。（有网友测试可达到70-90Mb/s左右，不同的硬件配置速度不同）</p>
+<p>有网友 弄一个8盘位的服务器。软件方面决定用UnRaid系统<br>
+而unRAID可以掉盘以后实时模拟故障盘上的数据</p>
+<p>网友们的相关讨论</p>
+<p>1 我感觉unraid还是有两把刷子的 系统非常轻量，现成的docker也很丰富，阵列设置也非常傻瓜<br>
+2.玩 一样跑了Plex和PT之类的玩意 我现在觉得Docker真的很不错，我那些虚拟机太笨重了<br>
+unRAID在U盘上只占用几百MB，内存也吃的很少 (我爱帮助网) 另外unRAID硬解编解码可以用8700k的核显，我发现那张1050Ti完全是浪费（不过可以Steam串流用）ESXi只要设置了初始化核显，独显直通必定Code 43报错，不知道unRAID这种基于KVM的虚拟化会不会有这个问题<br>
+3.远程的话 unraid 和plex本来就都是网页图形界面管理的 本机和远程管理没区别 你就理解成unraid跟群晖差不多的一个nas操作系统 也能安装app 灵活度更高 但没有那么傻瓜而已<br>
+4.docker好评，之前一直不理解，用了之后才发现让linux易用性提高了太多，本来一堆东西要装<br>
+5.这个要看实时功耗，纸面并不准确。我有个朋友也是8700k做的nas，读取时，功耗44w，有下载任务的话再涨几w。<br>
+plex 观看原盘负载也会增加，不过没有单独测试过。<br>
+6.unraid 是挺好的方案。我是分批搞的，现在 nas 和 plex server 分开俩机器，nas负责下载和存储，pc干粗活<br>
+7.unraid可以为vm和docker单独配置vlan，但我失败了，不知道问题在哪里<br>
+8.请教下，unRaid能挂载 白群晖iSCSI 硬盘吗？</p>
+<p>可点击链接加入群聊【Nas及矿渣交流】有更多交流和免费资源：</p>
+<p>https://jq.qq.com/?_wv=1027&amp;k=5aw6p1W</p>
+<p>相关扩展知识：</p>
+<ol>
+<li>
+<p>unRAID Server nas的优点介绍及教程帮助<br>
+http://www.52help.net/unraid/286.html</p>
+</li>
+<li>
+<p>unRAIDServer 6.8.1 最新版本-unRAID NAS Server Pro 6.8.1 开心版以及保姆级安装教程帮助<br>
+http://www.52help.net/unraid/266.html</p>
+</li>
+<li>
+<p>unRAID Server-6.8.1-x86_64 汉化包<br>
+http://www.52help.net/unraid/282.html</p>
+</li>
+<li>
+<p>Unraid Server安装 apps 应用中心（Community Applications）以及apps及VMS虚拟机菜单不出现解决办法<br>
+http://www.52help.net/unraid/270.html</p>
+</li>
+<li>
+<p>unraid docker加速-修改unraid docker的镜像源（含国内网易等镜像源）<br>
+http://www.52help.net/unraid/251.html</p>
+</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/unraidserver-681-zui-xin-ban-ben-unraid-nas-server-pro-681-kai-xin-ban-yi-ji-bao-mu-ji-an-zhuang-jiao-cheng-bang-zhu/">
+                  <h3 class="post-title">
+                    unRAIDServer 6.8.1 最新版本-unRAID NAS Server Pro 6.8.1 开心版以及保姆级安装教程帮助
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>unRAIDServer 6.8.1 最新版本-unRAID NAS Server Pro 6.8.1 开心版以及保姆级安装教程帮助 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582312248498">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="unraid server启动盘详细制作过程如下，总结一下主要几个关键步骤：
+一、当然是先下载unRaidServer 6.8.1安装包
+unRaidServer681（unRAID NAS Server Pro 6.8.1 专业版) 安装..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582312248498" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">unRAIDServer 6.8.1 最新版本-unRAID NAS Server Pro 6.8.1 开心版以及保姆级安装教程帮助</h2>
+            <div class="post-date">2020-02-22</div>
+            
+            <div class="post-content" v-pre>
+              <p>unraid server启动盘详细制作过程如下，总结一下主要几个关键步骤：</p>
+<p>一、当然是先下载unRaidServer 6.8.1安装包</p>
+<p>unRaidServer681（unRAID NAS Server Pro 6.8.1 专业版) 安装文件直接下载（无须从国外网站低速下载）国内网盘直接下载，网速快</p>
+<p>外链:https://www.lanzous.com/b00z7ufjc 密码:hqb5<br>
+因为云盘不支持 分卷压缩上传，所以改名了。</p>
+<p>切记：下载后, 请将<br>
+unRAIDServer-6.8.1-x86_64_k_fu11.A.rar 修改为 unRAIDServer-6.8.1-x86_64_k_fu11.part1.rar<br>
+unRAIDServer-6.8.1-x86_64_k_fu11.B.rar 修改为 unRAIDServer-6.8.1-x86_64_k_fu11.part2.rar<br>
+unRAIDServer-6.8.1-x86_64_k_fu11.C.rar 修改为 unRAIDServer-6.8.1-x86_64_k_fu11.part3.rar</p>
+<p>然后打开任何一个 文件即可解压了。解压密码：52help.net</p>
+<p>二、unRaidServer 6.8.1 启动优盘制作 及详细安装步骤要点，以及经验总强</p>
+<p>1.尽量使用真正的优盘（U盘）（不要使用读卡器+TF卡），优盘容量要大于1G，一般选用8G 16G 即可。<br>
+因为优盘只是用于启动和插件配置，其它是保存在你的机械硬盘中。<br>
+2.如果你的优盘不是windows文件格式，请先将优盘(U盘）格式化 Fat32 分区，并且将U盘名称改为 UNRAID  (大写）<br>
+3.如果你的优盘已经是Fat32分区格式，但有文件内容，请先清空内容<br>
+4.将unRAIDServer-6.8.1-x86_64_k_fu11解压出来，将整个目录下的所有文件复制到U盘<br>
+5.用管理员身份运行U盘上的 make_bootable.bat  （右键，选择用管理员身份执行）这样就可设置U盘可以启动<br>
+正常你提示是选择 Y/N  选择 Y,  如果出错，则建议使用win7 系统来打开这个优盘(我爱帮助网源创)，右键管理员身份执行这个文件<br>
+在win10下有部分优盘执行提示拒绝写入，但多数可以。而在win7下基本上都可以<br>
+6. 将优盘插入要安装UnRaid的电脑USB接口，设置U盘启动或选择U盘启动<br>
+7. 开机时可选择默认第1项（命令界面） 或第2项 （带UI界面），默认是不选择 ，2秒后自动加载第1项<br>
+8. 如果正常的话，最后会显示启动完成，显示Unraid的版本号，并显示ipv4的IP地址<br>
+如果是选择第2项 图形UI界面，需要输入 root 用户名，密码为空，登录后自动打开 unraid webUi 管理界面<br>
+9.在其他电脑网页浏览器上(我爱帮助网源创) 输入刚才的IP地下，如http://192.168.0.114   登录这个IP, 也可直接输入http://tower （其中tower为unraid 服务器的默认名称）<br>
+打开UnRaid server 管理界面（我是绑定了域名，直接用www.52help.net域名登录），进去后，就会提示激活，这时候不要选择试用及一个试用注册码</p>
+<pre><code>只需要记录下来U盘的GUID：即Flash GUID即可，复制下来
+</code></pre>
+<p>10.在第一个页面 选择 关机按钮，把unRAID Server关机，把U盘再插回其它windows电脑，在dos命令状态<br>
+使用keymaker.exe  你的flash guid号， 如  keymaker 0951-1643-3504-BB50F70D0138<br>
+会在根目录 生成注册文件，将这个注册文件 改名为 BTRS.key  剪切到到U盘的config目录下即可</p>
+<p>11.再把优盘重新插回需要使用unRaid Server的电脑，启动后，UNRAID就会显示 Pro版本了</p>
+<ol start="12">
+<li>如果优盘 有多个分区，则要将所有分区删除，重新分为一个分区才行</li>
+</ol>
+<p>Dos下注册的步骤<br>
+1.用制作 了的优盘启动<br>
+2. 抄下flash guid<br>
+3. 关机拔下优盘<br>
+4. 将优盘插入其它电脑<br>
+5. 进入dos界面（管理员身份）如win10 不行，建议win7<br>
+6. 输入 keymaker 你的GUID<br>
+7. 把生成的key文件复制到config目录 下</p>
+<p>按以上步骤即可安装成功。非常简单</p>
+<p>安装成功后的界面<br>
+<img src="https://newdy.cf/post-images/1582311539932.png" alt="" loading="lazy"><br>
+使用的界面<br>
+<img src="https://newdy.cf/post-images/1582311646140.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311653539.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311663424.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311669736.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311674921.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311682772.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311687825.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582311693257.png" alt="" loading="lazy"><br>
+三、unRAID Server 6.8.1 版本更新内容</p>
+<p>Changes</p>
+<p>Version 6.8.1 2020-01-10</p>
+<p>Base distro:</p>
+<ul>
+<li>
+<p>libuv: version 1.34.0</p>
+</li>
+<li>
+<p>libvirt: version 5.10.0</p>
+</li>
+<li>
+<p>mozilla-firefox: version 72.0.1 (CVE-2019-17026, CVE-2019-17015, CVE-2019-17016, CVE-2019-17017, CVE-2019-17018, CVE-2019-17019, CVE-2019-17020, CVE-2019-17021, CVE-2019-17022, CVE-2019-17023, CVE-2019-17024, CVE-2019-17025)</p>
+</li>
+<li>
+<p>php: version 7.3.13 (CVE-2019-11044 CVE-2019-11045 CVE-2019-11046 CVE-2019-11047 CVE-2019-11049 CVE-2019-11050)</p>
+</li>
+<li>
+<p>qemu: version 4.2.0</p>
+</li>
+<li>
+<p>samba: version 4.11.4</p>
+</li>
+<li>
+<p>ttyd: version 20200102</p>
+</li>
+<li>
+<p>wireguard-tools: version 1.0.20200102</p>
+</li>
+</ul>
+<p>Linux kernel:</p>
+<ul>
+<li>
+<p>version 4.19.94</p>
+</li>
+<li>
+<p>kernel_firmware: version 20191218_c4586ff (with additional Intel BT firmware)</p>
+</li>
+<li>
+<p>CONFIG_THUNDERBOLT: Thunderbolt support</p>
+</li>
+<li>
+<p>CONFIG_INTEL_WMI_THUNDERBOLT: Intel WMI thunderbolt force power driver</p>
+</li>
+<li>
+<p>CONFIG_THUNDERBOLT_NET: Networking over Thunderbolt cable</p>
+</li>
+<li>
+<p>oot: Highpoint rr3740a: version v1.19.0_19_04_04</p>
+</li>
+<li>
+<p>oot: Highpoint r750: version v1.2.11-18_06_26 [restored]</p>
+</li>
+<li>
+<p>oot: wireguard: version 0.0.20200105</p>
+</li>
+</ul>
+<p>Management:</p>
+<ul>
+<li>
+<p>add cache-busting params for noVNC url assets</p>
+</li>
+<li>
+<p>emhttpd: fix cryptsetup passphrase input</p>
+</li>
+<li>
+<p>network: disable IPv6 for an interface when its settings is &quot;IPv4 only&quot;.</p>
+</li>
+<li>
+<p>webgui: Management page: fixed typos in help text</p>
+</li>
+<li>
+<p>webgui: VM settings: fixed Apply button sometimes not working</p>
+</li>
+<li>
+<p>webgui: Dashboard: display CPU load full width when no HT</p>
+</li>
+<li>
+<p>webgui: Docker: show 'up-to-date' when status is unknown</p>
+</li>
+<li>
+<p>webgui: Fixed: handle race condition when updating share access rights in Edit User</p>
+</li>
+<li>
+<p>webgui: Docker: allow to set container port for custom bridge networks</p>
+</li>
+<li>
+<p>webgui: Better support for custom themes (not perfect yet)</p>
+</li>
+<li>
+<p>webgui: Dashboard: adjusted table positioning</p>
+</li>
+<li>
+<p>webgui: Add user name and user description verification</p>
+</li>
+<li>
+<p>webgui: Edit User: fix share access assignments</p>
+</li>
+<li>
+<p>webgui: Management page: remove UPnP conditional setting</p>
+</li>
+<li>
+<p>webgui: Escape shell arg when logging csrf mismatch</p>
+</li>
+<li>
+<p>webgui: Terminal button: give unsupported warning when Edge/MSIE is used</p>
+</li>
+<li>
+<p>webgui: Patched vulnerability in auth_request</p>
+</li>
+<li>
+<p>webgui: Docker: added new setting &quot;Host access to custom networks&quot;</p>
+</li>
+<li>
+<p>webgui: Patched vulnerability in template.php</p>
+</li>
+</ul>
+<p>版本变化 中文说明</p>
+<pre><code> 变化
+</code></pre>
+<p>版本6.8.1 2020-01-10</p>
+<p>发行版基础：<br>
+-libuv：版本1.34.0</p>
+<p>-libvirt：版本5.10.0</p>
+<p>-mozilla-firefox：版本72.0.1（CVE-2019-17026，CVE-2019-17015，CVE-2019-17016，CVE-2019-17017，CVE-2019-17018，CVE-2019-17019，CVE-2019- 17020，CVE-2019-17021，CVE-2019-17022，CVE-2019-17023，CVE-2019-17024，CVE-2019-17025）</p>
+<p>-php：版本7.3.13（CVE-2019-11044 CVE-2019-11045 CVE-2019-11046 CVE-2019-11047 CVE-2019-11049 CVE-2019-11050）</p>
+<p>-qemu：版本4.2.0</p>
+<p>-samba：版本4.11.4</p>
+<p>-ttyd：版本20200102</p>
+<p>-线卫工具：版本1.0.20200102</p>
+<p>Linux内核：<br>
+-版本4.19.94</p>
+<p>-kernel_firmware：版本20191218_c4586ff（带有其他Intel BT固件）</p>
+<p>-CONFIG_THUNDERBOLT：Thunderbolt支持</p>
+<p>-CONFIG_INTEL_WMI_THUNDERBOLT：英特尔WMI雷电强制电源驱动器</p>
+<p>-CONFIG_THUNDERBOLT_NET：通过Thunderbolt电缆联网</p>
+<p>-oot：Highpoint rr3740a：版本v1.19.0_19_04_04</p>
+<p>-oot：Highpoint r750：v1.2.11-18_06_26版[已恢复]</p>
+<p>-等待：wireguard：版本0.0.20200105</p>
+<p>管理：<br>
+-为noVNC网址资产添加缓存清除参数</p>
+<p>-emhttpd：修复cryptsetup密码输入</p>
+<p>-网络：当接口的设置为“仅IPv4”时，禁用该接口的IPv6。</p>
+<p>-webgui：管理页面：修复了帮助文本中的错别字</p>
+<p>-webgui：VM设置：修复了“应用”按钮有时不起作用</p>
+<p>-webgui：仪表板：无HT时显示CPU负载全宽</p>
+<p>-webgui：Docker：状态未知时显示“最新”</p>
+<p>-webgui：已修复：在“编辑用户”中更新共享访问权限时处理竞争情况</p>
+<p>-webgui：Docker：允许为自定义桥网络设置容器端口</p>
+<p>-webgui：更好地支持自定义主题（尚不完善）</p>
+<p>-webgui：控制板：调整表位置</p>
+<p>-webgui：添加用户名和用户描述验证</p>
+<p>-webgui：编辑用户：修复共享访问分配</p>
+<p>-webgui：管理页面：删除UPnP条件设置</p>
+<p>-webgui：记录csrf不匹配时转义shell arg</p>
+<p>-webgui：终端按钮：使用Edge / MSIE时发出不受支持的警告</p>
+<p>-webgui：auth_request中的修补漏洞</p>
+<p>-webgui：Docker：添加了新设置“对自定义网络的主机访问”</p>
+<p>-webgui：template.php中的已修补漏洞</p>
+<p>注意：使用usb3.0 usb3.1 的u盘可能不支持。建议用2.0的优盘</p>
+<p>unRAID Server-6.8.1-x86_64 汉化包</p>
+<ol>
+<li>
+<p>先下载 unRAID Server-6.8.1-x86_64 汉化包 网盘下载地址</p>
+<p>外链: https://www.lanzous.com/b00z80brc  密码:e9qr</p>
+</li>
+<li>
+<p>切记，下载后请将：</p>
+<p>unRAIDServer-6.8.1-x86_64汉化包.A.rar   改为 unRAIDServer-6.8.1-x86_64汉化包.part1.rar<br>
+unRAIDServer-6.8.1-x86_64汉化包.B.rar   改为 unRAIDServer-6.8.1-x86_64汉化包.part2.rar</p>
+</li>
+<li>
+<p>然后再进行解压. 把2个汉化包文件 解压覆盖原文件即可（最好先备份旧英文版文件，以防万一）</p>
+</li>
+</ol>
+<p>压缩包解压密码为：52help.net</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/unraid672-an-zhuang/">
+                  <h3 class="post-title">
+                    unraid6.7.2安装
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
