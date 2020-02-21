@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-20T11:59:42.353Z</updated>
+    <updated>2020-02-21T18:31:28.624Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,113 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[unraid6.7.2安装]]></title>
+        <id>https://newdy.cf/post/unraid672-an-zhuang/</id>
+        <link href="https://newdy.cf/post/unraid672-an-zhuang/">
+        </link>
+        <updated>2020-02-21T18:24:15.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://newdy.cf/post-images/1582309503734.png" alt="" loading="lazy"><br>
+注意 4 help 打开复制翻译 ,它就是一教程<br>
+<img src="https://newdy.cf/post-images/1582309522668.png" alt="" loading="lazy"><br>
+大佬说话简而言之，这里啰嗦一下<br>
+格式化U盘 格式FAT32 卷标 UNRAID 大写<br>
+用第一张图的第6个工具把unraid安装到U盘中<br>
+<img src="https://newdy.cf/post-images/1582309546445.png" alt="" loading="lazy"><br>
+将crack目录中的文件复制到U盘根目录，拔U盘，插到服务器，启动<br>
+找到服务器IP，浏览器直接IP进入，按图打开，找到 Flash GUID 后面的ID<br>
+<img src="https://newdy.cf/post-images/1582309577402.png" alt="" loading="lazy"><br>
+用第一张图中的第5个行成key,如第一张图中的3就是。<br>
+服务器关机，拔U盘插到操作电脑，把刚生成的BTRS.key复制到U盘的config文件中。完事<br>
+有大佬做了视频 53，对我这小白太有用处了，https://space.bilibili.com/28457?share_medium=android&amp;share_source=more&amp;bbid=ehksHyZDIRMmHn8dYR1hVmdVJF46SXpJek14infoc&amp;ts=1573127133669</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Watchtower - 自动更新 Docker 镜像与容器]]></title>
+        <id>https://newdy.cf/post/watchtower-zi-dong-geng-xin-docker-jing-xiang-yu-rong-qi/</id>
+        <link href="https://newdy.cf/post/watchtower-zi-dong-geng-xin-docker-jing-xiang-yu-rong-qi/">
+        </link>
+        <updated>2020-02-20T13:17:14.000Z</updated>
+        <summary type="html"><![CDATA[<p>前言<br>
+在早前部署Awesome TTRSS时,作者在docker-compose里配置了Watchtower,于是找到 Github 官方项目研究了下,根据官方文档简单整理了一下常用参数以备用.</p>
+<p>Watchtower 是一款实现自动化更新 Docker 镜像与容器的实用工具.它监控着所有正在运行的容器以及相关镜像,当检测本地镜像与镜像仓库中的镜像有差异时,会自动拉取最新镜像并使用最初部署时的参数重新启动相应的容器.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>前言<br>
+在早前部署Awesome TTRSS时,作者在docker-compose里配置了Watchtower,于是找到 Github 官方项目研究了下,根据官方文档简单整理了一下常用参数以备用.</p>
+<p>Watchtower 是一款实现自动化更新 Docker 镜像与容器的实用工具.它监控着所有正在运行的容器以及相关镜像,当检测本地镜像与镜像仓库中的镜像有差异时,会自动拉取最新镜像并使用最初部署时的参数重新启动相应的容器.</p>
+<!-- more -->
+<p>containrrr/watchtower</p>
+<!-- more -->
+<p>部署<br>
+快速启动<br>
+以容器的方式启动 Watch­tower</p>
+<p>docker run -d <br>
+--name watchtower <br>
+-v /var/run/docker.sock:/var/run/docker.sock <br>
+containrrr/watchtower<br>
+清理旧镜像<br>
+镜像在更新后旧镜像标签会变为none,长期自动更新会导致过多的none镜像占用空间,加入--cleanup参数可以在每次更新后自动删除none镜像.</p>
+<p>docker run -d <br>
+--name watchtower <br>
+-v /var/run/docker.sock:/var/run/docker.sock <br>
+containrrr/watchtower <br>
+--cleanup<br>
+指定容器更新<br>
+如无需自动更新所有稳定运行的容器,可以配置仅更新指定容器,只需要在命令后加上容器名.例如只更新nginx和redis.</p>
+<p>docker run -d <br>
+--name watchtower <br>
+-v /var/run/docker.sock:/var/run/docker.sock <br>
+containrrr/watchtower <br>
+--cleanup <br>
+nginx redis<br>
+注意指定容器需填写 容器名 ,并非镜像名.由于启动容器时可能没有定义 --name 参数,请执行 docker ps 查询核对容器名.<br>
+指定容器排除更新<br>
+如需要更新大部分容器,而排除掉少数容器不更新,可以加上 --label=com.centurylinklabs.watchtower.enable=false 的参数.命令结尾加上不更新的容器名.例如希望自动更新所有容器,而不更新nginx和redis.</p>
+<p>docker run -d <br>
+--name watchtower <br>
+-v /var/run/docker.sock:/var/run/docker.sock <br>
+--label=com.centurylinklabs.watchtower.enable=false <br>
+containrrr/watchtower <br>
+--cleanup <br>
+nginx redis<br>
+注意指定容器需填写 容器名 ,并非镜像名.由于启动容器时可能没有定义 --name 参数,请执行 docker ps 查询核对容器名.<br>
+配置自动更新频率<br>
+Watch­tower 默认每 5 分钟轮询一次,可以使用以下参数配置更新的频率.</p>
+<p>--interval,-i 配置更新周期,默认300秒.<br>
+--schedule,-s 配置定时更新,使用Cron表达式,例如&quot;0 0 4 * * *&quot;.即每天凌晨4点更新.<br>
+每小时更新一次</p>
+<p>docker run -d <br>
+--name watchtower <br>
+-v /var/run/docker.sock:/var/run/docker.sock <br>
+containrrr/watchtower <br>
+--cleanup <br>
+-i 3600<br>
+每天凌晨4点更新</p>
+<p>docker run -d <br>
+--name watchtower <br>
+-v /var/run/docker.sock:/var/run/docker.sock <br>
+containrrr/watchtower <br>
+--cleanup <br>
+-s &quot;0 0 4 * * *&quot;<br>
+手动更新<br>
+使用手动更新的方式,运行一次Watch­tower容器来更新所需的容器,更新后会自动删除本次运行的Watch­tower容器.只需要加上--rm和--run-once参数即可.同时也可以配合以上指定容器或指定排除容器的参数来使用.</p>
+<p>docker run --rm <br>
+-v /var/run/docker.sock:/var/run/docker.sock <br>
+--label=com.centurylinklabs.watchtower.enable=false <br>
+containrrr/watchtower <br>
+--cleanup <br>
+--run-once <br>
+nginx redis<br>
+注意指定容器需填写 容器名 ,并非镜像名.由于启动容器时可能没有定义 --name 参数,请执行 docker ps 查询核对容器名.<br>
+手动运行更新时会出现以下消息,表示正在更新,请耐心等待几分钟.</p>
+<p>time=&quot;2020-02-18T03:58:24Z&quot; level=info msg=&quot;Running a one time update.&quot;<br>
+随后提示找到更新镜像,停止容器,更新镜像,重启容器并移除旧镜像.至此更新完毕.</p>
+<p>time=&quot;2020-02-18T04:02:45Z&quot; level=info msg=&quot;Found new xxxx/xxxx:latest image (sha256:10383f5b5720d7e1fxxxx137034c69b7f6xxxxxxafcc4e9d508b561af77)&quot;<br>
+time=&quot;2020-02-18T04:02:45Z&quot; level=info msg=&quot;Stopping /xxxx (2e9ce1ebe319f3a35d80bxxxxxxxxxx6763ada155da957acb24fe76fc8a8c5) with SIGTERM&quot;<br>
+time=&quot;2020-02-18T04:02:46Z&quot; level=info msg=&quot;Creating /xxxx&quot;<br>
+time=&quot;2020-02-18T04:02:46Z&quot; level=info msg=&quot;Removing image sha256:ff4ee4caaa237174080c0d545xxxxxx</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Centos7.3防火墙配置]]></title>
         <id>https://newdy.cf/post/centos73-fang-huo-qiang-pei-zhi/</id>
@@ -1260,279 +1367,6 @@ subdomain = nas<br>
 <p>2、在dns server 上添加刚申请的域名，并新建一条A记录，指向我们家里的nas ip</p>
 <p>3、在路由器上设置分配dns server 的ip  为我们nas 存储的ip</p>
 <p>4、黑群晖开机启动frps</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Nginx SSL 双向认证]]></title>
-        <id>https://newdy.cf/post/nginx-ssl-shuang-xiang-ren-zheng/</id>
-        <link href="https://newdy.cf/post/nginx-ssl-shuang-xiang-ren-zheng/">
-        </link>
-        <updated>2020-02-19T08:34:51.000Z</updated>
-        <content type="html"><![CDATA[<p>安装Nginx和OpenSSL</p>
-<p>yum install nginx openssl -y<br>
-SSL 服务器 / 客户端双向验证证书的生成<br>
-创建一个新的 CA 根证书，在 nginx 安装目录下新建 ca 文件夹，进入 ca，创建几个子文件夹</p>
-<p>$ mkdir ca &amp;&amp; cd ca<br>
-$ mkdir newcerts private conf server</p>
-<h1 id="newcerts-子目录将用于存放-ca-签署过的数字证书证书备份目录private-用于存放-ca-的私钥conf-目录用于存放一些简化参数用的配置文件server-存放服务器证书文件">newcerts 子目录将用于存放 CA 签署过的数字证书(证书备份目录)；private 用于存放 CA 的私钥；conf 目录用于存放一些简化参数用的配置文件；server 存放服务器证书文件。</h1>
-<p>conf 目录新建 openssl.conf 文件</p>
-<p>[ ca ]<br>
-default_ca      = foo                   # The default ca section</p>
-<p>[ foo ]<br>
-dir            = ./         # top dir<br>
-database       = ./index.txt          # index file.<br>
-new_certs_dir  = ./newcerts           # new certs dir</p>
-<p>certificate    = ./private/ca.crt         # The CA cert<br>
-serial         = ./serial             # serial no file<br>
-private_key    = ./private/ca.key  # CA private key<br>
-RANDFILE       = ./private/.rand      # random number file</p>
-<p>default_days   = 3650                     # how long to certify for<br>
-default_crl_days= 30                     # how long before next CRL<br>
-default_md     = sha256                     # message digest method to use<br>
-unique_subject = no                      # Set to 'no' to allow creation of<br>
-# several ctificates with same subject.<br>
-policy         = policy_any              # default policy</p>
-<p>[ policy_any ]<br>
-countryName = match<br>
-stateOrProvinceName = match<br>
-organizationName = match<br>
-organizationalUnitName = match<br>
-localityName            = optional<br>
-commonName              = supplied<br>
-emailAddress            = optional<br>
-生成私钥 key 文件</p>
-<p>$ openssl genrsa -out private/ca.key 2048<br>
-输出<br>
-Generating RSA private key, 2048 bit long modulus<br>
-.......+++<br>
-.........................+++<br>
-e is 65537 (0x10001)<br>
-private 目录下有 ca.key 文件生成。<br>
-生成证书请求 csr 文件</p>
-<p>$ openssl req -new -key private/ca.key -out private/ca.csr<br>
-生成凭证 crt 文件</p>
-<p>$ openssl x509 -req -days 365 -in private/ca.csr -signkey private/ca.key -out private/ca.crt<br>
-private 目录下有 ca.crt 文件生成。<br>
-为我们的 key 设置起始序列号和创建 CA 键库</p>
-<p>$ echo FACE &gt; serial<br>
-#可以是任意四个字符<br>
-$ touch index.txt<br>
-为 &quot;用户证书&quot; 的移除创建一个证书撤销列表</p>
-<p>$ openssl ca -gencrl -out ./private/ca.crl -crldays 7 -config &quot;./conf/openssl.conf&quot;</p>
-<h1 id="输出">输出</h1>
-<p>Using configuration from ./conf/openssl.conf<br>
-private 目录下有 ca.crl 文件生成。<br>
-服务器证书的生成</p>
-<p>创建一个 key</p>
-<p>$ openssl genrsa -out server/server.key 2048<br>
-为我们的 key 创建一个证书签名请求 csr 文件<br>
-$ openssl req -new -key server/server.key -out server/server.csr<br>
-使用我们私有的 CA key 为刚才的 key 签名<br>
-$ openssl ca -in server/server.csr -cert private/ca.crt -keyfile private/ca.key -out     server/server.crt -config &quot;./conf/openssl.conf&quot;</p>
-<h1 id="输出-2">输出</h1>
-<p>Using configuration from ./conf/openssl.conf<br>
-Check that the request matches the signature<br>
-Signature ok<br>
-The Subject's Distinguished Name is as follows<br>
-countryName           :PRINTABLE:'CN'<br>
-stateOrProvinceName   :ASN.1 12:'GuangDong'<br>
-localityName          :ASN.1 12:'XX'<br>
-organizationName      :ASN.1 12:'<strong><strong>'<br>
-organizationalUnitName:ASN.1 12:'<strong>'<br>
-commonName            :ASN.1 12:'</strong>'<br>
-emailAddress          :IA5STRING:'</strong></strong>'<br>
-Certificate is to be certified until Mar 19 07:37:02 2017 GMT (365 days)<br>
-Sign the certificate? [y/n]:y</p>
-<p>1 out of 1 certificate requests certified, commit? [y/n]y<br>
-Write out database with 1 new entries<br>
-Data Base Updated<br>
-注：签名信息每次必须输入一致</p>
-<p>客户端证书的生成 * 创建存放 key 的目录 users</p>
-<p>$ mkdir users</p>
-<ul>
-<li>为用户创建一个 key</li>
-</ul>
-<p>$ openssl genrsa -des3 -out ./users/client.key 2048<br>
-输出：<br>
-Enter pass phrase for ./users/client.key:123<br>
-Verifying - Enter pass phrase for ./users/client.key:123<br>
-#要求输入 pass phrase，这个是当前 key 的口令，以防止本密钥泄漏后被人盗用。两次输入同一个密码(比如我这里输入     123)，users 目录下有 client.key 文件生成。<br>
-为 key 创建一个证书签名请求 csr 文件<br>
-$ openssl req -new -key ./users/client.key -out ./users/client.csr<br>
-#users 目录下有 client.csr 文件生成。<br>
-使用我们私有的 CA key 为刚才的 key 签名</p>
-<p>$ openssl ca -in ./users/client.csr -cert ./private/ca.crt -keyfile ./private/ca.key -out    ./users/client.crt -config &quot;./conf/openssl.conf&quot;<br>
-将证书转换为大多数浏览器都能识别的 PKCS12 文件</p>
-<p>$ openssl pkcs12 -export -clcerts -in ./users/client.crt -inkey ./users/client.key -out ./users/client.p12<br>
-输出</p>
-<p>Enter pass phrase for ./users/client.key:<br>
-Enter Export Password:<br>
-Verifying - Enter Export Password:<br>
-输入密码后，users 目录下有 client.p12 文件生成。</p>
-<p>Nginx配置<br>
-vhosts.xxx.conf 在 server { }段输入如下代码</p>
-<pre><code>listen       443; 
-server_name  localhost; 
-ssi on; 
-ssi_silent_errors on; 
-ssi_types text/shtml; 
-
-ssl                  on; 
-ssl_certificate      /usr/local/nginx/ca/server/server.crt; 
-ssl_certificate_key  /usr/local/nginx/ca/server/server.key; 
-ssl_client_certificate /usr/local/nginx/ca/private/ca.crt; 
-
-ssl_session_timeout  5m; 
-ssl_verify_client on;  #开户客户端证书验证 
-ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDH:AES:HIGH:!aNULL:!MD5:!ADH:!DH;
-
-
-ssl_prefer_server_ciphers   on; 
-</code></pre>
-<p>重新启动Nginx</p>
-<p>nginx -t<br>
-nginx -s reload</p>
-<p>作者：假装_很深沉<br>
-链接：https://www.jianshu.com/p/40bfe7566254<br>
-来源：简书<br>
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[生成Nginx服务器SSL证书和客户端证书]]></title>
-        <id>https://newdy.cf/post/sheng-cheng-nginx-fu-wu-qi-ssl-zheng-shu-he-ke-hu-duan-zheng-shu/</id>
-        <link href="https://newdy.cf/post/sheng-cheng-nginx-fu-wu-qi-ssl-zheng-shu-he-ke-hu-duan-zheng-shu/">
-        </link>
-        <updated>2020-02-19T04:54:59.000Z</updated>
-        <content type="html"><![CDATA[<p>Nginx服务器SSL证书<br>
-生成pass key</p>
-<p>下面的命令用于生成一个2048bit的pass key, -passout pass:111111 用于避免交互式输入密码</p>
-<p>[tomcat@a02 tmp]$ openssl genrsa -aes256 -passout pass:111111 -out server.pass.key 2048<br>
-Generating RSA private key, 2048 bit long modulus<br>
-...........+++<br>
-.....................+++<br>
-e is 65537 (0x10001)</p>
-<p>生成key</p>
-<p>下面的命令用于生成私钥, -passin pass:111111是和pass key的密码对应的, 用于避免交互式输入密码</p>
-<p>[tomcat@a02 tmp]$ openssl rsa -passin pass:111111 -in server.pass.key -out server.key<br>
-writing RSA key</p>
-<p>生成证书签发请求文件(CSR)</p>
-<p>下面的命令用于生成csr文件, 这里需要填写机构相关信息. 其中CN务必填写为对应的服务器域名. 最后那个challenge password, 是这个csr的password</p>
-<h2 id="tomcata02-tmp-openssl-req-new-sha256-key-serverkey-out-servercsryou-are-about-to-be-asked-to-enter-information-that-will-be-incorporatedinto-your-certificate-requestwhat-you-are-about-to-enter-is-what-is-called-a-distinguished-name-or-a-dnthere-are-quite-a-few-fields-but-you-can-leave-some-blankfor-some-fields-there-will-be-a-default-valueif-you-enter-the-field-will-be-left-blank">[tomcat@a02 tmp]$ openssl req -new -sha256 -key server.key -out server.csr<br>
-You are about to be asked to enter information that will be incorporated<br>
-into your certificate request.<br>
-What you are about to enter is what is called a Distinguished Name or a DN.<br>
-There are quite a few fields but you can leave some blank<br>
-For some fields there will be a default value,<br>
-If you enter '.', the field will be left blank.</h2>
-<p>Country Name (2 letter code) [XX]:CN<br>
-State or Province Name (full name) []:Beijing<br>
-Locality Name (eg, city) [Default City]:Chaoyang<br>
-Organization Name (eg, company) [Default Company Ltd]:HenSomeone<br>
-Organizational Unit Name (eg, section) []:iSomeone<br>
-Common Name (eg, your name or your server's hostname) []:internal.someone.com<br>
-Email Address []:</p>
-<p>Please enter the following 'extra' attributes<br>
-to be sent with your certificate request<br>
-A challenge password []:222222<br>
-An optional company name []:</p>
-<p>发送CSR文件给CA服务商签发证书</p>
-<p>如果是购买的CA服务商的SSL证书服务, 这一步把CSR发给服务商就可以了. 收到证书后将内容写入到 server.pem 文件</p>
-<p>在Nginx上这样配置</p>
-<p>server {<br>
-listen      443;<br>
-server_name  www.example.com;</p>
-<pre><code>ssl                  on;
-ssl_certificate      /path/to/ssl/server.pem;
-ssl_certificate_key  /path/to/ssl/server.key;
-ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
-ssl_session_cache shared:ssl_www_example_com:5m;
-ssl_session_timeout  5m;
-ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:ECDHE-RSA-DES-CBC3-SHA:ECDHE-ECDSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES256-GCM-SHA384:AES256-SHA256:AES256-SHA:AES128-GCM-SHA256:AES128-SHA256:AES128-SHA:DES-CBC3-SHA;
-#...
-location / {
-    #...
-}
-#...
-</code></pre>
-<p>}</p>
-<p>制作自签名证书</p>
-<p>如果是打算制作自签名证书, 则进行如下的操作生成pem证书</p>
-<p>[tomcat@a02 tmp]$ openssl x509 -req -sha256 -days 3655 -in server.csr -signkey server.key -out server.pem<br>
-Signature ok<br>
-subject=/C=CN/ST=Beijing/L=Chaoyang/O=HenSomeone/OU=iSomeone/CN=internal.someone.com<br>
-Getting Private key</p>
-<p>Nginx客户端验证证书<br>
-Nginx客户端验证证书和服务端SSL证书其实是没关系的, 你可以一边使用CA签发的证书, 一边使用自己制作的客户端验证证书.</p>
-<p>生成服务器端私钥</p>
-<p>[tomcat@a02 tmp]$ openssl genrsa -aes256 -passout pass:201906 -out ca.pass.key 2048<br>
-Generating RSA private key, 2048 bit long modulus<br>
-...............................................................................................................+++<br>
-...................................+++<br>
-e is 65537 (0x10001)</p>
-<p>[tomcat@a02 tmp]$ openssl rsa -passin pass:201906 -in ca.pass.key -out ca.key<br>
-writing RSA key</p>
-<p>生成服务器端证书</p>
-<p>下面的命令会生成服务器证书ca.pem, 用于配制到nginx.</p>
-<h2 id="tomcata02-tmp-openssl-req-new-x509-days-3655-key-cakey-out-capemyou-are-about-to-be-asked-to-enter-information-that-will-be-incorporatedinto-your-certificate-requestwhat-you-are-about-to-enter-is-what-is-called-a-distinguished-name-or-a-dnthere-are-quite-a-few-fields-but-you-can-leave-some-blankfor-some-fields-there-will-be-a-default-valueif-you-enter-the-field-will-be-left-blank">[tomcat@a02 tmp]$ openssl req -new -x509 -days 3655 -key ca.key -out ca.pem<br>
-You are about to be asked to enter information that will be incorporated<br>
-into your certificate request.<br>
-What you are about to enter is what is called a Distinguished Name or a DN.<br>
-There are quite a few fields but you can leave some blank<br>
-For some fields there will be a default value,<br>
-If you enter '.', the field will be left blank.</h2>
-<p>Country Name (2 letter code) [XX]:CN<br>
-State or Province Name (full name) []:Beijing<br>
-Locality Name (eg, city) [Default City]:Chaoyang<br>
-Organization Name (eg, company) [Default Company Ltd]:HenSomeone<br>
-Organizational Unit Name (eg, section) []:iSomeone<br>
-Common Name (eg, your name or your server's hostname) []:internal.someone.com<br>
-Email Address []:</p>
-<p>生成客户端私钥</p>
-<p>[tomcat@a02 tmp]$ openssl genrsa -aes256 -passout pass:201906 -out client_01.pass.key 2048<br>
-Generating RSA private key, 2048 bit long modulus<br>
-..........................+++<br>
-.....+++<br>
-e is 65537 (0x10001)</p>
-<p>[tomcat@a02 tmp]$ openssl rsa -passin pass:201906 -in client_01.pass.key -out client_01.key<br>
-writing RSA key</p>
-<p>生成客户端证书签发请求CSR</p>
-<h2 id="tomcata02-tmp-openssl-req-new-key-client_01key-out-client_01csryou-are-about-to-be-asked-to-enter-information-that-will-be-incorporatedinto-your-certificate-requestwhat-you-are-about-to-enter-is-what-is-called-a-distinguished-name-or-a-dnthere-are-quite-a-few-fields-but-you-can-leave-some-blankfor-some-fields-there-will-be-a-default-valueif-you-enter-the-field-will-be-left-blank">[tomcat@a02 tmp]$ openssl req -new -key client_01.key -out client_01.csr<br>
-You are about to be asked to enter information that will be incorporated<br>
-into your certificate request.<br>
-What you are about to enter is what is called a Distinguished Name or a DN.<br>
-There are quite a few fields but you can leave some blank<br>
-For some fields there will be a default value,<br>
-If you enter '.', the field will be left blank.</h2>
-<p>Country Name (2 letter code) [XX]:CN<br>
-State or Province Name (full name) []:Beijing<br>
-Locality Name (eg, city) [Default City]:Chaoyang<br>
-Organization Name (eg, company) [Default Company Ltd]:HenSomeone<br>
-Organizational Unit Name (eg, section) []:Staff<br>
-Common Name (eg, your name or your server's hostname) []:Staff<br>
-Email Address []:</p>
-<p>Please enter the following 'extra' attributes<br>
-to be sent with your certificate request<br>
-A challenge password []:201907<br>
-An optional company name []:</p>
-<p>签发客户端证书</p>
-<p>下面的命令, 用服务端的私钥和服务端的证书, 对客户端的CSR进行签发, 生成服务端证书. 这里有一个 -set_serial 01 的参数, 如果签发多个客户端证书, 这个数字不能重复</p>
-<p>[tomcat@a02 tmp]$ openssl x509 -req -days 3655 -in client_01.csr -CA ca.pem -CAkey ca.key -set_serial 01 -out client_01.pem<br>
-Signature ok<br>
-subject=/C=CN/ST=Beijing/L=Chaoyang/O=HenSomeone/OU=Staff/CN=Staff<br>
-Getting CA Private Key</p>
-<p>客户端证书格式转换</p>
-<p>前面生成的证书, 不能直接用于常见的应用, 需要转换成应用需要的格式</p>
-<p>Full PEM:</p>
-<p>[tomcat@a02 tmp]$ cat client_01.key client_01.pem ca.pem &gt; client_01.full.pem</p>
-<p>PFX - 这里输入的export password, 就是应用导入PFX证书时需要输入的密码.</p>
-<p>[tomcat@a02 tmp]$ openssl pkcs12 -export -out client_01.full.pfx -inkey client_01.key -in client_01.pem -certfile ca.pem<br>
-Enter Export Password:<br>
-Verifying - Enter Export Password:</p>
-<p>配置Nginx的客户端验证证书</p>
-<p>ssl_client_certificate /path/to/ca.pem;<br>
-ssl_verify_client optional; # or <code>on</code> if you require client key</p>
 ]]></content>
     </entry>
 </feed>

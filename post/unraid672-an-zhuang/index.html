@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>搭建 DNS 服务解锁 Netflix | Gridea</title>
+<title>unraid6.7.2安装 | Gridea</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -18,7 +18,14 @@
 
 
 
-    <meta name="description" content="有观看 Netflix 习惯的朋友应该都知道，除了需要科学上网之外，IP 能够解锁 Netflix 也是正常播放的必要条件之一。不过有时因为流量原因，我们不直接使用能够解锁 NF 的服务器来播放，而是架设 DNS 服务作为其它机器的中转。这..." />
+    <meta name="description" content="
+注意 4 help 打开复制翻译 ,它就是一教程
+
+大佬说话简而言之，这里啰嗦一下
+格式化U盘 格式FAT32 卷标 UNRAID 大写
+用第一张图的第6个工具把unraid安装到U盘中
+
+将crack目录中的文件复制到U盘根目录，拔U盘..." />
     <meta name="keywords" content="" />
   </head>
   <body>
@@ -94,25 +101,35 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">搭建 DNS 服务解锁 Netflix</h2>
-            <div class="post-date">2020-02-11</div>
+            <h2 class="post-title">unraid6.7.2安装</h2>
+            <div class="post-date">2020-02-22</div>
             
             <div class="post-content" v-pre>
-              <p>有观看 Netflix 习惯的朋友应该都知道，除了需要科学上网之外，IP 能够解锁 Netflix 也是正常播放的必要条件之一。不过有时因为流量原因，我们不直接使用能够解锁 NF 的服务器来播放，而是架设 DNS 服务作为其它机器的中转。这样，原本不能解锁 NF 的服务器便也可以正常播放了。不过我们今天并不细究原理，只是分享方法。</p>
-<p>如果需要解锁 Netflix ，前提条件是你拥有一台能够正常观看 NF 的服务器A，以及另一台无法观看 NF 的服务器B。</p>
-<p>首先我们在服务器A上运行以下代码安装 DNS 服务：</p>
-<p>wget --no-check-certificate -O dnsmasq_sniproxy.sh https://raw.githubusercontent.com/myxuchangbin/dnsmasq_sniproxy_install/master/dnsmasq_sniproxy.sh &amp;&amp; bash dnsmasq_sniproxy.sh -i</p>
-<p>如果开启了防火墙，记得在服务器A上放行53端口的入网连接。随后在服务器B上设置 DNS 为服务器A的 ip ，以 Debian 为例：</p>
-<p>如果你的服务器B是静态配置 IP，只需要修改<br>
-/etc/resolv.conf 中的 nameserver 即可。如：nameserver 1.0.0.1</p>
-<p>如果你的服务器B是自动获取IP，切勿修改 /etc/resolv.conf 。<br>
-因为此时这个文件受到 DHCP 的影响，在每次重启后都会还原为默认值。此时我们需要编辑 /etc/dhcp/dhclient.conf ，添加：supersede domain-name-servers 1.0.0.1; 来手动指派 DNS 地址。</p>
-<p>最后重启服务器B的网络即可：/etc/init.d/networking restart</p>
-<p>上述例子中的 1.0.0.1 仅用于示范，实际使用时需要填写服务器A的公网 ip 地址。</p>
-<p>此时再使用服务器B，Netflix 已经可以正常播放了。并且 DNS 解锁只需要消耗服务器A非常少的流量，适用于流量较少无法直接使用服务器A来观看 NF 的情况。为了提高系统安全性，还可以自行配置 iptables 来限制53端口的入网 ip 地址，在此便不细谈了。</p>
+              <p><img src="https://newdy.cf/post-images/1582309503734.png" alt="" loading="lazy"><br>
+注意 4 help 打开复制翻译 ,它就是一教程<br>
+<img src="https://newdy.cf/post-images/1582309522668.png" alt="" loading="lazy"><br>
+大佬说话简而言之，这里啰嗦一下<br>
+格式化U盘 格式FAT32 卷标 UNRAID 大写<br>
+用第一张图的第6个工具把unraid安装到U盘中<br>
+<img src="https://newdy.cf/post-images/1582309546445.png" alt="" loading="lazy"><br>
+将crack目录中的文件复制到U盘根目录，拔U盘，插到服务器，启动<br>
+找到服务器IP，浏览器直接IP进入，按图打开，找到 Flash GUID 后面的ID<br>
+<img src="https://newdy.cf/post-images/1582309577402.png" alt="" loading="lazy"><br>
+用第一张图中的第5个行成key,如第一张图中的3就是。<br>
+服务器关机，拔U盘插到操作电脑，把刚生成的BTRS.key复制到U盘的config文件中。完事<br>
+有大佬做了视频 53，对我这小白太有用处了，https://space.bilibili.com/28457?share_medium=android&amp;share_source=more&amp;bbid=ehksHyZDIRMmHn8dYR1hVmdVJF46SXpJek14infoc&amp;ts=1573127133669</p>
 
             </div>
             
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/watchtower-zi-dong-geng-xin-docker-jing-xiang-yu-rong-qi/">
+                  <h3 class="post-title">
+                    Watchtower - 自动更新 Docker 镜像与容器
+                  </h3>
+                </a>
+              </div>
             
 
             
