@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>SS/SSR/V2Ray负载均衡的方法1 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582471298571">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="有人会问，为什么需要负载均衡呢？
+负载均衡最大的作用就是0宕机，可以做到宕机秒切换。 保证你所有的线路都能基本不掉线，这样稳定性就得到了保障。
+还有就是，如果手里有线路优质但是带宽不大的小鸡，可以用这种方法变相提升带宽。比如套路云的新手套餐..." />
+    <meta name="keywords" content="V2Ray,负载均衡,bbr" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582471298571" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">SS/SSR/V2Ray负载均衡的方法1</h2>
+            <div class="post-date">2020-02-23</div>
+            
+            <div class="post-content" v-pre>
+              <p>有人会问，为什么需要负载均衡呢？</p>
+<p>负载均衡最大的作用就是0宕机，可以做到宕机秒切换。 保证你所有的线路都能基本不掉线，这样稳定性就得到了保障。</p>
+<p>还有就是，如果手里有线路优质但是带宽不大的小鸡，可以用这种方法变相提升带宽。比如套路云的新手套餐，就很适合这么玩。</p>
+<p>这里介绍两种方法，第一种用HAProxy，第二种用Nginx。</p>
+<p>如果需要UDP，比如玩游戏，就只能用 Nginx，因为HAProxy不支持UDP 。</p>
+<p>这里负载的线路有一个要求：就是不管你是SS/SSR/V2Ray，你都必须保证用来负载的机器的加密、混淆等等都是一致的，不然是没法负载的哦。</p>
+<p>这里先介绍Nginx的方法：</p>
+<p>yum -y install nginx<br>
+然后在Nginx的主配置文件内写一个include，因为我们需要用到stream段，这个段和http段是平级的，不能内嵌到http段使用：</p>
+<p>echo &quot;include /etc/nginx/tcpconf.d/*.conf;&quot; &gt;&gt; /etc/nginx/nginx.conf<br>
+创建一个存放配置文件的目录：</p>
+<p>mkdir -p /etc/nginx/tcpconf.d<br>
+新建一个配置文件：</p>
+<p>nano /etc/nginx/tcpconf.d/proxy.conf<br>
+写入如下配置：</p>
+<p>stream {</p>
+<pre><code>upstream imlala {
+    server 1.2.3.4:55555 weight=7;
+    server 2.2.3.4:55555 weight=3;
+}
+
+server {
+listen 50003;
+    listen 50003 udp;
+    proxy_pass imlala;
+}
+</code></pre>
+<p>}<br>
+这边我使用的是weight（权重）模式，可以去掉这两个设置让Nginx默认用于轮询模式。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://newdy.cf/tag/xRAiWkDDe/" class="tag">
+                    V2Ray
+                  </a>
+                
+                  <a href="https://newdy.cf/tag/yu41sXzCV/" class="tag">
+                    负载均衡
+                  </a>
+                
+                  <a href="https://newdy.cf/tag/gVJuZQhK_/" class="tag">
+                    bbr
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/unraid-de-you-dian-ji-que-dian-da-quan/">
+                  <h3 class="post-title">
+                    unraid的优点及缺点大全
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>

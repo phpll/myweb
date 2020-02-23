@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>全能中继工具haproxy（中转/端口转发） | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582471298571">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="概述
+优点：功能强大，甚至支持https转发
+缺点：配置略微复杂
+安装
+apt-get install -y haproxy
+配置文件
+nano /etc/haproxy/haproxy.cfg
+global
+log 127.0.0.1  ..." />
+    <meta name="keywords" content="haproxy" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582471298571" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">全能中继工具haproxy（中转/端口转发）</h2>
+            <div class="post-date">2020-02-23</div>
+            
+            <div class="post-content" v-pre>
+              <p>概述<br>
+优点：功能强大，甚至支持https转发</p>
+<p>缺点：配置略微复杂</p>
+<p>安装<br>
+apt-get install -y haproxy<br>
+配置文件<br>
+nano /etc/haproxy/haproxy.cfg<br>
+global<br>
+log 127.0.0.1   local0           #[日志输出配置，所有日志都记录在本机，通过local0输出]<br>
+log 127.0.0.1   local1 notice    #定义haproxy 日志级别[error warringinfo debug]<br>
+daemon                    #以后台形式运行harpoxy<br>
+nbproc 1                         #设置进程数量<br>
+pidfile /var/run/haproxy.pid<br>
+ulimit-n 65536                    #ulimit 的数量限制<br>
+#maxconn 2000000                  #默认最大连接数,需考虑ulimit-n限制<br>
+#chroot /usr/local/haproxy<br>
+tune.ssl.default-dh-param  2048<br>
+defaults<br>
+log global<br>
+mode tcp                  #默认的模式mode { tcp|http|health }，tcp是4层，http是7层，health只会返回OK<br>
+retries 3                 #两次连接失败就认为是服务器不可用，也可以通过后面设置<br>
+option abortonclose       #当服务器负载很高的时候，自动结束掉当前队列处理比较久的链接<br>
+option redispatch<br>
+maxconn 8192              #默认的最大连接数<br>
+timeout connect  5000ms   #连接超时<br>
+timeout client 50000ms    #客户端超时<br>
+timeout server 50000ms    #服务器超时<br>
+timeout tunnel 1h<br>
+timeout client-fin 30s<br>
+balance roundrobin        #设置默认负载均衡方式，轮询方式<br>
+#balance source           #设置默认负载均衡方式，类似于nginx的ip_hash<br>
+#balnace leastconn        #设置默认负载均衡方式，最小连接数<br>
+listen admin_stats<br>
+bind 0.0.0.0:987               #节点统计页面的访问端口<br>
+mode http                       #http的7层模式<br>
+option httplog                  #采用http日志格式<br>
+maxconn 10                      #节点统计页面默认的最大连接数<br>
+stats refresh 30s               #节点统计页面自动刷新时间<br>
+stats uri /haproxy              #节点统计页面url<br>
+stats realm Haproxy             #统计页面密码框上提示文本<br>
+stats auth admin:admin           #设置监控页面的用户和密码:admin,可以设置多个用户名<br>
+stats  admin if TRUE            #设置手工启动/禁用，后端服务器(haproxy-1.4.9以后版本)<br>
+frontend transit<br>
+bind *:999<br>
+mode tcp<br>
+default_backend hkt<br>
+backend hkt<br>
+mode tcp<br>
+server hkt 1.1.1.1:80 check inter 30s rise 2 fall 3 maxconn 2000000<br>
+frontend wtt<br>
+bind *:443 ssl crt /root/ssl.pem<br>
+redirect scheme https if !{ ssl_fc }<br>
+mode http<br>
+default_backend wtt<br>
+backend wtt<br>
+mode http<br>
+server wtt 2.2.2.2:80 check inter 30s rise 2 fall 3 maxconn 2000000<br>
+软件支持一个页面监控，默认开启，用户名和密码可以设定<br>
+<img src="https://newdy.cf/post-images/1582443824051.png" alt="" loading="lazy"></p>
+<p>然后如果是中转多个后端，就添加多个backend</p>
+<p>如果使用ssl的话，记得要先把证书设置好</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://newdy.cf/tag/uOhaI4aTc/" class="tag">
+                    haproxy
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/ssssrv2ray-fu-zai-jun-heng-de-fang-fa-2/">
+                  <h3 class="post-title">
+                    SS/SSR/V2Ray负载均衡的方法2
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
