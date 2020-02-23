@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582471641294">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582489941557">
 <link rel="stylesheet" href="https://newdy.cf/styles/main.css">
 
 
@@ -17,8 +17,19 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
 
     <meta name="description" content="温故而知新">
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     
   </head>
   <body>
@@ -28,7 +39,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1582471641294" class="site-logo">
+        <img src="https://newdy.cf/images/avatar.png?v=1582489941557" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -93,6 +104,21 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://newdy.cf/post/si-ge-fang-fa-chi-xian-xia-zai-chrome-tuo-zhan-cheng-xu/">
+                  <h2 class="post-title">四个方法离线下载 Chrome 拓展程序</h2>
+                </a>
+                <div class="post-date">
+                  2020-02-24
+                </div>
+                <div class="post-abstract">
+                  
+                </div>
+              </div>
+              
+            </article>
           
             <article class="post-item">
               <div class="left">
@@ -232,21 +258,6 @@
               
             </article>
           
-            <article class="post-item">
-              <div class="left">
-                <a href="https://newdy.cf/post/centos73-fang-huo-qiang-pei-zhi/">
-                  <h2 class="post-title">Centos7.3防火墙配置</h2>
-                </a>
-                <div class="post-date">
-                  2020-02-20
-                </div>
-                <div class="post-abstract">
-                  
-                </div>
-              </div>
-              
-            </article>
-          
 
           <div class="pagination-container">
   
@@ -273,6 +284,11 @@ var app = new Vue({
 
 </script>
 
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
 
 
 

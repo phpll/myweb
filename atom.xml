@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-23T15:28:17.684Z</updated>
+    <updated>2020-02-23T20:32:23.473Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -11,6 +11,20 @@
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
     <entry>
+        <title type="html"><![CDATA[四个方法离线下载 Chrome 拓展程序]]></title>
+        <id>https://newdy.cf/post/si-ge-fang-fa-chi-xian-xia-zai-chrome-tuo-zhan-cheng-xu/</id>
+        <link href="https://newdy.cf/post/si-ge-fang-fa-chi-xian-xia-zai-chrome-tuo-zhan-cheng-xu/">
+        </link>
+        <updated>2020-02-23T18:50:15.000Z</updated>
+        <content type="html"><![CDATA[<p>1、Chrome 网上商店中文镜像网站<br>
+https://www.gugeapps.net/<br>
+2、离线下载 crx 英文网站，支持历史版本<br>
+https://www.crx4chrome.com/<br>
+3、根据插件 URL 和 ID ，远程下载插件 Google Chrome 插件<br>
+https://chrome-extension-downloader.com/</p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[天猫精灵X1自动恢复出厂设置解决方法]]></title>
         <id>https://newdy.cf/post/tian-mao-jing-ling-x1-zi-dong-hui-fu-chu-han-she-zhi-jie-jue-fang-fa/</id>
         <link href="https://newdy.cf/post/tian-mao-jing-ling-x1-zi-dong-hui-fu-chu-han-she-zhi-jie-jue-fang-fa/">
@@ -18,7 +32,8 @@
         <updated>2020-02-23T15:05:57.000Z</updated>
         <content type="html"><![CDATA[<p>最近天猫精灵使用一段时间后就会自动恢复出厂，需要重新配置网络等，特别麻烦。 偶见一篇文章详解了出现该问题的原因及解决办法，跟着动手试了下，还真心好了。 整理了一下操作步骤，给需要的朋友一个解决办法。</p>
 <p>一、修复方法<br>
-<img src="https://newdy.cf/post-images/1582470411036.jpg" alt="" loading="lazy"></p>
+<img src="https://newdy.cf/post-images/1582470411036.jpg" alt="" loading="lazy"><br>
+<img src="https://i.loli.net/2020/02/24/eEZnVhjgK64ia3R.png" alt="1581432909952.png" loading="lazy"></p>
 <p>修复方法：SW1右0.5V跳线到GND</p>
 <p>简单操作，手残党勿怕，实在搞不定，找个修电器的帮忙操作下也就几块钱。</p>
 <p>二、修复步骤详解</p>
@@ -660,44 +675,6 @@ nginx redis<br>
 time=&quot;2020-02-18T04:02:45Z&quot; level=info msg=&quot;Stopping /xxxx (2e9ce1ebe319f3a35d80bxxxxxxxxxx6763ada155da957acb24fe76fc8a8c5) with SIGTERM&quot;<br>
 time=&quot;2020-02-18T04:02:46Z&quot; level=info msg=&quot;Creating /xxxx&quot;<br>
 time=&quot;2020-02-18T04:02:46Z&quot; level=info msg=&quot;Removing image sha256:ff4ee4caaa237174080c0d545xxxxxx</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Centos7.3防火墙配置]]></title>
-        <id>https://newdy.cf/post/centos73-fang-huo-qiang-pei-zhi/</id>
-        <link href="https://newdy.cf/post/centos73-fang-huo-qiang-pei-zhi/">
-        </link>
-        <updated>2020-02-20T10:55:40.000Z</updated>
-        <content type="html"><![CDATA[<p>1、查看firewall服务状态<br>
-systemctl status firewalld<br>
-<img src="https://newdy.cf/post-images/1582196168648.png" alt="" loading="lazy"></p>
-<p>2、查看firewall的状态<br>
-firewall-cmd --state<br>
-<img src="https://newdy.cf/post-images/1582196217057.png" alt="" loading="lazy"></p>
-<p>3、开启、重启、关闭、firewalld.service服务</p>
-<h1 id="开启">开启</h1>
-<p>service firewalld start</p>
-<h1 id="重启">重启</h1>
-<p>service firewalld restart</p>
-<h1 id="关闭">关闭</h1>
-<p>service firewalld stop</p>
-<p>4、查看防火墙规则<br>
-firewall-cmd --list-all<br>
-<img src="https://newdy.cf/post-images/1582196328235.png" alt="" loading="lazy"></p>
-<p>5、查询、开放、关闭端口</p>
-<p>复制代码</p>
-<h1 id="查询端口是否开放">查询端口是否开放</h1>
-<p>firewall-cmd --query-port=8080/tcp</p>
-<h1 id="开放80端口">开放80端口</h1>
-<p>firewall-cmd --permanent --add-port=80/tcp</p>
-<h1 id="移除端口">移除端口</h1>
-<p>firewall-cmd --permanent --remove-port=8080/tcp</p>
-<p>#重启防火墙(修改配置后要重启防火墙)<br>
-firewall-cmd --reload</p>
-<h1 id="参数解释">参数解释</h1>
-<p>1、firwall-cmd：是Linux提供的操作firewall的一个工具；<br>
-2、--permanent：表示设置为持久；<br>
-3、--add-port：标识添加的端口；</p>
 ]]></content>
     </entry>
 </feed>
