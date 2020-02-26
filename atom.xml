@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-23T20:32:23.473Z</updated>
+    <updated>2020-02-26T16:59:58.848Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,339 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[一条网线有八根线，空闲的四根能做什么？]]></title>
+        <id>https://newdy.cf/post/yi-tiao-wang-xian-you-ba-gen-xian-kong-xian-de-si-gen-neng-zuo-shi-me/</id>
+        <link href="https://newdy.cf/post/yi-tiao-wang-xian-you-ba-gen-xian-kong-xian-de-si-gen-neng-zuo-shi-me/">
+        </link>
+        <updated>2020-02-26T16:56:00.000Z</updated>
+        <content type="html"><![CDATA[<p>一条网线里面有八根线，多数情况下实际有用的只有四根（橙白、橙、绿白、绿），另外四根（蓝白、蓝、棕白、棕）就空着不用。这给了我们很多省事的机会，用上这四根线，就不用重新拉线了。来看看这四根线能做什么？</p>
+<p><img src="https://newdy.cf/post-images/1582736196547.jpg" alt="" loading="lazy"><br>
+网线才用一半，那另一半岂不是可以再拉一路网线。理论上可以，实际上也可以。不过不能拉太远。因为蓝白、蓝、棕白、棕这四根线的电阻比橙白、橙、绿白、绿这四根的要大的多，并且绕线密度也不一样，所以传输距离会小很多。<br>
+<img src="https://newdy.cf/post-images/1582736242356.jpg" alt="" loading="lazy"><br>
+办公上最常用的就是接电话线了。电话线是用两芯的，也就是说一路电话线要用两根线。这样一条网线除了上网，还能拉两路电话线。PS：注意拉线时不要用测线仪测电话线，电话线电压高，有些测线仪会烧掉的。网卡电压3.3v以下，电话线平时一二十伏，来电时能超过50v。<br>
+<img src="https://newdy.cf/post-images/1582736279863.jpg" alt="" loading="lazy"><br>
+还一种比较常用的就是接摄像头。模拟摄像头是两芯的，也跟电话线一样可以接两路。高清头是四芯的，只能接一路了。摄像头这样接还要另外供电。<br>
+<img src="https://newdy.cf/post-images/1582736304697.jpg" alt="" loading="lazy"><br>
+再来说说USB，功能太多了。USB是四芯的，一根接地，一根供电（5v），两根传数据。四根线两头颜色对好接上就行了。可以当作USB延长线，接手机，连打印机等。打印机这样接十米都没问题，比usb线效果还好。</p>
+<p><img src="https://newdy.cf/post-images/1582736336102.jpg" alt="" loading="lazy"><br>
+一般LED屏显示的内容都是通过插U盘上传的。如果显示实时内容就要用串口（com口）连接电脑。这种串口接线只要接3根就行，网线4根够用了。不过串口线长度不要超过30米。<br>
+<img src="https://newdy.cf/post-images/1582736361767.jpg" alt="" loading="lazy"><br>
+网线还可以供电，就是我们平常说的PoE（Power over Ethernet）。一路供电用两根线就行了，不过有衰减，有空余的线可以把多根拧成一根，效果会好一点。这种方法仅限于弱电供电。当然也有牛人用它来接220V的交流电，不过小编不敢。</p>
+<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582736389055.jpg" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[开启ECN功能]]></title>
+        <id>https://newdy.cf/post/kai-qi-ecn-gong-neng/</id>
+        <link href="https://newdy.cf/post/kai-qi-ecn-gong-neng/">
+        </link>
+        <updated>2020-02-25T17:32:16.000Z</updated>
+        <content type="html"><![CDATA[<p>登录服务器，单击 开始 &gt; 运行，输入 cmd，进入命令行窗口。<br>
+执行如下命令，查看TCP全局参数的信息。<br>
+netsh interface tcp show global<br>
+系统显示类似如下，则说明系统已经开启ECN功能</p>
+<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582652009787.png" alt="" loading="lazy"></figure>
+<p>执行如下命令，关闭ECN功能。<br>
+netsh interface tcp set global ecncapability=disabled<br>
+执行如下命令，开启ECN功能<br>
+netsh interface tcp set global ecncapability=enabled<br>
+执行如下命令，查看TCP全局参数的信息，确认 ECN 功能 为 disabled。<br>
+netsh interface tcp show global</p>
+<p>更多信息<br>
+ECN的作用主要是在网络出现拥塞时通知TCP的传输层，减少TCP连接中被丢弃的数据包数量，达到避免重传、减少等待时间、减少网络抖动的效果。但是有些网络设备的配置规则不能与ECN兼容，例如打印机、路由器。这些设备会将ECN交换包视为非法，同时丢弃已设置ECN的数据包，导致网络出现问题。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[公共 DNS 服务器 IP 地址]]></title>
+        <id>https://newdy.cf/post/gong-gong-dns-fu-wu-qi-ip-di-zhi/</id>
+        <link href="https://newdy.cf/post/gong-gong-dns-fu-wu-qi-ip-di-zhi/">
+        </link>
+        <updated>2020-02-25T02:56:24.000Z</updated>
+        <content type="html"><![CDATA[<p>名称                                           	     DNS 服务器IP 地址<br>
+114 DNS	                              114.114.114.114	114.114.115.115<br>
+阿里 AliDNS	                          223.5.5.5	             223.6.6.6<br>
+百度 BaiduDNS	                  180.76.76.76<br>
+DNSPod DNS+	                    119.29.29.29	     182.254.116.116<br>
+CNNIC SDNS                        1.2.4.8	                210.2.4.8<br>
+oneDNSDNS 派	                117.50.11.11	      52.80.66.66<br>
+电信/移动/铁通	                    101.226.4.6	           218.30.118.6<br>
+DNS 派 联通	                         123.125.81.6	       140.207.198.6<br>
+Cloudflare DNS	                  1.1.1.1	                 1.0.0.1<br>
+Google DNS	                       8.8.8.8	                  8.8.4.4<br>
+IBM Quad9	                        9.9.9.9<br>
+DNS.SB	                               185.222.222.222	  185.184.222.222<br>
+OpenDNS	                            208.67.222.222	    208.67.220.220<br>
+V2EX DNS	                        199.91.73.222	     178.79.131.110</p>
+<p>香港电信                                202.181.202.140    202.181.224.140<br>
+香港联通                                205.252.144.228    208.151.69.65<br>
+澳门 V                                   202.175.3.8            202.175.3.3<br>
+台湾                                      168.95.192.1          168.95.1.1</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[网线水晶头接法和线序（图文详解）]]></title>
+        <id>https://newdy.cf/post/wang-xian-shui-jing-tou-jie-fa-he-xian-xu-tu-wen-xiang-jie/</id>
+        <link href="https://newdy.cf/post/wang-xian-shui-jing-tou-jie-fa-he-xian-xu-tu-wen-xiang-jie/">
+        </link>
+        <updated>2020-02-24T14:23:00.000Z</updated>
+        <content type="html"><![CDATA[<p>水晶头接线颜色有两种：<br>
+1.平行线的做法是：两头同为568A标准或568B标准。（常用）</p>
+<p>2.交叉线的做法是：一头568A标准，一头568B标准。</p>
+<p>568A标准顺序：绿白，绿，橙白，蓝，蓝白，橙，棕白，棕</p>
+<p>568B标准顺序：橙白，橙，绿白，蓝，蓝白，绿，棕白，棕</p>
+<p>如果连接的双方地位不对等的，则用平行线，例如电脑连接到路由器或交换机。</p>
+<p>如果连接的两台设备是对等的，则用交叉线，例如电脑连接到电脑。<br>
+<img src="https://newdy.cf/post-images/1582554223204.jpg" alt="" loading="lazy"></p>
+<p>扩展资料</p>
+<p>网线质量鉴别<br>
+三类线的标识是“CAT3”，带宽10M，适用于十兆网基本已淘汰；五类线的标识是“CAT5”，带宽100M ，适用于百兆以下的网；超五类线的标识是“CAT5E”，带宽155M，是主流产品；六类线的标识是“ CAT6”，带宽250M，用于架设千兆网</p>
+<p>除了假线外，市面上有很多用三类线冒充五类线、超五类线的情况。下面是网线的鉴别方法：</p>
+<p>三类线里的线是二对四根，五类线里的线是四对八根。</p>
+<p>真线的外胶皮不易燃烧，而假线的外胶皮大部分是易燃的。</p>
+<p>假线在较高温下（40℃以上）外胶皮会变软，真的不会。</p>
+<p>真线内部的铜芯用料较纯，比较软、有韧性而且不易被拉断。</p>
+<p>网线的扭绕方向是逆时针扭绕而不是顺时针绕的。顺时针绕会对速度和传输距离有影响。</p>
+<p>网线里的线在对绕时圈数是不一样的，因为圈数一样的话两对线之间的传输信号会互相干扰，使传输距离变短。</p>
+<p>屏蔽双绞线的导线与胶皮间有一层金属网和绝缘材料，水晶头外面也被金属所包裹。</p>
+<p>有条件的话可以找100米的双绞线利用Windows中的“网络监视器”或“资源监视器”实地测试一下，5类线能达到100Mbps，3类线只有10Mbps。</p>
+<p>网线标准长度1000英尺/箱（大约相当于305米）</p>
+<p>使用磁铁可以鉴别铁芯线，如果网线用磁铁可以吸引（哪怕是轻微的吸引），那说明是铁芯线，铁芯线因为电阻大，严重影响传输效率和传输距离，不推荐购买。优质的网线一般都是使用铜作为线芯的。即使差一些的线，也应该使用铝作为线芯。</p>
+<p>剥开少许网线，看一下线芯的粗细，线芯细了也会影响传输效率。所以应该选用相对而言线芯粗的。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[MySQL（MariaDB）的 SSL 加密复制]]></title>
+        <id>https://newdy.cf/post/mysqlmariadbde-ssl-jia-mi-fu-zhi/</id>
+        <link href="https://newdy.cf/post/mysqlmariadbde-ssl-jia-mi-fu-zhi/">
+        </link>
+        <updated>2020-02-24T12:04:51.000Z</updated>
+        <content type="html"><![CDATA[<p>在默认的主从复制过程或远程连接到MySQL/MariaDB所有的链接通信中的数据都是明文的，在局域网内连接倒问题不大；要是在外网里访问数据或则复制，则安全隐患会被放大很多。由于项目要求需要直接和外网的一台实例进行同步。所以本文介绍下通过SSL加密的方式进行复制的方法，来进一步提高数据的安全性。本文会一起介绍MySQL和MariaDB。</p>
+<p>环境搭建：</p>
+<p>默认情况下ssl都是关闭的，要是have_ssl显示NO，则表示数据库不支持SSL，需要重新编译安装来支持它，显示为DISABLED表示支持SSL，但没有开启。</p>
+<p>复制代码</p>
+<blockquote>
+<p>show variables like '%ssl%';                                                                                                  +---------------+----------+<br>
+| Variable_name | Value    |<br>
++---------------+----------+<br>
+| have_openssl  | DISABLED |<br>
+| have_ssl      | DISABLED |<br>
+| ssl_ca        |          |<br>
+| ssl_capath    |          |<br>
+| ssl_cert      |          |<br>
+| ssl_cipher    |          |<br>
+| ssl_key       |          |<br>
++---------------+----------+<br>
+复制代码<br>
+现在来开启SSL，在配置文件的mysqld选项组里面添加：</p>
+</blockquote>
+<p>ssl<br>
+重启数据库，再次查看：</p>
+<p>复制代码<br>
+show variables like '%ssl%';<br>
++---------------+-------+<br>
+| Variable_name | Value |<br>
++---------------+-------+<br>
+| have_openssl  | YES   |<br>
+| have_ssl      | YES   |<br>
+| ssl_ca        |       |<br>
+| ssl_capath    |       |<br>
+| ssl_cert      |       |<br>
+| ssl_cipher    |       |<br>
+| ssl_key       |       |<br>
++---------------+-------+<br>
+复制代码<br>
+接着就是配置SSL的重点了：</p>
+<p>1：在主服务器上创建CA证书：</p>
+<p>openssl genrsa 2048 &gt; ca-key.pem</p>
+<p>openssl req -new -x509 -nodes -days 1000 -key ca-key.pem &gt; ca-cert.pem<br>
+2：在主服务器上创建服务端的证书：</p>
+<p>openssl req -newkey rsa:2048 -days 1000 -nodes -keyout server-key.pem &gt; server-req.pem</p>
+<p>openssl x509 -req -in server-req.pem -days 1000 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 &gt; server-cert.pem<br>
+3：在主服务器上创建客户端的证书：</p>
+<p>openssl req -newkey rsa:2048 -days 1000 -nodes -keyout client-key.pem &gt; client-req.pem</p>
+<p>openssl x509 -req -in client-req.pem -days 1000 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 &gt; client-cert.pem<br>
+上面的操作都是在主上执行的，并且都在/etc/mysql/ 目录下执行的。这里需要注意的是MySQL和MariaDB不同：</p>
+<p>MySQL在生成上面证书的时候需要输入大量用户信息，在CA上创建证书要注意所有的用户信息要和CA中的一致，从国家到部门都要相同，否则会造成证书无法使用，直接全部默认回车即可。要是用户信息一样则MariaDB会报错：</p>
+<p>ERROR 2026 (HY000): SSL connection error: error:00000001:lib(0):func(0):reason(1)<br>
+和</p>
+<p>[ERROR] Slave I/O: error connecting to master ... - retry-time: 60  retries: 86400  message: SSL connection error: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed, Internal MariaDB error code: 2026<br>
+MariaDB在生成上面证书的时候也是需要输入大量用户信息，和MySQL不同的是输入的用户信息服务端和客户端不能一致。即服务端输入和客户端输入不一样。具体原因见这里，最后可以通过：</p>
+<p>openssl verify -CAfile /etc/mysql/ca-cert.pem /etc/mysql/server-cert.pem /etc/mysql/client-cert.pem<br>
+验证MariaDB证书的有效性。好了，所有的证书已经生成，那么在主上需要修改配置文件，把生成的证书配置起来：</p>
+<p>ssl-ca=/etc/mysql/ca-cert.pem<br>
+ssl-cert=/etc/mysql/server-cert.pem<br>
+ssl-key=/etc/mysql/server-key.pem<br>
+并且把生成的证书：ca-cert.pem，client-cert.pem，client-key.pem 复制给从服务器。</p>
+<p>重启主服务器，查看SSL的情况：</p>
+<p>复制代码</p>
+<blockquote>
+<p>show variables like '%ssl%';<br>
++---------------+----------------------------+<br>
+| Variable_name | Value                      |<br>
++---------------+----------------------------+<br>
+| have_openssl  | DISABLED                   |<br>
+| have_ssl      | DISABLED                   |<br>
+| ssl_ca        | /etc/mysql/ca-cert.pem     |<br>
+| ssl_capath    |                            |<br>
+| ssl_cert      | /etc/mysql/server-cert.pem |<br>
+| ssl_cipher    |                            |<br>
+| ssl_key       | /etc/mysql/server-key.pem  |<br>
++---------------+----------------------------+<br>
+复制代码<br>
+发现have_ssl变成了DISABLED，查看错误日志：</p>
+</blockquote>
+<p>SSL error: Unable to get private key from '/etc/mysql/server-key.pem'<br>
+141229 11:09:02 [Warning] Failed to setup SSL<br>
+141229 11:09:02 [Warning] SSL error: Unable to get private key<br>
+发现服务端的key不可用，在网上到了解决办法，大家可以自己看：http://askubuntu.com/questions/194074/enabling-ssl-in-mysql，概括的说就是openssl新版本的变化导致的，这里有2个解决办法来重新生成server-key.pem：</p>
+<p>方法1：openssl rsa</p>
+<p>openssl rsa -in server-key.pem -out server-key.pem<br>
+再次查看SSL情况：</p>
+<p>复制代码</p>
+<blockquote>
+<p>show variables like '%ssl%';<br>
++---------------+----------------------------+<br>
+| Variable_name | Value                      |<br>
++---------------+----------------------------+<br>
+| have_openssl  | YES                        |<br>
+| have_ssl      | YES                        |<br>
+| ssl_ca        | /etc/mysql/ca-cert.pem     |<br>
+| ssl_capath    |                            |<br>
+| ssl_cert      | /etc/mysql/server-cert.pem |<br>
+| ssl_cipher    |                            |<br>
+| ssl_key       | /etc/mysql/server-key.pem  |<br>
++---------------+----------------------------+<br>
+复制代码<br>
+方法2：这里也可以直接安装openssl的0.9.8x版本进行证书生成。</p>
+</blockquote>
+<p>wget http://www.openssl.org/source/openssl-0.9.8x.tar.gz<br>
+tar xvfz openssl-0.9.8x.tar.gz<br>
+cd openssl-0.9.8x<br>
+./config --prefix=/usr/local/openssl-0.9.8<br>
+make<br>
+make install<br>
+本文是通过方法1来进行解决的。</p>
+<p>到此在主上的操作完成，再生成一个复制帐号：REQUIRE SSL</p>
+<p>GRANT REPLICATION SLAVE ON <em>.</em> TO 'rep'@'192.168.200.%' IDENTIFIED BY '123456' REQUIRE SSL;<br>
+接着就去从上配置。之前已经把生成的证书给了从服务器，那么在配置之前可以用SSL连接主服务器试试：</p>
+<p>$mysql --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem -h192.168.200.245 -urep -p<br>
+Enter password:<br>
+SSL error: Unable to get private key from 'client-key.pem'<br>
+ERROR 2026 (HY000): SSL connection error<br>
+同理，也是SSL的问题导致的，重新生成client-key.pem，方法同重新生成server-key.pem一样：</p>
+<p>openssl rsa -in client-key.pem -out client-key.pem<br>
+继续用SSL测试连接：</p>
+<p>复制代码<br>
+$mysql --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem -h192.168.200.245 -urep -p<br>
+Enter password:<br>
+Welcome to the MySQL monitor.  Commands end with ; or \g.<br>
+Your MySQL connection id is 763<br>
+Server version: 5.5.35-0ubuntu0.12.04.2-log (Ubuntu)</p>
+<p>Copyright (c) 2000, 2014, Oracle and/or its affiliates. All rights reserved.</p>
+<p>Oracle is a registered trademark of Oracle Corporation and/or its<br>
+affiliates. Other names may be trademarks of their respective<br>
+owners.</p>
+<p>Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.</p>
+<h2 id="mysql-s">mysql&gt; \s</h2>
+<p>mysql  Ver 14.14 Distrib 5.5.37, for debian-linux-gnu (x86_64) using readline 6.2</p>
+<p>Connection id:        763<br>
+Current database:<br>
+Current user:        rep@192.168.200.212<br>
+SSL:            Cipher in use is DHE-RSA-AES256-SHA<br>
+Current pager:        stdout<br>
+Using outfile:        ''<br>
+Using delimiter:    ;<br>
+Server version:        5.5.35-0ubuntu0.12.04.2-log (Ubuntu)<br>
+Protocol version:    10<br>
+Connection:        192.168.200.245 via TCP/IP<br>
+Server characterset:    utf8mb4<br>
+Db     characterset:    utf8mb4<br>
+Client characterset:    utf8<br>
+Conn.  characterset:    utf8<br>
+TCP port:        3306<br>
+Uptime:            22 min 52 sec</p>
+<p>Threads: 3  Questions: 2325  Slow queries: 1  Opens: 7483  Flush tables: 1  Open tables: 100  Queries per second avg: 1.694<br>
+复制代码<br>
+SSL测试连接成功，并且登入的SSL协议是：Cipher in use is DHE-RSA-AES256-SHA</p>
+<p>继续在从上配置SSL：</p>
+<p>ssl<br>
+ssl-ca=/etc/mysql/ca-cert.pem<br>
+ssl-cert=/etc/mysql/client-cert.pem<br>
+ssl-key=/etc/mysql/client-key.pem<br>
+查看SSL是否被支持：</p>
+<p>复制代码</p>
+<blockquote>
+<p>show variables like '%ssl%';<br>
++---------------+----------------------------+<br>
+| Variable_name | Value                      |<br>
++---------------+----------------------------+<br>
+| have_openssl  | YES                        |<br>
+| have_ssl      | YES                        |<br>
+| ssl_ca        | /etc/mysql/ca-cert.pem     |<br>
+| ssl_capath    |                            |<br>
+| ssl_cert      | /etc/mysql/client-cert.pem |<br>
+| ssl_cipher    |                            |<br>
+| ssl_key       | /etc/mysql/client-key.pem  |<br>
++---------------+----------------------------+<br>
+复制代码<br>
+从上SSL也被正确支持，那么最后开始配置主从replicate。在从上CHANGE:</p>
+</blockquote>
+<p>CHANGE MASTER TO MASTER_HOST='192.168.200.245', MASTER_USER='rep', MASTER_PASSWORD='123456', MASTER_LOG_FILE='mysql-bin.000042', MASTER_LOG_POS=521, MASTER_SSL=1, MASTER_SSL_CA = '/etc/mysql/ca-cert.pem', MASTER_SSL_CERT = '/etc/mysql/client-cert.pem', MASTER_SSL_KEY = '/etc/mysql/client-key.pem'<br>
+测试：</p>
+<p>M：</p>
+<p>复制代码</p>
+<blockquote>
+<p>create table tmp_1229(id int,name varchar(100))default charset utf8;</p>
+</blockquote>
+<blockquote>
+<p>insert into tmp_1229 values(1,'a'),(2,'b'),(3,'c');</p>
+</blockquote>
+<blockquote>
+<p>select * from tmp_1229;<br>
++------+------+<br>
+| id   | name |<br>
++------+------+<br>
+|    1 | a    |<br>
+|    2 | b    |<br>
+|    3 | c    |<br>
++------+------+<br>
+复制代码<br>
+S:</p>
+</blockquote>
+<p>复制代码</p>
+<blockquote>
+<p>select * from tmp_1229;<br>
++------+------+<br>
+| id   | name |<br>
++------+------+<br>
+|    1 | a    |<br>
+|    2 | b    |<br>
+|    3 | c    |<br>
++------+------+</p>
+</blockquote>
+<p>复制代码<br>
+以上同步成功。</p>
+<p>总结：</p>
+<pre><code>  SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。复制默认是明文进行传输的，通过SSL加密可以大大提高数据的安全性。在上面的过程中，遇到一些问题：
+</code></pre>
+<p>1：openssl版本问题引起的证书不可用，文中已经说明解决办法。</p>
+<p>2：MariaDB 证书的不可用，原因是生成服务端客户端证书的时候输入一致导致的，文中也说明了解决办法。</p>
+<p>3：要是配置有问题，在用SSL登陆的时候，可以发现错误信息，可以直接定位到哪里出问题。</p>
+<p>ssl登陆：<br>
+mysql --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem -h192.168.200.245 -urep -p<br>
+4：在配置MariaDB的时候，在生成证书的时候可以直接先验证，查看是否有问题。</p>
+<p>验证：<br>
+openssl verify -CAfile /etc/mysql/ca-cert.pem /etc/mysql/server-cert.pem /etc/mysql/client-cert.pem<br>
+/etc/mysql/server-cert.pem: OK<br>
+/etc/mysql/client-cert.pem: OK</p>
+<p>5：要是openssl版本没有问题，不需要再次通过openssl rsa 再次生成，具体的安装配置方法参照本文章即可。</p>
+<p>更新（2016.3.19）：</p>
+<p>今天做了MySQL5.7的SSL复制，5.7安装的时候就已经在数据目录下面生成了上面的这些pem文件，所以直接把client的pem复制到从上去就可以了（注意复制过去之后修改权限，属主改成mysql即可）。否则报错：</p>
+<p>Failed to set up SSL because of the following SSL library error: Unable to get certificate ... server-cert.pem<br>
+Failed to set up SSL because of the following SSL library error: Unable to get private key ... server-cert.pem</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[四个方法离线下载 Chrome 拓展程序]]></title>
         <id>https://newdy.cf/post/si-ge-fang-fa-chi-xian-xia-zai-chrome-tuo-zhan-cheng-xu/</id>
@@ -193,488 +526,6 @@ setenforce 0<br>
 启动HAProxy：</p>
 <p>systemctl start haproxy<br>
 systemctl enable haproxy</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SS/SSR/V2Ray负载均衡的方法1]]></title>
-        <id>https://newdy.cf/post/ssssrv2ray-fu-zai-jun-heng-de-fang-fa-1/</id>
-        <link href="https://newdy.cf/post/ssssrv2ray-fu-zai-jun-heng-de-fang-fa-1/">
-        </link>
-        <updated>2020-02-23T07:35:08.000Z</updated>
-        <content type="html"><![CDATA[<p>有人会问，为什么需要负载均衡呢？</p>
-<p>负载均衡最大的作用就是0宕机，可以做到宕机秒切换。 保证你所有的线路都能基本不掉线，这样稳定性就得到了保障。</p>
-<p>还有就是，如果手里有线路优质但是带宽不大的小鸡，可以用这种方法变相提升带宽。比如套路云的新手套餐，就很适合这么玩。</p>
-<p>这里介绍两种方法，第一种用HAProxy，第二种用Nginx。</p>
-<p>如果需要UDP，比如玩游戏，就只能用 Nginx，因为HAProxy不支持UDP 。</p>
-<p>这里负载的线路有一个要求：就是不管你是SS/SSR/V2Ray，你都必须保证用来负载的机器的加密、混淆等等都是一致的，不然是没法负载的哦。</p>
-<p>这里先介绍Nginx的方法：</p>
-<p>yum -y install nginx<br>
-然后在Nginx的主配置文件内写一个include，因为我们需要用到stream段，这个段和http段是平级的，不能内嵌到http段使用：</p>
-<p>echo &quot;include /etc/nginx/tcpconf.d/*.conf;&quot; &gt;&gt; /etc/nginx/nginx.conf<br>
-创建一个存放配置文件的目录：</p>
-<p>mkdir -p /etc/nginx/tcpconf.d<br>
-新建一个配置文件：</p>
-<p>nano /etc/nginx/tcpconf.d/proxy.conf<br>
-写入如下配置：</p>
-<p>stream {</p>
-<pre><code>upstream imlala {
-    server 1.2.3.4:55555 weight=7;
-    server 2.2.3.4:55555 weight=3;
-}
-
-server {
-listen 50003;
-    listen 50003 udp;
-    proxy_pass imlala;
-}
-</code></pre>
-<p>}<br>
-这边我使用的是weight（权重）模式，可以去掉这两个设置让Nginx默认用于轮询模式。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[unraid的优点及缺点大全]]></title>
-        <id>https://newdy.cf/post/unraid-de-you-dian-ji-que-dian-da-quan/</id>
-        <link href="https://newdy.cf/post/unraid-de-you-dian-ji-que-dian-da-quan/">
-        </link>
-        <updated>2020-02-21T19:10:13.000Z</updated>
-        <content type="html"><![CDATA[<p>UNRAID的介绍：</p>
-<p>什么是UNRAID，UNRAID是基于LINUX slackware的RAID系统，其本质总结成一句话就是带有校验盘（即容错功能）的JBOD。</p>
-<p>UNRAID的优点:</p>
-<p>1.unraid有现成的很多plugin支持 支持docker 也支持 vm 虚拟机，还有现成的应用市场直接下载. 同时作为nas服务器 docker服务器 虚拟机服务器 插件 应用 等多种功能。</p>
-<p>2.web界面管理，非常轻量（一个u盘加载到内存运行) ，直接samba共享，windows连接nas很方便</p>
-<p>3.有现成的Deluge和Plex的docker，Linux新手也能很快运用，比Ubuntu用VNC方便很多（VNC或者teamviewer不流畅而且经常有些莫名其妙的问题）<br>
-4.最重要硬盘的管理方式是随便加硬盘，可以不同大小不同速度(我爱帮助网)，最后都是一个存储池，但比windows好处只要一个硬盘做冗余就行，有硬盘坏了就从那个冗余盘，对我来说比折腾RAID可靠多了。缺点是60美元的价格。<br>
-5.支持硬盘无访问自动休眠（SPINDOWN）省电，毕竟一个10/20块硬盘的家用阵列，不是每时每刻都有访问需求的。节能、降噪。<br>
-6.阵列中每个硬盘容量可以不一样。</p>
-<p>7.只需要一个校验盘，要求其容量是阵列里面最大的(即：容量≥阵列中任意一个硬盘)。</p>
-<p>8.允许1个硬盘倒下，不影响阵列数据完整。即使第2个硬盘倒下，也只损失这个硬盘上的数据。而不会损失整个阵列数据。举例：一个阵列ABCD 4块硬盘+校验盘E。如果A-E盘中的任意一块坏了，对数据没有影响，用同容量或者更大容量（容量≤校验盘）的硬盘替换坏的硬盘即可。如果两块硬盘坏了，如A/E，那只会丢失A盘中的内容，B/C/D盘中的内容仍然可以访问，只要把盘拿出来，用LINUX LIVE CD启动，即可访问其中内容。<br>
-9.扩容方便，直接往阵列里添加硬盘就可以了。唯一要求是容量≤校验盘。此外对容量没有要求（见第6点）。如果新加入的硬盘容量比校验盘大，需要先用这个硬盘替换校验盘，然后再把替换下来的校验盘作为新盘加入以增大阵列容量。</p>
-<p>10.UNRAID，不仅可以快速的组磁盘阵列、快速的创建共享文件夹、快速的使用DOCKER容器跑各种服务，还可以创建各种各样的虚拟机，而且占用率极低<br>
-11.使用体验比PVE好。比vmware esxi 使用简单，比黑群晖安装方便，且对硬盘要求不高</p>
-<p>官网列出的Unraid的优点（tmtony翻译）</p>
-<ol>
-<li>unRAIDServer可以确保您的数据安全<br>
-unRAID与传统RAID有所不同，原因有很多。在大多数情况下，RAID是在将文件写入RAID阵列时旋转的多个驱动器，并且数据分布在多个驱动器中。因此，即使一个文件也可以存在于多个磁盘上。<br>
-unRAID中的共享网络资源可以跨越多个磁盘，但是它以与传统RAID完全不同的方式管理数据（tmtony翻译）。可以将unRAID配置为最多使用两个奇偶校验磁盘。与传统RAID一样，如果最多两个驱动器死机，这将防止数据丢失，从而确保数据安全。</li>
-<li>unRAID有效<br>
-unRAID可能不如传统RAID有效，但效率更高。由于所有驱动器都不会旋转以读取和写入数据，因此大大降低了功耗。<br>
-unRAID对增加阵列的大小也有效。您可以添加任何大小的磁盘，即使该磁盘与其他磁盘的大小不匹配，也会以该大小增加阵列的大小。只要确保您的奇偶校验磁盘等于或大于阵列中的最大磁盘，数据就将是安全的。<br>
-3.虚拟机支持<br>
-unRAID具有内置的虚拟化支持，因此计算机上任何剩余的资源都可用于启动虚拟机。</li>
-<li>unRAID具有出色的应用程序支持<br>
-unRAID是从支持Docker的组中编译的。简而言之，Docker是一个容器平台(我爱帮助网)，允许应用程序在自己的安全环境中运行。它是目前全球数百万开发人员中最广泛使用的容器平台，它为数以千计的应用程序提供了UnRAID破解访问。<br>
-5.硬件预算较低<br>
-unRAID Server Pro最重要的好处之一就是它可以在常规PC硬件上运行。这意味着，只要您有适当的预算，就可以使自己的装配多么强大。如果您需要没有虚拟化或资源密集型应用程序的NAS，您甚至可以重新分配您拥有的旧计算机。</li>
-</ol>
-<p>unRAID Server Pro的适应场景</p>
-<p>unRAID Server Pro是用于个人和小型企业的操作系统，它具有企业级功能，可让您使用应用程序，VM，存储设备和硬件的任意组合来配置计算机系统，以最大化性能和容量。<br>
-突出优点<br>
-简单性。柔韧性 可扩展性。模块化 Unraid使您能够使用首选的硬件，软件和操作系统来构建您一直想要的系统。<br>
-控制您的数据<br>
-打破单个操作系统的局限。Unraid允许您对系统资源进行分区，以存储和保护数据（tmtony翻译），运行任何应用程序和/或在隔离的环境中创建虚拟机。<br>
-网络附加存储<br>
-我们采用与硬件无关的方法来连接网络存储。在几乎所有具有x86 64位功能的系统上引导(我爱帮 助网)，并管理大小，速度，品牌和协议不同的磁盘阵列。按需缩放。添加更多磁盘，而无需重新平衡数据。通过运行更少的麻烦，运行更多应用程序，<br>
-Application Server<br>
-Unraid可使您从硬件中获得更多价值。使用任何基于Linux或Windows的x86应用程序。将应用程序放置在隔离的运行时环境中以防止冲突。通过我们的Web界面轻松控制应用程序。<br>
-虚拟主机<br>
-Unraid作为虚拟化主机运行，利用管理程序以安全和隔离的方式将资源划分给虚拟化来宾（tmtony翻译）。与Docker容器相比，可以为VM分配更多的资源，但仍提供隔离的访问。<br>
-使您的系统专业化<br>
-数字媒体特立独行者<br>
-视频制作人，带有大量视频库的流媒体，媒体编辑，摄影师，音乐家和音乐收藏家使用Unraid降低了初始成本。从最少两个驱动器开始，然后一次使用一个或多个驱动器进行扩展。<br>
-硬核游戏<br>
-玩家也拥有媒体服务器并喜欢构建自己的自定义系统的游戏玩家使用Unraid来做所有事情而不会失去优势（tmtony翻译）。<br>
-数据存储用户<br>
-需要大量存储空间的设计师，3D动画师，开发人员，摄影师和其他用户使用Unraid在本地存储资产以便快速访问。与Apple Time Machine和Windows备份服务一起使用，可以从本地设备中存档大量不经常访问的数据。<br>
-多操作系统用户<br>
-软件工程师，游戏开发工作室，AR / VR设计师和大学实验室使用Unraid在多个平台上以及跨操作系统和设备上测试软件，并允许多个用户访问一个系统。</p>
-<p>UNRAID的缺点：<br>
-1.UNRAID是要授权的，一个Pro版本授权119美刀，可支持21块硬盘（7月10日的RC6版本支持24块硬盘，正好适合24盘位的机箱）。免费版本支持3块硬盘（1校验盘+2数据盘）。<br>
-2. 读写速度不快，在30-40MB/S。个人认为家用够了。（有网友测试可达到70-90Mb/s左右，不同的硬件配置速度不同）</p>
-<p>有网友 弄一个8盘位的服务器。软件方面决定用UnRaid系统<br>
-而unRAID可以掉盘以后实时模拟故障盘上的数据</p>
-<p>网友们的相关讨论</p>
-<p>1 我感觉unraid还是有两把刷子的 系统非常轻量，现成的docker也很丰富，阵列设置也非常傻瓜<br>
-2.玩 一样跑了Plex和PT之类的玩意 我现在觉得Docker真的很不错，我那些虚拟机太笨重了<br>
-unRAID在U盘上只占用几百MB，内存也吃的很少 (我爱帮助网) 另外unRAID硬解编解码可以用8700k的核显，我发现那张1050Ti完全是浪费（不过可以Steam串流用）ESXi只要设置了初始化核显，独显直通必定Code 43报错，不知道unRAID这种基于KVM的虚拟化会不会有这个问题<br>
-3.远程的话 unraid 和plex本来就都是网页图形界面管理的 本机和远程管理没区别 你就理解成unraid跟群晖差不多的一个nas操作系统 也能安装app 灵活度更高 但没有那么傻瓜而已<br>
-4.docker好评，之前一直不理解，用了之后才发现让linux易用性提高了太多，本来一堆东西要装<br>
-5.这个要看实时功耗，纸面并不准确。我有个朋友也是8700k做的nas，读取时，功耗44w，有下载任务的话再涨几w。<br>
-plex 观看原盘负载也会增加，不过没有单独测试过。<br>
-6.unraid 是挺好的方案。我是分批搞的，现在 nas 和 plex server 分开俩机器，nas负责下载和存储，pc干粗活<br>
-7.unraid可以为vm和docker单独配置vlan，但我失败了，不知道问题在哪里<br>
-8.请教下，unRaid能挂载 白群晖iSCSI 硬盘吗？</p>
-<p>可点击链接加入群聊【Nas及矿渣交流】有更多交流和免费资源：</p>
-<p>https://jq.qq.com/?_wv=1027&amp;k=5aw6p1W</p>
-<p>相关扩展知识：</p>
-<ol>
-<li>
-<p>unRAID Server nas的优点介绍及教程帮助<br>
-http://www.52help.net/unraid/286.html</p>
-</li>
-<li>
-<p>unRAIDServer 6.8.1 最新版本-unRAID NAS Server Pro 6.8.1 开心版以及保姆级安装教程帮助<br>
-http://www.52help.net/unraid/266.html</p>
-</li>
-<li>
-<p>unRAID Server-6.8.1-x86_64 汉化包<br>
-http://www.52help.net/unraid/282.html</p>
-</li>
-<li>
-<p>Unraid Server安装 apps 应用中心（Community Applications）以及apps及VMS虚拟机菜单不出现解决办法<br>
-http://www.52help.net/unraid/270.html</p>
-</li>
-<li>
-<p>unraid docker加速-修改unraid docker的镜像源（含国内网易等镜像源）<br>
-http://www.52help.net/unraid/251.html</p>
-</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[unRAIDServer 6.8.1 最新版本-unRAID NAS Server Pro 6.8.1 开心版以及保姆级安装教程帮助]]></title>
-        <id>https://newdy.cf/post/unraidserver-681-zui-xin-ban-ben-unraid-nas-server-pro-681-kai-xin-ban-yi-ji-bao-mu-ji-an-zhuang-jiao-cheng-bang-zhu/</id>
-        <link href="https://newdy.cf/post/unraidserver-681-zui-xin-ban-ben-unraid-nas-server-pro-681-kai-xin-ban-yi-ji-bao-mu-ji-an-zhuang-jiao-cheng-bang-zhu/">
-        </link>
-        <updated>2020-02-21T18:57:29.000Z</updated>
-        <content type="html"><![CDATA[<p>unraid server启动盘详细制作过程如下，总结一下主要几个关键步骤：</p>
-<p>一、当然是先下载unRaidServer 6.8.1安装包</p>
-<p>unRaidServer681（unRAID NAS Server Pro 6.8.1 专业版) 安装文件直接下载（无须从国外网站低速下载）国内网盘直接下载，网速快</p>
-<p>外链:https://www.lanzous.com/b00z7ufjc 密码:hqb5<br>
-因为云盘不支持 分卷压缩上传，所以改名了。</p>
-<p>切记：下载后, 请将<br>
-unRAIDServer-6.8.1-x86_64_k_fu11.A.rar 修改为 unRAIDServer-6.8.1-x86_64_k_fu11.part1.rar<br>
-unRAIDServer-6.8.1-x86_64_k_fu11.B.rar 修改为 unRAIDServer-6.8.1-x86_64_k_fu11.part2.rar<br>
-unRAIDServer-6.8.1-x86_64_k_fu11.C.rar 修改为 unRAIDServer-6.8.1-x86_64_k_fu11.part3.rar</p>
-<p>然后打开任何一个 文件即可解压了。解压密码：52help.net</p>
-<p>二、unRaidServer 6.8.1 启动优盘制作 及详细安装步骤要点，以及经验总强</p>
-<p>1.尽量使用真正的优盘（U盘）（不要使用读卡器+TF卡），优盘容量要大于1G，一般选用8G 16G 即可。<br>
-因为优盘只是用于启动和插件配置，其它是保存在你的机械硬盘中。<br>
-2.如果你的优盘不是windows文件格式，请先将优盘(U盘）格式化 Fat32 分区，并且将U盘名称改为 UNRAID  (大写）<br>
-3.如果你的优盘已经是Fat32分区格式，但有文件内容，请先清空内容<br>
-4.将unRAIDServer-6.8.1-x86_64_k_fu11解压出来，将整个目录下的所有文件复制到U盘<br>
-5.用管理员身份运行U盘上的 make_bootable.bat  （右键，选择用管理员身份执行）这样就可设置U盘可以启动<br>
-正常你提示是选择 Y/N  选择 Y,  如果出错，则建议使用win7 系统来打开这个优盘(我爱帮助网源创)，右键管理员身份执行这个文件<br>
-在win10下有部分优盘执行提示拒绝写入，但多数可以。而在win7下基本上都可以<br>
-6. 将优盘插入要安装UnRaid的电脑USB接口，设置U盘启动或选择U盘启动<br>
-7. 开机时可选择默认第1项（命令界面） 或第2项 （带UI界面），默认是不选择 ，2秒后自动加载第1项<br>
-8. 如果正常的话，最后会显示启动完成，显示Unraid的版本号，并显示ipv4的IP地址<br>
-如果是选择第2项 图形UI界面，需要输入 root 用户名，密码为空，登录后自动打开 unraid webUi 管理界面<br>
-9.在其他电脑网页浏览器上(我爱帮助网源创) 输入刚才的IP地下，如http://192.168.0.114   登录这个IP, 也可直接输入http://tower （其中tower为unraid 服务器的默认名称）<br>
-打开UnRaid server 管理界面（我是绑定了域名，直接用www.52help.net域名登录），进去后，就会提示激活，这时候不要选择试用及一个试用注册码</p>
-<pre><code>只需要记录下来U盘的GUID：即Flash GUID即可，复制下来
-</code></pre>
-<p>10.在第一个页面 选择 关机按钮，把unRAID Server关机，把U盘再插回其它windows电脑，在dos命令状态<br>
-使用keymaker.exe  你的flash guid号， 如  keymaker 0951-1643-3504-BB50F70D0138<br>
-keymaker 0930-6545-224c-7D9B0FCA3ADC<br>
-会在根目录 生成注册文件，将这个注册文件 改名为 BTRS.key  剪切到到U盘的config目录下即可</p>
-<p>11.再把优盘重新插回需要使用unRaid Server的电脑，启动后，UNRAID就会显示 Pro版本了</p>
-<ol>
-<li>如果优盘 有多个分区，则要将所有分区删除，重新分为一个分区才行</li>
-</ol>
-<p>Dos下注册的步骤<br>
-1.用制作 了的优盘启动<br>
-2. 抄下flash guid<br>
-3. 关机拔下优盘<br>
-4. 将优盘插入其它电脑<br>
-5. 进入dos界面（管理员身份）如win10 不行，建议win7<br>
-6. 输入 keymaker 你的GUID<br>
-7. 把生成的key文件复制到config目录 下</p>
-<p>按以上步骤即可安装成功。非常简单</p>
-<p>安装成功后的界面<br>
-<img src="https://newdy.cf/post-images/1582311539932.png" alt="" loading="lazy"><br>
-使用的界面<br>
-<img src="https://newdy.cf/post-images/1582311646140.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582311653539.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582311663424.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582311669736.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582311674921.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582311682772.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582311687825.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582311693257.png" alt="" loading="lazy"><br>
-三、unRAID Server 6.8.1 版本更新内容</p>
-<p>Changes</p>
-<p>Version 6.8.1 2020-01-10</p>
-<p>Base distro:</p>
-<ul>
-<li>
-<p>libuv: version 1.34.0</p>
-</li>
-<li>
-<p>libvirt: version 5.10.0</p>
-</li>
-<li>
-<p>mozilla-firefox: version 72.0.1 (CVE-2019-17026, CVE-2019-17015, CVE-2019-17016, CVE-2019-17017, CVE-2019-17018, CVE-2019-17019, CVE-2019-17020, CVE-2019-17021, CVE-2019-17022, CVE-2019-17023, CVE-2019-17024, CVE-2019-17025)</p>
-</li>
-<li>
-<p>php: version 7.3.13 (CVE-2019-11044 CVE-2019-11045 CVE-2019-11046 CVE-2019-11047 CVE-2019-11049 CVE-2019-11050)</p>
-</li>
-<li>
-<p>qemu: version 4.2.0</p>
-</li>
-<li>
-<p>samba: version 4.11.4</p>
-</li>
-<li>
-<p>ttyd: version 20200102</p>
-</li>
-<li>
-<p>wireguard-tools: version 1.0.20200102</p>
-</li>
-</ul>
-<p>Linux kernel:</p>
-<ul>
-<li>
-<p>version 4.19.94</p>
-</li>
-<li>
-<p>kernel_firmware: version 20191218_c4586ff (with additional Intel BT firmware)</p>
-</li>
-<li>
-<p>CONFIG_THUNDERBOLT: Thunderbolt support</p>
-</li>
-<li>
-<p>CONFIG_INTEL_WMI_THUNDERBOLT: Intel WMI thunderbolt force power driver</p>
-</li>
-<li>
-<p>CONFIG_THUNDERBOLT_NET: Networking over Thunderbolt cable</p>
-</li>
-<li>
-<p>oot: Highpoint rr3740a: version v1.19.0_19_04_04</p>
-</li>
-<li>
-<p>oot: Highpoint r750: version v1.2.11-18_06_26 [restored]</p>
-</li>
-<li>
-<p>oot: wireguard: version 0.0.20200105</p>
-</li>
-</ul>
-<p>Management:</p>
-<ul>
-<li>
-<p>add cache-busting params for noVNC url assets</p>
-</li>
-<li>
-<p>emhttpd: fix cryptsetup passphrase input</p>
-</li>
-<li>
-<p>network: disable IPv6 for an interface when its settings is &quot;IPv4 only&quot;.</p>
-</li>
-<li>
-<p>webgui: Management page: fixed typos in help text</p>
-</li>
-<li>
-<p>webgui: VM settings: fixed Apply button sometimes not working</p>
-</li>
-<li>
-<p>webgui: Dashboard: display CPU load full width when no HT</p>
-</li>
-<li>
-<p>webgui: Docker: show 'up-to-date' when status is unknown</p>
-</li>
-<li>
-<p>webgui: Fixed: handle race condition when updating share access rights in Edit User</p>
-</li>
-<li>
-<p>webgui: Docker: allow to set container port for custom bridge networks</p>
-</li>
-<li>
-<p>webgui: Better support for custom themes (not perfect yet)</p>
-</li>
-<li>
-<p>webgui: Dashboard: adjusted table positioning</p>
-</li>
-<li>
-<p>webgui: Add user name and user description verification</p>
-</li>
-<li>
-<p>webgui: Edit User: fix share access assignments</p>
-</li>
-<li>
-<p>webgui: Management page: remove UPnP conditional setting</p>
-</li>
-<li>
-<p>webgui: Escape shell arg when logging csrf mismatch</p>
-</li>
-<li>
-<p>webgui: Terminal button: give unsupported warning when Edge/MSIE is used</p>
-</li>
-<li>
-<p>webgui: Patched vulnerability in auth_request</p>
-</li>
-<li>
-<p>webgui: Docker: added new setting &quot;Host access to custom networks&quot;</p>
-</li>
-<li>
-<p>webgui: Patched vulnerability in template.php</p>
-</li>
-</ul>
-<p>版本变化 中文说明</p>
-<pre><code> 变化
-</code></pre>
-<p>版本6.8.1 2020-01-10</p>
-<p>发行版基础：<br>
--libuv：版本1.34.0</p>
-<p>-libvirt：版本5.10.0</p>
-<p>-mozilla-firefox：版本72.0.1（CVE-2019-17026，CVE-2019-17015，CVE-2019-17016，CVE-2019-17017，CVE-2019-17018，CVE-2019-17019，CVE-2019- 17020，CVE-2019-17021，CVE-2019-17022，CVE-2019-17023，CVE-2019-17024，CVE-2019-17025）</p>
-<p>-php：版本7.3.13（CVE-2019-11044 CVE-2019-11045 CVE-2019-11046 CVE-2019-11047 CVE-2019-11049 CVE-2019-11050）</p>
-<p>-qemu：版本4.2.0</p>
-<p>-samba：版本4.11.4</p>
-<p>-ttyd：版本20200102</p>
-<p>-线卫工具：版本1.0.20200102</p>
-<p>Linux内核：<br>
--版本4.19.94</p>
-<p>-kernel_firmware：版本20191218_c4586ff（带有其他Intel BT固件）</p>
-<p>-CONFIG_THUNDERBOLT：Thunderbolt支持</p>
-<p>-CONFIG_INTEL_WMI_THUNDERBOLT：英特尔WMI雷电强制电源驱动器</p>
-<p>-CONFIG_THUNDERBOLT_NET：通过Thunderbolt电缆联网</p>
-<p>-oot：Highpoint rr3740a：版本v1.19.0_19_04_04</p>
-<p>-oot：Highpoint r750：v1.2.11-18_06_26版[已恢复]</p>
-<p>-等待：wireguard：版本0.0.20200105</p>
-<p>管理：<br>
--为noVNC网址资产添加缓存清除参数</p>
-<p>-emhttpd：修复cryptsetup密码输入</p>
-<p>-网络：当接口的设置为“仅IPv4”时，禁用该接口的IPv6。</p>
-<p>-webgui：管理页面：修复了帮助文本中的错别字</p>
-<p>-webgui：VM设置：修复了“应用”按钮有时不起作用</p>
-<p>-webgui：仪表板：无HT时显示CPU负载全宽</p>
-<p>-webgui：Docker：状态未知时显示“最新”</p>
-<p>-webgui：已修复：在“编辑用户”中更新共享访问权限时处理竞争情况</p>
-<p>-webgui：Docker：允许为自定义桥网络设置容器端口</p>
-<p>-webgui：更好地支持自定义主题（尚不完善）</p>
-<p>-webgui：控制板：调整表位置</p>
-<p>-webgui：添加用户名和用户描述验证</p>
-<p>-webgui：编辑用户：修复共享访问分配</p>
-<p>-webgui：管理页面：删除UPnP条件设置</p>
-<p>-webgui：记录csrf不匹配时转义shell arg</p>
-<p>-webgui：终端按钮：使用Edge / MSIE时发出不受支持的警告</p>
-<p>-webgui：auth_request中的修补漏洞</p>
-<p>-webgui：Docker：添加了新设置“对自定义网络的主机访问”</p>
-<p>-webgui：template.php中的已修补漏洞</p>
-<p>注意：使用usb3.0 usb3.1 的u盘可能不支持。建议用2.0的优盘</p>
-<p>unRAID Server-6.8.1-x86_64 汉化包</p>
-<ol>
-<li>
-<p>先下载 unRAID Server-6.8.1-x86_64 汉化包 网盘下载地址</p>
-<p>外链: https://www.lanzous.com/b00z80brc  密码:e9qr</p>
-</li>
-<li>
-<p>切记，下载后请将：</p>
-<p>unRAIDServer-6.8.1-x86_64汉化包.A.rar   改为 unRAIDServer-6.8.1-x86_64汉化包.part1.rar<br>
-unRAIDServer-6.8.1-x86_64汉化包.B.rar   改为 unRAIDServer-6.8.1-x86_64汉化包.part2.rar</p>
-</li>
-<li>
-<p>然后再进行解压. 把2个汉化包文件 解压覆盖原文件即可（最好先备份旧英文版文件，以防万一）</p>
-</li>
-</ol>
-<p>压缩包解压密码为：52help.net</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[unraid6.7.2安装]]></title>
-        <id>https://newdy.cf/post/unraid672-an-zhuang/</id>
-        <link href="https://newdy.cf/post/unraid672-an-zhuang/">
-        </link>
-        <updated>2020-02-21T18:24:15.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://newdy.cf/post-images/1582309503734.png" alt="" loading="lazy"><br>
-注意 4 help 打开复制翻译 ,它就是一教程<br>
-<img src="https://newdy.cf/post-images/1582309522668.png" alt="" loading="lazy"><br>
-大佬说话简而言之，这里啰嗦一下<br>
-格式化U盘 格式FAT32 卷标 UNRAID 大写<br>
-用第一张图的第6个工具把unraid安装到U盘中<br>
-<img src="https://newdy.cf/post-images/1582309546445.png" alt="" loading="lazy"><br>
-将crack目录中的文件复制到U盘根目录，拔U盘，插到服务器，启动<br>
-找到服务器IP，浏览器直接IP进入，按图打开，找到 Flash GUID 后面的ID<br>
-<img src="https://newdy.cf/post-images/1582309577402.png" alt="" loading="lazy"><br>
-用第一张图中的第5个行成key,如第一张图中的3就是。<br>
-服务器关机，拔U盘插到操作电脑，把刚生成的BTRS.key复制到U盘的config文件中。完事<br>
-有大佬做了视频 53，对我这小白太有用处了，https://space.bilibili.com/28457?share_medium=android&amp;share_source=more&amp;bbid=ehksHyZDIRMmHn8dYR1hVmdVJF46SXpJek14infoc&amp;ts=1573127133669</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Watchtower - 自动更新 Docker 镜像与容器]]></title>
-        <id>https://newdy.cf/post/watchtower-zi-dong-geng-xin-docker-jing-xiang-yu-rong-qi/</id>
-        <link href="https://newdy.cf/post/watchtower-zi-dong-geng-xin-docker-jing-xiang-yu-rong-qi/">
-        </link>
-        <updated>2020-02-20T13:17:14.000Z</updated>
-        <summary type="html"><![CDATA[<p>前言<br>
-在早前部署Awesome TTRSS时,作者在docker-compose里配置了Watchtower,于是找到 Github 官方项目研究了下,根据官方文档简单整理了一下常用参数以备用.</p>
-<p>Watchtower 是一款实现自动化更新 Docker 镜像与容器的实用工具.它监控着所有正在运行的容器以及相关镜像,当检测本地镜像与镜像仓库中的镜像有差异时,会自动拉取最新镜像并使用最初部署时的参数重新启动相应的容器.</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>前言<br>
-在早前部署Awesome TTRSS时,作者在docker-compose里配置了Watchtower,于是找到 Github 官方项目研究了下,根据官方文档简单整理了一下常用参数以备用.</p>
-<p>Watchtower 是一款实现自动化更新 Docker 镜像与容器的实用工具.它监控着所有正在运行的容器以及相关镜像,当检测本地镜像与镜像仓库中的镜像有差异时,会自动拉取最新镜像并使用最初部署时的参数重新启动相应的容器.</p>
-<!-- more -->
-<p>containrrr/watchtower</p>
-<!-- more -->
-<p>部署<br>
-快速启动<br>
-以容器的方式启动 Watch­tower</p>
-<p>docker run -d <br>
---name watchtower <br>
--v /var/run/docker.sock:/var/run/docker.sock <br>
-containrrr/watchtower<br>
-清理旧镜像<br>
-镜像在更新后旧镜像标签会变为none,长期自动更新会导致过多的none镜像占用空间,加入--cleanup参数可以在每次更新后自动删除none镜像.</p>
-<p>docker run -d <br>
---name watchtower <br>
--v /var/run/docker.sock:/var/run/docker.sock <br>
-containrrr/watchtower <br>
---cleanup<br>
-指定容器更新<br>
-如无需自动更新所有稳定运行的容器,可以配置仅更新指定容器,只需要在命令后加上容器名.例如只更新nginx和redis.</p>
-<p>docker run -d <br>
---name watchtower <br>
--v /var/run/docker.sock:/var/run/docker.sock <br>
-containrrr/watchtower <br>
---cleanup <br>
-nginx redis<br>
-注意指定容器需填写 容器名 ,并非镜像名.由于启动容器时可能没有定义 --name 参数,请执行 docker ps 查询核对容器名.<br>
-指定容器排除更新<br>
-如需要更新大部分容器,而排除掉少数容器不更新,可以加上 --label=com.centurylinklabs.watchtower.enable=false 的参数.命令结尾加上不更新的容器名.例如希望自动更新所有容器,而不更新nginx和redis.</p>
-<p>docker run -d <br>
---name watchtower <br>
--v /var/run/docker.sock:/var/run/docker.sock <br>
---label=com.centurylinklabs.watchtower.enable=false <br>
-containrrr/watchtower <br>
---cleanup <br>
-nginx redis<br>
-注意指定容器需填写 容器名 ,并非镜像名.由于启动容器时可能没有定义 --name 参数,请执行 docker ps 查询核对容器名.<br>
-配置自动更新频率<br>
-Watch­tower 默认每 5 分钟轮询一次,可以使用以下参数配置更新的频率.</p>
-<p>--interval,-i 配置更新周期,默认300秒.<br>
---schedule,-s 配置定时更新,使用Cron表达式,例如&quot;0 0 4 * * *&quot;.即每天凌晨4点更新.<br>
-每小时更新一次</p>
-<p>docker run -d <br>
---name watchtower <br>
--v /var/run/docker.sock:/var/run/docker.sock <br>
-containrrr/watchtower <br>
---cleanup <br>
--i 3600<br>
-每天凌晨4点更新</p>
-<p>docker run -d <br>
---name watchtower <br>
--v /var/run/docker.sock:/var/run/docker.sock <br>
-containrrr/watchtower <br>
---cleanup <br>
--s &quot;0 0 4 * * *&quot;<br>
-手动更新<br>
-使用手动更新的方式,运行一次Watch­tower容器来更新所需的容器,更新后会自动删除本次运行的Watch­tower容器.只需要加上--rm和--run-once参数即可.同时也可以配合以上指定容器或指定排除容器的参数来使用.</p>
-<p>docker run --rm <br>
--v /var/run/docker.sock:/var/run/docker.sock <br>
---label=com.centurylinklabs.watchtower.enable=false <br>
-containrrr/watchtower <br>
---cleanup <br>
---run-once <br>
-nginx redis<br>
-注意指定容器需填写 容器名 ,并非镜像名.由于启动容器时可能没有定义 --name 参数,请执行 docker ps 查询核对容器名.<br>
-手动运行更新时会出现以下消息,表示正在更新,请耐心等待几分钟.</p>
-<p>time=&quot;2020-02-18T03:58:24Z&quot; level=info msg=&quot;Running a one time update.&quot;<br>
-随后提示找到更新镜像,停止容器,更新镜像,重启容器并移除旧镜像.至此更新完毕.</p>
-<p>time=&quot;2020-02-18T04:02:45Z&quot; level=info msg=&quot;Found new xxxx/xxxx:latest image (sha256:10383f5b5720d7e1fxxxx137034c69b7f6xxxxxxafcc4e9d508b561af77)&quot;<br>
-time=&quot;2020-02-18T04:02:45Z&quot; level=info msg=&quot;Stopping /xxxx (2e9ce1ebe319f3a35d80bxxxxxxxxxx6763ada155da957acb24fe76fc8a8c5) with SIGTERM&quot;<br>
-time=&quot;2020-02-18T04:02:46Z&quot; level=info msg=&quot;Creating /xxxx&quot;<br>
-time=&quot;2020-02-18T04:02:46Z&quot; level=info msg=&quot;Removing image sha256:ff4ee4caaa237174080c0d545xxxxxx</p>
 ]]></content>
     </entry>
 </feed>

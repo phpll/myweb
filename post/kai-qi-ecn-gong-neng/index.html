@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>开启ECN功能 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582736391634">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
+
+    <meta name="description" content="登录服务器，单击 开始 &gt; 运行，输入 cmd，进入命令行窗口。
+执行如下命令，查看TCP全局参数的信息。
+netsh interface tcp show global
+系统显示类似如下，则说明系统已经开启ECN功能
+
+执行如下命令..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582736391634" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">开启ECN功能</h2>
+            <div class="post-date">2020-02-26</div>
+            
+            <div class="post-content" v-pre>
+              <p>登录服务器，单击 开始 &gt; 运行，输入 cmd，进入命令行窗口。<br>
+执行如下命令，查看TCP全局参数的信息。<br>
+netsh interface tcp show global<br>
+系统显示类似如下，则说明系统已经开启ECN功能</p>
+<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582652009787.png" alt="" loading="lazy"></figure>
+<p>执行如下命令，关闭ECN功能。<br>
+netsh interface tcp set global ecncapability=disabled<br>
+执行如下命令，开启ECN功能<br>
+netsh interface tcp set global ecncapability=enabled<br>
+执行如下命令，查看TCP全局参数的信息，确认 ECN 功能 为 disabled。<br>
+netsh interface tcp show global</p>
+<p>更多信息<br>
+ECN的作用主要是在网络出现拥塞时通知TCP的传输层，减少TCP连接中被丢弃的数据包数量，达到避免重传、减少等待时间、减少网络抖动的效果。但是有些网络设备的配置规则不能与ECN兼容，例如打印机、路由器。这些设备会将ECN交换包视为非法，同时丢弃已设置ECN的数据包，导致网络出现问题。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/gong-gong-dns-fu-wu-qi-ip-di-zhi/">
+                  <h3 class="post-title">
+                    公共 DNS 服务器 IP 地址
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

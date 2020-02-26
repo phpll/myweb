@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>MySQL（MariaDB）的 SSL 加密复制 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1582736391634">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
+
+    <meta name="description" content="在默认的主从复制过程或远程连接到MySQL/MariaDB所有的链接通信中的数据都是明文的，在局域网内连接倒问题不大；要是在外网里访问数据或则复制，则安全隐患会被放大很多。由于项目要求需要直接和外网的一台实例进行同步。所以本文介绍下通过SS..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1582736391634" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">MySQL（MariaDB）的 SSL 加密复制</h2>
+            <div class="post-date">2020-02-24</div>
+            
+            <div class="post-content" v-pre>
+              <p>在默认的主从复制过程或远程连接到MySQL/MariaDB所有的链接通信中的数据都是明文的，在局域网内连接倒问题不大；要是在外网里访问数据或则复制，则安全隐患会被放大很多。由于项目要求需要直接和外网的一台实例进行同步。所以本文介绍下通过SSL加密的方式进行复制的方法，来进一步提高数据的安全性。本文会一起介绍MySQL和MariaDB。</p>
+<p>环境搭建：</p>
+<p>默认情况下ssl都是关闭的，要是have_ssl显示NO，则表示数据库不支持SSL，需要重新编译安装来支持它，显示为DISABLED表示支持SSL，但没有开启。</p>
+<p>复制代码</p>
+<blockquote>
+<p>show variables like '%ssl%';                                                                                                  +---------------+----------+<br>
+| Variable_name | Value    |<br>
++---------------+----------+<br>
+| have_openssl  | DISABLED |<br>
+| have_ssl      | DISABLED |<br>
+| ssl_ca        |          |<br>
+| ssl_capath    |          |<br>
+| ssl_cert      |          |<br>
+| ssl_cipher    |          |<br>
+| ssl_key       |          |<br>
++---------------+----------+<br>
+复制代码<br>
+现在来开启SSL，在配置文件的mysqld选项组里面添加：</p>
+</blockquote>
+<p>ssl<br>
+重启数据库，再次查看：</p>
+<p>复制代码<br>
+show variables like '%ssl%';<br>
++---------------+-------+<br>
+| Variable_name | Value |<br>
++---------------+-------+<br>
+| have_openssl  | YES   |<br>
+| have_ssl      | YES   |<br>
+| ssl_ca        |       |<br>
+| ssl_capath    |       |<br>
+| ssl_cert      |       |<br>
+| ssl_cipher    |       |<br>
+| ssl_key       |       |<br>
++---------------+-------+<br>
+复制代码<br>
+接着就是配置SSL的重点了：</p>
+<p>1：在主服务器上创建CA证书：</p>
+<p>openssl genrsa 2048 &gt; ca-key.pem</p>
+<p>openssl req -new -x509 -nodes -days 1000 -key ca-key.pem &gt; ca-cert.pem<br>
+2：在主服务器上创建服务端的证书：</p>
+<p>openssl req -newkey rsa:2048 -days 1000 -nodes -keyout server-key.pem &gt; server-req.pem</p>
+<p>openssl x509 -req -in server-req.pem -days 1000 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 &gt; server-cert.pem<br>
+3：在主服务器上创建客户端的证书：</p>
+<p>openssl req -newkey rsa:2048 -days 1000 -nodes -keyout client-key.pem &gt; client-req.pem</p>
+<p>openssl x509 -req -in client-req.pem -days 1000 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 &gt; client-cert.pem<br>
+上面的操作都是在主上执行的，并且都在/etc/mysql/ 目录下执行的。这里需要注意的是MySQL和MariaDB不同：</p>
+<p>MySQL在生成上面证书的时候需要输入大量用户信息，在CA上创建证书要注意所有的用户信息要和CA中的一致，从国家到部门都要相同，否则会造成证书无法使用，直接全部默认回车即可。要是用户信息一样则MariaDB会报错：</p>
+<p>ERROR 2026 (HY000): SSL connection error: error:00000001:lib(0):func(0):reason(1)<br>
+和</p>
+<p>[ERROR] Slave I/O: error connecting to master ... - retry-time: 60  retries: 86400  message: SSL connection error: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed, Internal MariaDB error code: 2026<br>
+MariaDB在生成上面证书的时候也是需要输入大量用户信息，和MySQL不同的是输入的用户信息服务端和客户端不能一致。即服务端输入和客户端输入不一样。具体原因见这里，最后可以通过：</p>
+<p>openssl verify -CAfile /etc/mysql/ca-cert.pem /etc/mysql/server-cert.pem /etc/mysql/client-cert.pem<br>
+验证MariaDB证书的有效性。好了，所有的证书已经生成，那么在主上需要修改配置文件，把生成的证书配置起来：</p>
+<p>ssl-ca=/etc/mysql/ca-cert.pem<br>
+ssl-cert=/etc/mysql/server-cert.pem<br>
+ssl-key=/etc/mysql/server-key.pem<br>
+并且把生成的证书：ca-cert.pem，client-cert.pem，client-key.pem 复制给从服务器。</p>
+<p>重启主服务器，查看SSL的情况：</p>
+<p>复制代码</p>
+<blockquote>
+<p>show variables like '%ssl%';<br>
++---------------+----------------------------+<br>
+| Variable_name | Value                      |<br>
++---------------+----------------------------+<br>
+| have_openssl  | DISABLED                   |<br>
+| have_ssl      | DISABLED                   |<br>
+| ssl_ca        | /etc/mysql/ca-cert.pem     |<br>
+| ssl_capath    |                            |<br>
+| ssl_cert      | /etc/mysql/server-cert.pem |<br>
+| ssl_cipher    |                            |<br>
+| ssl_key       | /etc/mysql/server-key.pem  |<br>
++---------------+----------------------------+<br>
+复制代码<br>
+发现have_ssl变成了DISABLED，查看错误日志：</p>
+</blockquote>
+<p>SSL error: Unable to get private key from '/etc/mysql/server-key.pem'<br>
+141229 11:09:02 [Warning] Failed to setup SSL<br>
+141229 11:09:02 [Warning] SSL error: Unable to get private key<br>
+发现服务端的key不可用，在网上到了解决办法，大家可以自己看：http://askubuntu.com/questions/194074/enabling-ssl-in-mysql，概括的说就是openssl新版本的变化导致的，这里有2个解决办法来重新生成server-key.pem：</p>
+<p>方法1：openssl rsa</p>
+<p>openssl rsa -in server-key.pem -out server-key.pem<br>
+再次查看SSL情况：</p>
+<p>复制代码</p>
+<blockquote>
+<p>show variables like '%ssl%';<br>
++---------------+----------------------------+<br>
+| Variable_name | Value                      |<br>
++---------------+----------------------------+<br>
+| have_openssl  | YES                        |<br>
+| have_ssl      | YES                        |<br>
+| ssl_ca        | /etc/mysql/ca-cert.pem     |<br>
+| ssl_capath    |                            |<br>
+| ssl_cert      | /etc/mysql/server-cert.pem |<br>
+| ssl_cipher    |                            |<br>
+| ssl_key       | /etc/mysql/server-key.pem  |<br>
++---------------+----------------------------+<br>
+复制代码<br>
+方法2：这里也可以直接安装openssl的0.9.8x版本进行证书生成。</p>
+</blockquote>
+<p>wget http://www.openssl.org/source/openssl-0.9.8x.tar.gz<br>
+tar xvfz openssl-0.9.8x.tar.gz<br>
+cd openssl-0.9.8x<br>
+./config --prefix=/usr/local/openssl-0.9.8<br>
+make<br>
+make install<br>
+本文是通过方法1来进行解决的。</p>
+<p>到此在主上的操作完成，再生成一个复制帐号：REQUIRE SSL</p>
+<p>GRANT REPLICATION SLAVE ON <em>.</em> TO 'rep'@'192.168.200.%' IDENTIFIED BY '123456' REQUIRE SSL;<br>
+接着就去从上配置。之前已经把生成的证书给了从服务器，那么在配置之前可以用SSL连接主服务器试试：</p>
+<p>$mysql --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem -h192.168.200.245 -urep -p<br>
+Enter password:<br>
+SSL error: Unable to get private key from 'client-key.pem'<br>
+ERROR 2026 (HY000): SSL connection error<br>
+同理，也是SSL的问题导致的，重新生成client-key.pem，方法同重新生成server-key.pem一样：</p>
+<p>openssl rsa -in client-key.pem -out client-key.pem<br>
+继续用SSL测试连接：</p>
+<p>复制代码<br>
+$mysql --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem -h192.168.200.245 -urep -p<br>
+Enter password:<br>
+Welcome to the MySQL monitor.  Commands end with ; or \g.<br>
+Your MySQL connection id is 763<br>
+Server version: 5.5.35-0ubuntu0.12.04.2-log (Ubuntu)</p>
+<p>Copyright (c) 2000, 2014, Oracle and/or its affiliates. All rights reserved.</p>
+<p>Oracle is a registered trademark of Oracle Corporation and/or its<br>
+affiliates. Other names may be trademarks of their respective<br>
+owners.</p>
+<p>Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.</p>
+<h2 id="mysql-s">mysql&gt; \s</h2>
+<p>mysql  Ver 14.14 Distrib 5.5.37, for debian-linux-gnu (x86_64) using readline 6.2</p>
+<p>Connection id:        763<br>
+Current database:<br>
+Current user:        rep@192.168.200.212<br>
+SSL:            Cipher in use is DHE-RSA-AES256-SHA<br>
+Current pager:        stdout<br>
+Using outfile:        ''<br>
+Using delimiter:    ;<br>
+Server version:        5.5.35-0ubuntu0.12.04.2-log (Ubuntu)<br>
+Protocol version:    10<br>
+Connection:        192.168.200.245 via TCP/IP<br>
+Server characterset:    utf8mb4<br>
+Db     characterset:    utf8mb4<br>
+Client characterset:    utf8<br>
+Conn.  characterset:    utf8<br>
+TCP port:        3306<br>
+Uptime:            22 min 52 sec</p>
+<p>Threads: 3  Questions: 2325  Slow queries: 1  Opens: 7483  Flush tables: 1  Open tables: 100  Queries per second avg: 1.694<br>
+复制代码<br>
+SSL测试连接成功，并且登入的SSL协议是：Cipher in use is DHE-RSA-AES256-SHA</p>
+<p>继续在从上配置SSL：</p>
+<p>ssl<br>
+ssl-ca=/etc/mysql/ca-cert.pem<br>
+ssl-cert=/etc/mysql/client-cert.pem<br>
+ssl-key=/etc/mysql/client-key.pem<br>
+查看SSL是否被支持：</p>
+<p>复制代码</p>
+<blockquote>
+<p>show variables like '%ssl%';<br>
++---------------+----------------------------+<br>
+| Variable_name | Value                      |<br>
++---------------+----------------------------+<br>
+| have_openssl  | YES                        |<br>
+| have_ssl      | YES                        |<br>
+| ssl_ca        | /etc/mysql/ca-cert.pem     |<br>
+| ssl_capath    |                            |<br>
+| ssl_cert      | /etc/mysql/client-cert.pem |<br>
+| ssl_cipher    |                            |<br>
+| ssl_key       | /etc/mysql/client-key.pem  |<br>
++---------------+----------------------------+<br>
+复制代码<br>
+从上SSL也被正确支持，那么最后开始配置主从replicate。在从上CHANGE:</p>
+</blockquote>
+<p>CHANGE MASTER TO MASTER_HOST='192.168.200.245', MASTER_USER='rep', MASTER_PASSWORD='123456', MASTER_LOG_FILE='mysql-bin.000042', MASTER_LOG_POS=521, MASTER_SSL=1, MASTER_SSL_CA = '/etc/mysql/ca-cert.pem', MASTER_SSL_CERT = '/etc/mysql/client-cert.pem', MASTER_SSL_KEY = '/etc/mysql/client-key.pem'<br>
+测试：</p>
+<p>M：</p>
+<p>复制代码</p>
+<blockquote>
+<p>create table tmp_1229(id int,name varchar(100))default charset utf8;</p>
+</blockquote>
+<blockquote>
+<p>insert into tmp_1229 values(1,'a'),(2,'b'),(3,'c');</p>
+</blockquote>
+<blockquote>
+<p>select * from tmp_1229;<br>
++------+------+<br>
+| id   | name |<br>
++------+------+<br>
+|    1 | a    |<br>
+|    2 | b    |<br>
+|    3 | c    |<br>
++------+------+<br>
+复制代码<br>
+S:</p>
+</blockquote>
+<p>复制代码</p>
+<blockquote>
+<p>select * from tmp_1229;<br>
++------+------+<br>
+| id   | name |<br>
++------+------+<br>
+|    1 | a    |<br>
+|    2 | b    |<br>
+|    3 | c    |<br>
++------+------+</p>
+</blockquote>
+<p>复制代码<br>
+以上同步成功。</p>
+<p>总结：</p>
+<pre><code>  SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。复制默认是明文进行传输的，通过SSL加密可以大大提高数据的安全性。在上面的过程中，遇到一些问题：
+</code></pre>
+<p>1：openssl版本问题引起的证书不可用，文中已经说明解决办法。</p>
+<p>2：MariaDB 证书的不可用，原因是生成服务端客户端证书的时候输入一致导致的，文中也说明了解决办法。</p>
+<p>3：要是配置有问题，在用SSL登陆的时候，可以发现错误信息，可以直接定位到哪里出问题。</p>
+<p>ssl登陆：<br>
+mysql --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem -h192.168.200.245 -urep -p<br>
+4：在配置MariaDB的时候，在生成证书的时候可以直接先验证，查看是否有问题。</p>
+<p>验证：<br>
+openssl verify -CAfile /etc/mysql/ca-cert.pem /etc/mysql/server-cert.pem /etc/mysql/client-cert.pem<br>
+/etc/mysql/server-cert.pem: OK<br>
+/etc/mysql/client-cert.pem: OK</p>
+<p>5：要是openssl版本没有问题，不需要再次通过openssl rsa 再次生成，具体的安装配置方法参照本文章即可。</p>
+<p>更新（2016.3.19）：</p>
+<p>今天做了MySQL5.7的SSL复制，5.7安装的时候就已经在数据目录下面生成了上面的这些pem文件，所以直接把client的pem复制到从上去就可以了（注意复制过去之后修改权限，属主改成mysql即可）。否则报错：</p>
+<p>Failed to set up SSL because of the following SSL library error: Unable to get certificate ... server-cert.pem<br>
+Failed to set up SSL because of the following SSL library error: Unable to get private key ... server-cert.pem</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/si-ge-fang-fa-chi-xian-xia-zai-chrome-tuo-zhan-cheng-xu/">
+                  <h3 class="post-title">
+                    四个方法离线下载 Chrome 拓展程序
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
