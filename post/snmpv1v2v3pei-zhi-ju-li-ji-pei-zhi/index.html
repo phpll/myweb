@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>SNMP（V1/V2/V3）配置举例及配置 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1583040226828">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
+
+    <meta name="description" content="SNMPv1和SNMPv2c配置举例：
+SNMPv1和SNMPv2c的工作原理基本一致，要求配置的命令也是一致的，下面是SNMPv1和SNMPv2配置举例。
+1、配置Switch的接口IP地址，使其和网管站之间路由可达
+ system-vi..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1583040226828" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">SNMP（V1/V2/V3）配置举例及配置</h2>
+            <div class="post-date">2020-02-27</div>
+            
+            <div class="post-content" v-pre>
+              <p>SNMPv1和SNMPv2c配置举例：<br>
+SNMPv1和SNMPv2c的工作原理基本一致，要求配置的命令也是一致的，下面是SNMPv1和SNMPv2配置举例。<br>
+1、配置Switch的接口IP地址，使其和网管站之间路由可达<br>
+<HUAWEI> system-view<br>
+[HUAWEI] sysname Switch<br>
+[Switch] vlan 100<br>
+[Switch-vlan100] quit<br>
+[Switch] interface gigabitethernet 0/0/1<br>
+[Switch-GigabitEthernet0/0/1] port link-type hybrid<br>
+[Switch-GigabitEthernet0/0/1] port hybrid pvid vlan 100<br>
+[Switch-GigabitEthernet0/0/1] port hybrid untagged vlan 100<br>
+[Switch-GigabitEthernet0/0/1] quit<br>
+[Switch] interface vlanif 100<br>
+[Switch-Vlanif100] ip address 10.1.2.1 24<br>
+[Switch-Vlanif100] quit<br>
+2、 配置Switch的SNMP版本<br>
+[Switch] snmp-agent sys-info version v1    //snmp-agent sys-info version v2c表示配置为snmpv2c的版本<br>
+3、 配置团体名<br>
+[Switch] snmp-agent community write adminnms2<br>
+4、 配置告警主机<br>
+[Switch] snmp-agent target-host trap address udp-domain 10.1.1.2 params securityname adminnms2        //params securityname表示在网管侧显示的用户安全名<br>
+对于SNMPv1和SNMPv2c版本，不需要通过securityname参数的校验，网管可以接收所有告警主机发送的告警信息。该参数主要用来区分在同一个IP地址创建了多个告警主机场景下的多个告警主机</p>
+<p>上面的配置为SNMPv1/SNMPv2c必须配置的选项，针对其他的配置，都是按照需求来进行，比如限制网管对设备的管理权限。</p>
+<h1 id="配置acl使nms2可以管理交换机nms1不允许管理交换机">配置ACL，使NMS2可以管理交换机，NMS1不允许管理交换机。</h1>
+<p>[Switch] acl 2001<br>
+[Switch-acl-basic-2001] rule 5 permit source 10.1.1.2 0.0.0.0<br>
+[Switch-acl-basic-2001] rule 6 deny source 10.1.1.1 0.0.0.0<br>
+[Switch-acl-basic-2001] quit</p>
+<h1 id="配置mib视图限制nms2可以管理交换机上除rmon之外的节点">配置MIB视图，限制NMS2可以管理交换机上除RMON之外的节点。</h1>
+<p>[Switch] snmp-agent mib-view excluded allextrmon 1.3.6.1.2.1.16</p>
+<h1 id="配置团体名并引用acl和mib视图">配置团体名并引用ACL和MIB视图。</h1>
+<p>[Switch] snmp-agent community write adminnms2 mib-view allextrmon acl 2001   //配置访问权限，使NMS2可以管理交换机上RMON之外的节点</p>
+<p>SNMPV3配置举例：<br>
+SNMPv3的实现原理和SNMPv1/SNMPv2c基本一致，唯一的区别是SNMPv3增加了身份验证和加密处理，下面是SNMPv3配置举例：<br>
+1、配置Switch的接口IP地址，使其和网管站之间路由可达<br>
+<HUAWEI> system-view<br>
+[HUAWEI] sysname Switch<br>
+[Switch] vlan 100<br>
+[Switch-vlan100] quit<br>
+[Switch] interface gigabitethernet 0/0/1<br>
+[Switch-GigabitEthernet0/0/1] port link-type hybrid<br>
+[Switch-GigabitEthernet0/0/1] port hybrid pvid vlan 100<br>
+[Switch-GigabitEthernet0/0/1] port hybrid untagged vlan 100<br>
+[Switch-GigabitEthernet0/0/1] quit<br>
+[Switch] interface vlanif 100<br>
+[Switch-Vlanif100] ip address 10.1.2.1 24<br>
+[Switch-Vlanif100] quit<br>
+2、配置Switch的SNMP版本<br>
+[Switch] snmp-agent sys-info version v3    //可不配置，默认为V3版本<br>
+3、配置团体名<br>
+[Switch] snmp-agent community write adminnms2<br>
+4、配置用户组<br>
+[Switch] snmp-agent group v3 admin privacy   //配置用户组的安全方式为privacy，表示既认证又加密，admin表示用户组的名称<br>
+5、配置用户相关信息</p>
+<h1 id="配置用户并关联用户组">配置用户并关联用户组。</h1>
+<p>[Switch] snmp-agent usm-user v3 nms2-admin group admin   // nms2-admin表示用户名，admin表示用户组名称，与前一条命令中配置保持一致</p>
+<h1 id="对用户的数据进行认证认证密码为authe1234-因为用户的安全级别必须-用户组的安全级别上面用户组方式为既认证又加密所以下面用户必须同时配置认证和加密">对用户的数据进行认证，认证密码为Authe@1234。（因为用户的安全级别必须 &gt;= 用户组的安全级别，上面用户组方式为既认证又加密，所以下面用户必须同时配置认证和加密）</h1>
+<p>[Switch] snmp-agent usm-user v3 nms2-admin authentication-mode sha<br>
+Please configure the authentication password (8-64)<br>
+Enter Password:                  //输入认证密码，本例的认证密码为：Authe@1234。<br>
+Confirm Password:                //输入认证密码，本例的认证密码为：Authe@1234。</p>
+<h1 id="对用户的数据进行加密加密密码为priva1234">对用户的数据进行加密，加密密码为Priva@1234。</h1>
+<p>[Switch] snmp-agent usm-user v3 nms2-admin privacy-mode aes128<br>
+Please configure the privacy password (8-64)<br>
+Enter Password:                  //输入加密密码，本例的加密密码为：Priva@1234。<br>
+Confirm Password:                //输入加密密码，本例的加密密码为：Priva@1234。<br>
+5、配置告警主机<br>
+[Switch] snmp-agent target-host trap address udp-domain 10.1.1.2 params securityname nms2-admin v3 privacy</p>
+<p>说明1：对于SNMPv3版本，securityname必须配置为用户名。告警主机和网管都需要配置此参数，如果网管要接收告警主机发送的告警，必须通过该参数（包括认证和加密的方式）的校验，否则告警无法接收。<br>
+说明2：由于上面用户和用户组的基本都是privacy（既认证又加密），所以这里告警主机的安全级别必须为privacy。</p>
+<p>SNMPV3用户，用户组及告警主机安全级别配置说明<br>
+设备具备三种属性，按照安全性从高到低为：<br>
+·     1级：privacy （认证且加密）<br>
+·     2级：authentication （只认证）<br>
+·     3级：noauthentication （不认证不加密）</p>
+<p>要求用户的安全级别必须 &gt;=告警主机的安全级别&gt;= 用户组的安全级别<br>
+·     如果用户组的安全级别是privacy，那么告警主机和用户的安全级别一定得是privacy。<br>
+·     如果用户组的安全级别是authentication，那么告警主机的安全级别是authentication，用户的安全级别可以是authentication和privacy。<br>
+·     如果用户组的安全级别是authentication，告警主机的安全级别是privacy，那么用户的安全级别是privacy。<br>
+·     如果用户组的安全级别是noauthentication，告警主机的安全级别是noauthentication，那么用户的安全级别可以是noauthentication、authentication、privacy。<br>
+·     如果用户组的安全级别是noauthentication，告警主机的安全级别是authentication，那么用户的安全级别可以是authentication和privacy。<br>
+·     如果用户组的安全级别是noauthentication，告警主机的安全级别是privacy，那么用户的安全级别是privacy。</p>
+<p>上面的配置为SNMPV3必须配置的选项，针对其他的配置，都是按照需求来进行，比如限制网管对设备的管理权限。</p>
+<h1 id="配置acl使nms2可以管理交换机nms1不允许管理交换机-2">配置ACL，使NMS2可以管理交换机，NMS1不允许管理交换机。</h1>
+<p>[Switch] acl 2001<br>
+[Switch-acl-basic-2001] rule 5 permit source 10.1.1.2 0.0.0.0<br>
+[Switch-acl-basic-2001] rule 6 deny source 10.1.1.1 0.0.0.0<br>
+[Switch-acl-basic-2001] quit</p>
+<h1 id="配置mib视图限制nms2可以管理交换机上除rmon之外的节点-2">配置MIB视图，限制NMS2可以管理交换机上除RMON之外的节点。</h1>
+<p>[Switch] snmp-agent mib-view included isoview iso</p>
+<h1 id="配置用户组并引用acl和mib视图">配置用户组并引用ACL和MIB视图。</h1>
+<p>[Switch] snmp-agent group v3 admin privacy write-view isoview acl 2001  //配置访问权限，使NMS2可以管理ISO节点</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/yi-tiao-wang-xian-you-ba-gen-xian-kong-xian-de-si-gen-neng-zuo-shi-me/">
+                  <h3 class="post-title">
+                    一条网线有八根线，空闲的四根能做什么？
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

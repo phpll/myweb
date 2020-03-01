@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>让你的黑群晖更加完美，用M.2 NVME SSD做缓存 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1583040226828">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
+
+    <meta name="description" content="黑群晖一直以来有一个不完美的点就是无法使用缓存功能，目前使用国外大神做的这个补丁已经可以完美解决这个问题
+一、下载安装脚本
+https://github.com/padavan01/lede/blob/master/libNVMEpatch..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1583040226828" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">让你的黑群晖更加完美，用M.2 NVME SSD做缓存</h2>
+            <div class="post-date">2020-03-01</div>
+            
+            <div class="post-content" v-pre>
+              <p>黑群晖一直以来有一个不完美的点就是无法使用缓存功能，目前使用国外大神做的这个补丁已经可以完美解决这个问题</p>
+<p>一、下载安装脚本<br>
+https://github.com/padavan01/lede/blob/master/libNVMEpatch.zip</p>
+<p>二、不管你用FTP也好， DSM文件管理器也好， 把这个libNVMEpatch.sh 拷进你的黑群晖里， 比如， copy 进共享文件夹 DATA</p>
+<p>三、SSH登录后使用脚本<br>
+sudo -i<br>
+找到你的共享文件夹比如DATA， 我的在/volume1/DATA</p>
+<p>cd /usr/local/etc/rc.d/<br>
+cp /volume1/DATA/libNVMEpatch.sh .<br>
+chmod 755 libNVMEpatch.sh<br>
+退出SSH</p>
+<p>注意这里libNVMEpatch.sh在rc.d目录下， 已经成了一个自启动执行文件， 但其实这主要是防止一些小版本升级不小心改到了Nvme驱动二进制文件， 把patch覆盖了。 如果你能忍住不升级， 只执行一次也是可以的</p>
+<p>接下来就是重启黑群， 再次开机后，登陆DSM，打开“存储空间管理员”， 可以看到HDD/SSD栏下面， 赫然已经认出了两块Nvme缓存设备！！</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/snmp-dui-jie-ai-kuai-kua-san-ceng-ying-yong-gong-neng-j35j50/">
+                  <h3 class="post-title">
+                    snmp对接爱快跨三层应用功能 --- J35/J50 
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>snmp对接爱快跨三层应用功能 --- J35/J50  | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1583040226828">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
+
+    <meta name="description" content="一、介绍
+在跨三层设备的环境下，路由获取三层设备下的MAC地址一般为三层设备wan口的MAC地址，针对这种情况，爱快推出了跨三层应用功能，主要解决获取三层下的MAC地址及web认证问题
+本文介绍下爱快与J50交换机之间连接后，具体需要怎么设..." />
+    <meta name="keywords" content="snmp" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1583040226828" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">snmp对接爱快跨三层应用功能 --- J35/J50 </h2>
+            <div class="post-date">2020-02-27</div>
+            
+            <div class="post-content" v-pre>
+              <p>一、介绍<br>
+在跨三层设备的环境下，路由获取三层设备下的MAC地址一般为三层设备wan口的MAC地址，针对这种情况，爱快推出了跨三层应用功能，主要解决获取三层下的MAC地址及web认证问题<br>
+本文介绍下爱快与J50交换机之间连接后，具体需要怎么设置</p>
+<p>二、网络拓扑<br>
+<img src="https://newdy.cf/post-images/1582799650812.png" alt="" loading="lazy"><br>
+三、具体配置<br>
+1：爱快路由配置步骤：<br>
+①：网络设置--静态路由，添加一条回指路由，指向J50内网设备</p>
+<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582799734596.png" alt="" loading="lazy"></figure>
+<p>②：应用工具--跨三层应用，开启服务</p>
+<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582799739233.png" alt="" loading="lazy"></figure>
+<p>注：由于三层设备还未开启SNMP服务，所以这里会显示状态为异常，三层配置成功后会自动检测成功</p>
+<p>功能服务：勾选开启<br>
+功能状态：自动检测工作状态，检测间隔时间为5-10S<br>
+检测异常时，说明配置路由或三层设备的配置不一致<br>
+检测正常时，说明功能可以正常使用<br>
+SNMP服务器IP：J50的上联口iP地址，这里填写192.168.15.248<br>
+SNMP服务监听端口：默认为161，如无特殊需求可不修改<br>
+SNMP协议版本：需和J50配置一致，这里选择V2<br>
+团体名：需要和J50配置的团体名一致，如无特殊需求可不修改<br>
+2：IK-J50配置步骤：<br>
+①：配置vlan100、vlan200，指定接口10为access上联口，vid为100，指定接口20为access下联口，vid为200<br>
+<img src="https://newdy.cf/post-images/1582799758999.png" alt="" loading="lazy"></p>
+<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582799776939.png" alt="" loading="lazy"></figure>
+<p>②：配置vlan100的IP为192.168.15.248，vlan200的IP为192.168.200.1<br>
+<img src="https://newdy.cf/post-images/1582799836027.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582799843132.png" alt="" loading="lazy"><br>
+③：开启DHCP服务端，配置地址池、租约和DNS<br>
+<img src="https://newdy.cf/post-images/1582799903233.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582799909374.png" alt="" loading="lazy"><br>
+④：配置静态路由</p>
+<figure data-type="image" tabindex="4"><img src="https://newdy.cf/post-images/1582799956221.png" alt="" loading="lazy"></figure>
+<p>⑤：开启SNMP服务，同时配置SNMP版本<br>
+<img src="https://newdy.cf/post-images/1582799963324.png" alt="" loading="lazy"><br>
+⑥：配置SNMP团体名及访问规则：<br>
+<img src="https://newdy.cf/post-images/1582799996351.png" alt="" loading="lazy"><br>
+四、最终效果展示<br>
+跨三层应用界面：</p>
+<figure data-type="image" tabindex="5"><img src="https://newdy.cf/post-images/1582800053303.png" alt="" loading="lazy"></figure>
+<p>三层下电脑详情：<br>
+<img src="https://newdy.cf/post-images/1582800057552.png" alt="" loading="lazy"><br>
+爱快终端监控显示：<br>
+<img src="https://newdy.cf/post-images/1582800083530.png" alt="" loading="lazy"></p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://newdy.cf/tag/qn2qMoNvx/" class="tag">
+                    snmp
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/snmpv1v2v3pei-zhi-ju-li-ji-pei-zhi/">
+                  <h3 class="post-title">
+                    SNMP（V1/V2/V3）配置举例及配置
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

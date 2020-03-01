@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-02-26T16:59:58.848Z</updated>
+    <updated>2020-03-01T05:23:52.616Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,178 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[让你的黑群晖更加完美，用M.2 NVME SSD做缓存]]></title>
+        <id>https://newdy.cf/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/</id>
+        <link href="https://newdy.cf/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/">
+        </link>
+        <updated>2020-03-01T05:18:42.000Z</updated>
+        <content type="html"><![CDATA[<p>黑群晖一直以来有一个不完美的点就是无法使用缓存功能，目前使用国外大神做的这个补丁已经可以完美解决这个问题</p>
+<p>一、下载安装脚本<br>
+https://github.com/padavan01/lede/blob/master/libNVMEpatch.zip</p>
+<p>二、不管你用FTP也好， DSM文件管理器也好， 把这个libNVMEpatch.sh 拷进你的黑群晖里， 比如， copy 进共享文件夹 DATA</p>
+<p>三、SSH登录后使用脚本<br>
+sudo -i<br>
+找到你的共享文件夹比如DATA， 我的在/volume1/DATA</p>
+<p>cd /usr/local/etc/rc.d/<br>
+cp /volume1/DATA/libNVMEpatch.sh .<br>
+chmod 755 libNVMEpatch.sh<br>
+退出SSH</p>
+<p>注意这里libNVMEpatch.sh在rc.d目录下， 已经成了一个自启动执行文件， 但其实这主要是防止一些小版本升级不小心改到了Nvme驱动二进制文件， 把patch覆盖了。 如果你能忍住不升级， 只执行一次也是可以的</p>
+<p>接下来就是重启黑群， 再次开机后，登陆DSM，打开“存储空间管理员”， 可以看到HDD/SSD栏下面， 赫然已经认出了两块Nvme缓存设备！！</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[snmp对接爱快跨三层应用功能 --- J35/J50 ]]></title>
+        <id>https://newdy.cf/post/snmp-dui-jie-ai-kuai-kua-san-ceng-ying-yong-gong-neng-j35j50/</id>
+        <link href="https://newdy.cf/post/snmp-dui-jie-ai-kuai-kua-san-ceng-ying-yong-gong-neng-j35j50/">
+        </link>
+        <updated>2020-02-27T10:33:39.000Z</updated>
+        <content type="html"><![CDATA[<p>一、介绍<br>
+在跨三层设备的环境下，路由获取三层设备下的MAC地址一般为三层设备wan口的MAC地址，针对这种情况，爱快推出了跨三层应用功能，主要解决获取三层下的MAC地址及web认证问题<br>
+本文介绍下爱快与J50交换机之间连接后，具体需要怎么设置</p>
+<p>二、网络拓扑<br>
+<img src="https://newdy.cf/post-images/1582799650812.png" alt="" loading="lazy"><br>
+三、具体配置<br>
+1：爱快路由配置步骤：<br>
+①：网络设置--静态路由，添加一条回指路由，指向J50内网设备</p>
+<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582799734596.png" alt="" loading="lazy"></figure>
+<p>②：应用工具--跨三层应用，开启服务</p>
+<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582799739233.png" alt="" loading="lazy"></figure>
+<p>注：由于三层设备还未开启SNMP服务，所以这里会显示状态为异常，三层配置成功后会自动检测成功</p>
+<p>功能服务：勾选开启<br>
+功能状态：自动检测工作状态，检测间隔时间为5-10S<br>
+检测异常时，说明配置路由或三层设备的配置不一致<br>
+检测正常时，说明功能可以正常使用<br>
+SNMP服务器IP：J50的上联口iP地址，这里填写192.168.15.248<br>
+SNMP服务监听端口：默认为161，如无特殊需求可不修改<br>
+SNMP协议版本：需和J50配置一致，这里选择V2<br>
+团体名：需要和J50配置的团体名一致，如无特殊需求可不修改<br>
+2：IK-J50配置步骤：<br>
+①：配置vlan100、vlan200，指定接口10为access上联口，vid为100，指定接口20为access下联口，vid为200<br>
+<img src="https://newdy.cf/post-images/1582799758999.png" alt="" loading="lazy"></p>
+<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582799776939.png" alt="" loading="lazy"></figure>
+<p>②：配置vlan100的IP为192.168.15.248，vlan200的IP为192.168.200.1<br>
+<img src="https://newdy.cf/post-images/1582799836027.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582799843132.png" alt="" loading="lazy"><br>
+③：开启DHCP服务端，配置地址池、租约和DNS<br>
+<img src="https://newdy.cf/post-images/1582799903233.png" alt="" loading="lazy"><br>
+<img src="https://newdy.cf/post-images/1582799909374.png" alt="" loading="lazy"><br>
+④：配置静态路由</p>
+<figure data-type="image" tabindex="4"><img src="https://newdy.cf/post-images/1582799956221.png" alt="" loading="lazy"></figure>
+<p>⑤：开启SNMP服务，同时配置SNMP版本<br>
+<img src="https://newdy.cf/post-images/1582799963324.png" alt="" loading="lazy"><br>
+⑥：配置SNMP团体名及访问规则：<br>
+<img src="https://newdy.cf/post-images/1582799996351.png" alt="" loading="lazy"><br>
+四、最终效果展示<br>
+跨三层应用界面：</p>
+<figure data-type="image" tabindex="5"><img src="https://newdy.cf/post-images/1582800053303.png" alt="" loading="lazy"></figure>
+<p>三层下电脑详情：<br>
+<img src="https://newdy.cf/post-images/1582800057552.png" alt="" loading="lazy"><br>
+爱快终端监控显示：<br>
+<img src="https://newdy.cf/post-images/1582800083530.png" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[SNMP（V1/V2/V3）配置举例及配置]]></title>
+        <id>https://newdy.cf/post/snmpv1v2v3pei-zhi-ju-li-ji-pei-zhi/</id>
+        <link href="https://newdy.cf/post/snmpv1v2v3pei-zhi-ju-li-ji-pei-zhi/">
+        </link>
+        <updated>2020-02-27T03:14:20.000Z</updated>
+        <content type="html"><![CDATA[<p>SNMPv1和SNMPv2c配置举例：<br>
+SNMPv1和SNMPv2c的工作原理基本一致，要求配置的命令也是一致的，下面是SNMPv1和SNMPv2配置举例。<br>
+1、配置Switch的接口IP地址，使其和网管站之间路由可达<br>
+<HUAWEI> system-view<br>
+[HUAWEI] sysname Switch<br>
+[Switch] vlan 100<br>
+[Switch-vlan100] quit<br>
+[Switch] interface gigabitethernet 0/0/1<br>
+[Switch-GigabitEthernet0/0/1] port link-type hybrid<br>
+[Switch-GigabitEthernet0/0/1] port hybrid pvid vlan 100<br>
+[Switch-GigabitEthernet0/0/1] port hybrid untagged vlan 100<br>
+[Switch-GigabitEthernet0/0/1] quit<br>
+[Switch] interface vlanif 100<br>
+[Switch-Vlanif100] ip address 10.1.2.1 24<br>
+[Switch-Vlanif100] quit<br>
+2、 配置Switch的SNMP版本<br>
+[Switch] snmp-agent sys-info version v1    //snmp-agent sys-info version v2c表示配置为snmpv2c的版本<br>
+3、 配置团体名<br>
+[Switch] snmp-agent community write adminnms2<br>
+4、 配置告警主机<br>
+[Switch] snmp-agent target-host trap address udp-domain 10.1.1.2 params securityname adminnms2        //params securityname表示在网管侧显示的用户安全名<br>
+对于SNMPv1和SNMPv2c版本，不需要通过securityname参数的校验，网管可以接收所有告警主机发送的告警信息。该参数主要用来区分在同一个IP地址创建了多个告警主机场景下的多个告警主机</p>
+<p>上面的配置为SNMPv1/SNMPv2c必须配置的选项，针对其他的配置，都是按照需求来进行，比如限制网管对设备的管理权限。</p>
+<h1 id="配置acl使nms2可以管理交换机nms1不允许管理交换机">配置ACL，使NMS2可以管理交换机，NMS1不允许管理交换机。</h1>
+<p>[Switch] acl 2001<br>
+[Switch-acl-basic-2001] rule 5 permit source 10.1.1.2 0.0.0.0<br>
+[Switch-acl-basic-2001] rule 6 deny source 10.1.1.1 0.0.0.0<br>
+[Switch-acl-basic-2001] quit</p>
+<h1 id="配置mib视图限制nms2可以管理交换机上除rmon之外的节点">配置MIB视图，限制NMS2可以管理交换机上除RMON之外的节点。</h1>
+<p>[Switch] snmp-agent mib-view excluded allextrmon 1.3.6.1.2.1.16</p>
+<h1 id="配置团体名并引用acl和mib视图">配置团体名并引用ACL和MIB视图。</h1>
+<p>[Switch] snmp-agent community write adminnms2 mib-view allextrmon acl 2001   //配置访问权限，使NMS2可以管理交换机上RMON之外的节点</p>
+<p>SNMPV3配置举例：<br>
+SNMPv3的实现原理和SNMPv1/SNMPv2c基本一致，唯一的区别是SNMPv3增加了身份验证和加密处理，下面是SNMPv3配置举例：<br>
+1、配置Switch的接口IP地址，使其和网管站之间路由可达<br>
+<HUAWEI> system-view<br>
+[HUAWEI] sysname Switch<br>
+[Switch] vlan 100<br>
+[Switch-vlan100] quit<br>
+[Switch] interface gigabitethernet 0/0/1<br>
+[Switch-GigabitEthernet0/0/1] port link-type hybrid<br>
+[Switch-GigabitEthernet0/0/1] port hybrid pvid vlan 100<br>
+[Switch-GigabitEthernet0/0/1] port hybrid untagged vlan 100<br>
+[Switch-GigabitEthernet0/0/1] quit<br>
+[Switch] interface vlanif 100<br>
+[Switch-Vlanif100] ip address 10.1.2.1 24<br>
+[Switch-Vlanif100] quit<br>
+2、配置Switch的SNMP版本<br>
+[Switch] snmp-agent sys-info version v3    //可不配置，默认为V3版本<br>
+3、配置团体名<br>
+[Switch] snmp-agent community write adminnms2<br>
+4、配置用户组<br>
+[Switch] snmp-agent group v3 admin privacy   //配置用户组的安全方式为privacy，表示既认证又加密，admin表示用户组的名称<br>
+5、配置用户相关信息</p>
+<h1 id="配置用户并关联用户组">配置用户并关联用户组。</h1>
+<p>[Switch] snmp-agent usm-user v3 nms2-admin group admin   // nms2-admin表示用户名，admin表示用户组名称，与前一条命令中配置保持一致</p>
+<h1 id="对用户的数据进行认证认证密码为authe1234-因为用户的安全级别必须-用户组的安全级别上面用户组方式为既认证又加密所以下面用户必须同时配置认证和加密">对用户的数据进行认证，认证密码为Authe@1234。（因为用户的安全级别必须 &gt;= 用户组的安全级别，上面用户组方式为既认证又加密，所以下面用户必须同时配置认证和加密）</h1>
+<p>[Switch] snmp-agent usm-user v3 nms2-admin authentication-mode sha<br>
+Please configure the authentication password (8-64)<br>
+Enter Password:                  //输入认证密码，本例的认证密码为：Authe@1234。<br>
+Confirm Password:                //输入认证密码，本例的认证密码为：Authe@1234。</p>
+<h1 id="对用户的数据进行加密加密密码为priva1234">对用户的数据进行加密，加密密码为Priva@1234。</h1>
+<p>[Switch] snmp-agent usm-user v3 nms2-admin privacy-mode aes128<br>
+Please configure the privacy password (8-64)<br>
+Enter Password:                  //输入加密密码，本例的加密密码为：Priva@1234。<br>
+Confirm Password:                //输入加密密码，本例的加密密码为：Priva@1234。<br>
+5、配置告警主机<br>
+[Switch] snmp-agent target-host trap address udp-domain 10.1.1.2 params securityname nms2-admin v3 privacy</p>
+<p>说明1：对于SNMPv3版本，securityname必须配置为用户名。告警主机和网管都需要配置此参数，如果网管要接收告警主机发送的告警，必须通过该参数（包括认证和加密的方式）的校验，否则告警无法接收。<br>
+说明2：由于上面用户和用户组的基本都是privacy（既认证又加密），所以这里告警主机的安全级别必须为privacy。</p>
+<p>SNMPV3用户，用户组及告警主机安全级别配置说明<br>
+设备具备三种属性，按照安全性从高到低为：<br>
+·     1级：privacy （认证且加密）<br>
+·     2级：authentication （只认证）<br>
+·     3级：noauthentication （不认证不加密）</p>
+<p>要求用户的安全级别必须 &gt;=告警主机的安全级别&gt;= 用户组的安全级别<br>
+·     如果用户组的安全级别是privacy，那么告警主机和用户的安全级别一定得是privacy。<br>
+·     如果用户组的安全级别是authentication，那么告警主机的安全级别是authentication，用户的安全级别可以是authentication和privacy。<br>
+·     如果用户组的安全级别是authentication，告警主机的安全级别是privacy，那么用户的安全级别是privacy。<br>
+·     如果用户组的安全级别是noauthentication，告警主机的安全级别是noauthentication，那么用户的安全级别可以是noauthentication、authentication、privacy。<br>
+·     如果用户组的安全级别是noauthentication，告警主机的安全级别是authentication，那么用户的安全级别可以是authentication和privacy。<br>
+·     如果用户组的安全级别是noauthentication，告警主机的安全级别是privacy，那么用户的安全级别是privacy。</p>
+<p>上面的配置为SNMPV3必须配置的选项，针对其他的配置，都是按照需求来进行，比如限制网管对设备的管理权限。</p>
+<h1 id="配置acl使nms2可以管理交换机nms1不允许管理交换机-2">配置ACL，使NMS2可以管理交换机，NMS1不允许管理交换机。</h1>
+<p>[Switch] acl 2001<br>
+[Switch-acl-basic-2001] rule 5 permit source 10.1.1.2 0.0.0.0<br>
+[Switch-acl-basic-2001] rule 6 deny source 10.1.1.1 0.0.0.0<br>
+[Switch-acl-basic-2001] quit</p>
+<h1 id="配置mib视图限制nms2可以管理交换机上除rmon之外的节点-2">配置MIB视图，限制NMS2可以管理交换机上除RMON之外的节点。</h1>
+<p>[Switch] snmp-agent mib-view included isoview iso</p>
+<h1 id="配置用户组并引用acl和mib视图">配置用户组并引用ACL和MIB视图。</h1>
+<p>[Switch] snmp-agent group v3 admin privacy write-view isoview acl 2001  //配置访问权限，使NMS2可以管理ISO节点</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[一条网线有八根线，空闲的四根能做什么？]]></title>
         <id>https://newdy.cf/post/yi-tiao-wang-xian-you-ba-gen-xian-kong-xian-de-si-gen-neng-zuo-shi-me/</id>
@@ -394,138 +566,6 @@ https://chrome-extension-downloader.com/</p>
 <img src="https://newdy.cf/post-images/1582470546211.jpg" alt="" loading="lazy"></p>
 </li>
 </ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[BBR/BBRPLUS/锐速/BBR2一键脚本]]></title>
-        <id>https://newdy.cf/post/bbrbbrplusrui-su-bbr2-yi-jian-jiao-ben/</id>
-        <link href="https://newdy.cf/post/bbrbbrplusrui-su-bbr2-yi-jian-jiao-ben/">
-        </link>
-        <updated>2020-02-23T07:51:12.000Z</updated>
-        <content type="html"><![CDATA[<!-- more -->
-<p>wget -N --no-check-certificate &quot;https://github.com/ylx2016/Linux-NetSpeed/releases/download/sh/tcp.sh&quot; &amp;&amp; chmod +x tcp.sh &amp;&amp; ./tcp.sh</p>
-<!-- more -->
-<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582444326731.png" alt="" loading="lazy"></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[全能中继工具haproxy（中转/端口转发）]]></title>
-        <id>https://newdy.cf/post/quan-neng-zhong-ji-gong-ju-haproxyzhong-zhuan-duan-kou-zhuan-fa/</id>
-        <link href="https://newdy.cf/post/quan-neng-zhong-ji-gong-ju-haproxyzhong-zhuan-duan-kou-zhuan-fa/">
-        </link>
-        <updated>2020-02-23T07:42:49.000Z</updated>
-        <content type="html"><![CDATA[<p>概述<br>
-优点：功能强大，甚至支持https转发</p>
-<p>缺点：配置略微复杂</p>
-<p>安装<br>
-apt-get install -y haproxy<br>
-配置文件<br>
-nano /etc/haproxy/haproxy.cfg<br>
-global<br>
-log 127.0.0.1   local0           #[日志输出配置，所有日志都记录在本机，通过local0输出]<br>
-log 127.0.0.1   local1 notice    #定义haproxy 日志级别[error warringinfo debug]<br>
-daemon                    #以后台形式运行harpoxy<br>
-nbproc 1                         #设置进程数量<br>
-pidfile /var/run/haproxy.pid<br>
-ulimit-n 65536                    #ulimit 的数量限制<br>
-#maxconn 2000000                  #默认最大连接数,需考虑ulimit-n限制<br>
-#chroot /usr/local/haproxy<br>
-tune.ssl.default-dh-param  2048<br>
-defaults<br>
-log global<br>
-mode tcp                  #默认的模式mode { tcp|http|health }，tcp是4层，http是7层，health只会返回OK<br>
-retries 3                 #两次连接失败就认为是服务器不可用，也可以通过后面设置<br>
-option abortonclose       #当服务器负载很高的时候，自动结束掉当前队列处理比较久的链接<br>
-option redispatch<br>
-maxconn 8192              #默认的最大连接数<br>
-timeout connect  5000ms   #连接超时<br>
-timeout client 50000ms    #客户端超时<br>
-timeout server 50000ms    #服务器超时<br>
-timeout tunnel 1h<br>
-timeout client-fin 30s<br>
-balance roundrobin        #设置默认负载均衡方式，轮询方式<br>
-#balance source           #设置默认负载均衡方式，类似于nginx的ip_hash<br>
-#balnace leastconn        #设置默认负载均衡方式，最小连接数<br>
-listen admin_stats<br>
-bind 0.0.0.0:987               #节点统计页面的访问端口<br>
-mode http                       #http的7层模式<br>
-option httplog                  #采用http日志格式<br>
-maxconn 10                      #节点统计页面默认的最大连接数<br>
-stats refresh 30s               #节点统计页面自动刷新时间<br>
-stats uri /haproxy              #节点统计页面url<br>
-stats realm Haproxy             #统计页面密码框上提示文本<br>
-stats auth admin:admin           #设置监控页面的用户和密码:admin,可以设置多个用户名<br>
-stats  admin if TRUE            #设置手工启动/禁用，后端服务器(haproxy-1.4.9以后版本)<br>
-frontend transit<br>
-bind *:999<br>
-mode tcp<br>
-default_backend hkt<br>
-backend hkt<br>
-mode tcp<br>
-server hkt 1.1.1.1:80 check inter 30s rise 2 fall 3 maxconn 2000000<br>
-frontend wtt<br>
-bind *:443 ssl crt /root/ssl.pem<br>
-redirect scheme https if !{ ssl_fc }<br>
-mode http<br>
-default_backend wtt<br>
-backend wtt<br>
-mode http<br>
-server wtt 2.2.2.2:80 check inter 30s rise 2 fall 3 maxconn 2000000<br>
-软件支持一个页面监控，默认开启，用户名和密码可以设定<br>
-<img src="https://newdy.cf/post-images/1582443824051.png" alt="" loading="lazy"></p>
-<p>然后如果是中转多个后端，就添加多个backend</p>
-<p>如果使用ssl的话，记得要先把证书设置好</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SS/SSR/V2Ray负载均衡的方法2]]></title>
-        <id>https://newdy.cf/post/ssssrv2ray-fu-zai-jun-heng-de-fang-fa-2/</id>
-        <link href="https://newdy.cf/post/ssssrv2ray-fu-zai-jun-heng-de-fang-fa-2/">
-        </link>
-        <updated>2020-02-23T07:36:15.000Z</updated>
-        <content type="html"><![CDATA[<p>上次讲了Nginx的负载，这次接着说Haproxy的负载</p>
-<p>先安装：</p>
-<p>yum -y install haproxy<br>
-将默认的配置文件做一个备份：</p>
-<p>mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak<br>
-新建一个配置文件：</p>
-<p>nano /etc/haproxy/haproxy.cfg<br>
-写入下面的配置：</p>
-<p>global<br>
-chroot  /var/lib/haproxy<br>
-pidfile /var/run/haproxy.pid<br>
-user    haproxy<br>
-group   haproxy</p>
-<p>defaults<br>
-mode    tcp                         #服务器默认的工作模式<br>
-balance roundrobin                  #服务器默认使用的均衡模式<br>
-retries 3                           #三次连接失败表示服务器不可用<br>
-maxconn 5000                        #最大连接数<br>
-timeout connect 500ms               #连接超时<br>
-timeout client  3s                  #客户端超时<br>
-timeout server  3s                  #服务器超时</p>
-<p>listen WebPanel<br>
-mode    http                        #这里使用HTTP模式<br>
-bind    0.0.0.0:50000               #WEB服务端口<br>
-stats   refresh 5s                  #自动刷新时间<br>
-stats   uri  /                      #WEB管理地址<br>
-stats   auth imlala:lala.im         #账号密码<br>
-stats   hide-version                #隐藏版本<br>
-stats   admin if TRUE               #验证通过则赋予管理权</p>
-<p>listen USA<br>
-bind 0.0.0.0:50001                  #服务端口<br>
-server usa1 1.2.3.4:55555 check inter 500 rise 2 fall 4 weight 100   #SS/SSR服务器地址与端口<br>
-server usa2 2.2.3.4:55555 check inter 500 rise 2 fall 4 weight 50    #SS/SSR服务器地址与端口</p>
-<p>listen JP<br>
-bind 0.0.0.0:50002                  #服务端口<br>
-server jp1 3.2.3.4:55555 check inter 500 rise 2 fall 4 weight 100   #SS/SSR服务器地址与端口<br>
-server jp2 4.2.3.4:55555 check inter 500 rise 2 fall 4 weight 50    #SS/SSR服务器地址与端口<br>
-配置完成之后，务必关闭SELinux，否则我们无法使用systemd去正常运行HAProxy（这是一个坑）：</p>
-<p>sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config<br>
-setenforce 0<br>
-启动HAProxy：</p>
-<p>systemctl start haproxy<br>
-systemctl enable haproxy</p>
 ]]></content>
     </entry>
 </feed>
