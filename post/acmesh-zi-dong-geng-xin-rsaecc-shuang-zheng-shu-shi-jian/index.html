@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>acme.sh 自动更新 RSA、ECC 双证书实践 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1584886991936">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
+
+    <meta name="description" content="不知不觉，一年的通配符证书就快到期了。作为一名技术人员，我是不准备续费了。恰巧知道一个 acme.sh 的项目，它是一个实现 ACME 协议的客户端，能够向支持 ACME 协议的 CA 申请证书（如 Letsencrypt）。 最重要的是它..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1584886991936" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">acme.sh 自动更新 RSA、ECC 双证书实践</h2>
+            <div class="post-date">2020-03-14</div>
+            
+            <div class="post-content" v-pre>
+              <p>不知不觉，一年的通配符证书就快到期了。作为一名技术人员，我是不准备续费了。恰巧知道一个 acme.sh 的项目，它是一个实现 ACME 协议的客户端，能够向支持 ACME 协议的 CA 申请证书（如 Letsencrypt）。 最重要的是它对接了大多数的域名服务商，能够通过域名服务商提供的 API，自动的添加 DNS 验证记录进行全自动颁发证书，还可以模拟 HTTP 服务器进行文件验证。so，不管你的证书期限是 90 天，还是更短，再也不用担心证书过期的问题了。</p>
+<p>至于 ACME 协议是什么？Automatic Certificate Management Environment 自动化证书管理环境，通过它我们可以实现证书的自动申请以及部署，可以大大的节省人员的管理及额外的配置工作。</p>
+<p>ACME 的通信过程通过一系列的 API 进行，你可以通过类似 https://example.com/directory 获取可以请求的 API 列表，如 Letsencrypt。当然再通信过程中采取了很多的安全措施，如在 RFC 文档中你可能会看 JWT、JWS、JOSE、JWK、reply-nonce等名词，看起来就陌生。如果你不是技术人员，也大可不必去研究那些东西，知道怎么用就行。</p>
+<p>安装 acme.sh<br>
+好了，废话不多说。acme.sh 下载非常的简单，官方提供了 2 中方式：</p>
+<p>通过执行在线脚本安装：</p>
+<p>$ curl https://get.acme.sh | sh</p>
+<h1 id="或者">或者</h1>
+<p>$ wget -O -  https://get.acme.sh | sh<br>
+通过 git 安装：</p>
+<p>git clone https://github.com/Neilpang/acme.sh.git<br>
+cd ./acme.sh<br>
+./acme.sh --install<br>
+在安装的过程中，做了 3 件事：</p>
+<p>复制 acme.sh 到你的 HOME 目录（$HOME）：~/.acme.sh/。之后所有生成的证书也会放在这里。<br>
+创建别名：acme.sh=~/.acme.sh/acme.sh。<br>
+创建 cron 每日任务去检查是否有证书需要更新。 如： 0 0 * * * &quot;/home/user/.acme.sh&quot;/acme.sh --cron --home &quot;/home/user/.acme.sh&quot; &gt; /dev/null<br>
+使用 acme.sh<br>
+如何使用？acme.sh 的功能非常的强大，使用方式确非常的简单。提醒，该脚本需要在你的服务器下执行。官方地址：How-to-issue-a-cert。</p>
+<p>关于 ECC 证书，你只需要再末尾添加 --keylength ec-256。如：</p>
+<p>$ acme.sh --issue -w /home/wwwroot/example.com -d example.com -d www.example.com --keylength ec-256<br>
+可选长度有：</p>
+<p>ec-256 (prime256v1, “ECDSA P-256”)<br>
+ec-384 (secp384r1, “ECDSA P-384”)<br>
+ec-521 (secp521r1, “ECDSA P-521”, which is not supported by Let’s Encrypt yet.)<br>
+申请证书<br>
+单域名</p>
+<p>$ acme.sh --issue -d example.com -w /home/wwwroot/example.com<br>
+多域名</p>
+<p>$ acme.sh --issue -d example.com -d www.example.com -d cp.example.com -w /home/wwwroot/example.com<br>
+这里的 -w 指定的是 web 服务器根目录，请确保有写入权限。example.com 就是你要签发的域名，建议主域放在第一个。颁发好的证书会放在 ~/.acme.sh/example.com/。证书将会每 60 天自动更新。</p>
+<p>注意：这里仅申请颁发证书，之后还有安装步骤。当然这些步骤均可实现自动化。指定 web 根目录是为了写入验证文件，故请保证根目录的文件可以通过 URL 访问到。</p>
+<p>Standalone 模式<br>
+这个模式会自己启动一个 HTTP/HTTPS 的服务器，供 CA 进行域名验证。所以，你需要确保 80⁄443 端口是没有被占用的。</p>
+<h1 id="确保你的-80-端口未被占用">确保你的 80 端口未被占用</h1>
+<p>$ acme.sh  --issue  -d example.com  --standalone</p>
+<h1 id="当然你也可以指定端口但前提是你会通过代理或负载均衡转发到该端口">当然你也可以指定端口，但前提是你会通过代理或负载均衡转发到该端口。</h1>
+<h1 id="因为-letsencrypt-可只会访问-80-端口哦">因为 letsencrypt 可只会访问 80 端口哦。</h1>
+<p>$ acme.sh  --issue  -d example.com  --standalone --httpport 88<br>
+当然还有 --tls 模式，使用 443 端口。</p>
+<p>Apache/Nginx 模式<br>
+这个模式会检查 apache/nginx 现有的配置。在证书颁发成功后，自动的更改配置文件，达到自动申请自动部署的目的，非常的方便：</p>
+<p>$ acme.sh  --issue  -d example.com  --apache<br>
+$ acme.sh  --issue  -d example.com  --nginx<br>
+DNS 手动模式</p>
+<p>$ acme.sh --issue --dns -d example.com -d www.example.com -d cp.example.com<br>
+会有类似以下信息：</p>
+<p>Add the following txt record:<br>
+Domain:_acme-challenge.example.com<br>
+Txt value:9ihDbjYfTExAYeDs4DBUeuTo18KBzwvTEjUnSwd32-c</p>
+<p>Add the following txt record:<br>
+Domain:_acme-challenge.www.example.com<br>
+Txt value:9ihDbjxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+<p>Please add those txt records to the domains. Waiting for the dns to take effect.<br>
+你需要手动添加如上域名记录。</p>
+<p>如果你需要更新证书，请执行：</p>
+<p>$ acme.sh --renew -d example.com<br>
+DNS API模式<br>
+通过域名服务商提供的 API 模式，进行动态的添加 DNS 记录，实现自动证书更新及部署。这也是本博客采用的方式（未采用 Nginx 方式也是有原因的）。</p>
+<p>DNS API支持列表，涵盖了国内外主流的域名服务商。具体的使用方法你需要根据服务商进行不同设置 How to use DNS API。</p>
+<p>混合模式<br>
+该模式下，为每个域名指定不同的验证方式，但 example.com 和 www.example.com 必须在同一根目录。</p>
+<p>$ acme.sh  --issue  <br>
+-d example.com -d www.example.com -w /home/wwwroot/ <br>
+-d bb.com  --dns dns_cf <br>
+-d cc.com  --apache <br>
+-d dd.com  -w /home/wwwroot/dd.com<br>
+安装证书<br>
+再颁发证书之后，我们可能需要将证书拷贝到指定位置。那么我们需要使用到 --install-cert 命令，请尽量避免手动拷贝证书。</p>
+<h1 id="apache">Apache</h1>
+<p>$ acme.sh --install-cert -d example.com <br>
+--cert-file      /path/to/certfile/in/apache/cert.pem  <br>
+--key-file       /path/to/keyfile/in/apache/key.pem  <br>
+--fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem <br>
+--reloadcmd     &quot;service apache2 force-reload&quot;</p>
+<h1 id="nginx">Nginx</h1>
+<p>$ acme.sh --install-cert -d example.com <br>
+--key-file       /path/to/keyfile/in/nginx/key.pem  <br>
+--fullchain-file /path/to/fullchain/nginx/cert.pem <br>
+--reloadcmd     &quot;service nginx force-reload&quot;<br>
+这里会将私钥、证书、证书链拷贝到指定位置，成功后执行 --reloadcmd 命令。请确保有执行这些命令的权限。</p>
+<p>当然你也不用担心证书更新的问题，在证书 60 天之后，会自动更新，更新后就会执行 --reloadcmd 的命令。</p>
+<p>这里还有一些 hook 功能，请查看帮助 $ acme.sh -h，如，--renew-hook（每次证书成功更新后执行的命令）等。</p>
+<p>更新证书<br>
+使用该工具的应该都是冲着其强大的自动更新部署功能来的。当然，如果你想手动更新：</p>
+<h1 id="rsa">RSA</h1>
+<p>$ acme.sh --renew -d example.com --force</p>
+<h1 id="ecc">ECC</h1>
+<p>acme.sh --renew -d example.com --force --ecc<br>
+全自动更新<br>
+为了实现全自动更新证书，我们需要添加一个 --renew-hook 的命令，它的作用就是能够在证书成功颁发后执行命令。</p>
+<p>如：</p>
+<p>$ acme.sh --issue --dns dns_ali -d example.com -d www.example.com -k ec-256 <br>
+--renew-hook &quot;acme.sh --install-cert -d example.com --ecc <br>
+--key-file       /path/to/keyfile/in/nginx/key.pem <br>
+--fullchain-file /path/to/fullchain/nginx/cert.pem <br>
+--reloadcmd      &quot;service nginx force-reload&quot;&quot;<br>
+解读，这里使用 ali_dns 为 example.com 和 www.example.com 颁发 ecc 证书。在证书到期前 30 天，acme.sh 将再次执行这条命令进行证书的更新。更新后执行 --renew-hook 将证书安装到指定地方 /path/to/keyfile/in/nginx/，安装好之后会执行 --reloadcmd 命令，让 nginx 重新加载证书。这样就完成了证书的自动更新，不过首次证书颁发后，需要你进行证书的安装。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/github-webhooks-wan-mei-zi-dong-hua-bu-shu-jiao-cheng/">
+                  <h3 class="post-title">
+                    Github Webhooks 完美自动化部署教程
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Github Webhooks 完美自动化部署教程 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1584886991936">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
+
+    <meta name="description" content="
+前言
+之前使用GitHub Actions可以在提交代码后自动上传到腾讯云COS存储桶,实现静态网站完美自动化部署.那么非静态的网站或者项目需要自动化部署到VPS服务器上就可以使用GitHub Webhooks来实现.作为纯属新手来说,网..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1584886991936" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Github Webhooks 完美自动化部署教程</h2>
+            <div class="post-date">2020-03-08</div>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://newdy.cf/post-images/1583652416269.jpg" alt="" loading="lazy"><br>
+前言<br>
+之前使用GitHub Actions可以在提交代码后自动上传到腾讯云COS存储桶,实现静态网站完美自动化部署.那么非静态的网站或者项目需要自动化部署到VPS服务器上就可以使用GitHub Webhooks来实现.作为纯属新手来说,网上查阅了十几篇相关教程,都没法部署成功,最后总算找到了问题关键点,决定整理成文章分享出来,希望能帮助到新手用户.</p>
+<p>Webhook支持php,js等多种方式,可以实现简单的部署,也可以实现复杂的自动化构建等功能,本文介绍适合新手用户的php方式,来自动化部署网站.<br>
+Webhook简单原理<br>
+对于入门新手来说,Webhook可以理解为当你在本地完成代码工作后,Push提交到GitHub,GitHub检测到Push后,使用Webhook发送一条命令到你的VPS服务器上的Webhook.php文件,服务器检测到命令后根据webhook.php中的配置在服务器上执行Pull命令,同步GitHub上的代码到服务器.实现了简单的自动化部署工作.节省了你再次上传至服务器的多余操作.</p>
+<p>部署流程<br>
+启用shell_exec<br>
+编辑php.ini</p>
+<p>vi /usr/local/php/etc/php.ini<br>
+查找shell_exec,在disable_functions中删除shell_exec字段.<br>
+<img src="https://newdy.cf/post-images/1583652514268.jpg" alt="" loading="lazy"><br>
+重启php.ini保存设置</p>
+<p>/etc/init.d/php-fpm restart<br>
+配置站点目录权限<br>
+由于Webhook的推送请求是通过http/https方式发送至服务器,根据webhook.php中的命令执行git pull的实为运行php的用户,根据以下命令可以查执行php用户为www.</p>
+<p>ps aux | grep php<br>
+确保仓库所在的站点目录所有者为www</p>
+<p>chown -R www:www /home/wwwroot<br>
+切换为www账户<br>
+以root账户登陆服务器,修改www的登录权限.</p>
+<p>vi /etc/passwd<br>
+找到</p>
+<p>www❌1003:1003::/home/www:/sbin/nologin<br>
+修为改</p>
+<p>www❌1003:1003::/home/www:/bin/bash<br>
+为www创建ssh公钥<br>
+切换为www登陆</p>
+<p>su www<br>
+创建ssh公钥</p>
+<p>ssh-keygen -t rsa</p>
+<p>获取你的公钥id_rsa.pub</p>
+<p>cat /home/www/.ssh/id_rsa.pub</p>
+<p>登陆GitHub配置ssh公钥<br>
+登陆GitHub - 进入仓库 - Settings - Deploy keys - Add Deploy keys<br>
+粘贴刚才创建的公钥<br>
+<img src="https://newdy.cf/post-images/1583652574339.jpg" alt="" loading="lazy"><br>
+首次git clone仓库<br>
+验证ssh公钥配置成功</p>
+<p>ssh -T git@github.com</p>
+<p>首次clone仓库成功</p>
+<p>git clone git@github.com:xxxxxx/xxxxxxx.git</p>
+<p>配置webhook.php<br>
+在项目网站根目录创建webhook.php获得外网链接为https://yourdoamin.com/webhook.php<br>
+粘贴以下代码,只需要更改keySecret和wwwRoot即可.</p>
+<?php
+
+// 自行创建一个验证密码
+$keySecret = 'xxxxxx';
+
+// 修改为你自己的仓库绝对路径
+$wwwRoot = [
+    '/home/wwwroot/xxxx',
+];
+
+// 保存运行脚本的日志
+$logFile = 'log/webhook.log';
+
+// 执行git命令
+$gitCommand = 'git pull';
+
+// 判断是否开启秘钥认证(已实现gitee和github)
+if (isset($keySecret) && !empty($keySecret)) {
+    list($headers, $gitType) = [[], null];
+    foreach ($_SERVER as $key => $value) {
+        'HTTP_' == substr($key, 0, 5) && $headers[str_replace('_', '-', substr($key, 5))] = $value;
+        if (empty($gitType) && strpos($key, 'GITEE') !== false) {
+            $gitType = 'GITEE';
+        }
+        if (empty($gitType) && strpos($key, 'GITHUB') !== false) {
+            $gitType = 'GITHUB';
+        }
+    }
+    if ($gitType == 'GITEE') {
+        if (!isset($headers['X-GITEE-TOKEN']) || $headers['X-GITEE-TOKEN'] != $keySecret) {
+            die('GITEE - 请求失败，秘钥有误');
+        }
+    } elseif ($gitType == 'GITHUB') {
+        $json_content = file_get_contents('php://input');
+        $signature = "sha1=" . hash_hmac('sha1', $json_content, $keySecret);
+        if ($signature != $headers['X-HUB-SIGNATURE']) {
+            die('GITHUB - 请求失败，秘钥有误');
+        }
+    } else {
+        die('请求错误，未知git类型');
+    }
+}
+
+!is_array($wwwRoot) && $wwwRoot = [$wwwRoot];
+foreach ($wwwRoot as $vo) {
+    $shell = sprintf("cd %s && git pull 2>&1", $vo);
+    $output = shell_exec($shell);
+    $log = sprintf("[%s] %s \n", date('Y-m-d H:i:s', time()) . ' - ' . $vo, $output);
+    echo $log;
+    file_put_contents($logFile, $log, FILE_APPEND);
+}
+GitHub Webhooks配置
+登陆GitHub - 进入仓库 - Settings - Webhooks - Add webhook
+Payload URL 输入刚才获取的webhook.php的外网链接.
+Content type 保持默认
+Secret 输入刚才配置webhook.php创建的验证密码
+Add webhook 完成创建
+![](https://newdy.cf/post-images/1583652656005.jpg)
+恢复关闭www登陆
+exit退出www登陆切回root,在次关闭www登陆.
+
+vi /etc/passwd
+恢复为
+
+www:x:1003:1003::/home/www:/sbin/nologin
+自动化部署成功
+本地push代码到GitHub后,可以看到返回信息提示服务器pull成功.
+![](https://newdy.cf/post-images/1583652683115.jpg)
+
+关键点和相关错误
+权限
+网上很多教程都没有提到权限问题,所以对于新手小白来说,就会不知道为什么不成功.而少数提到权限的教程,也没有非常详细指导用户如何配置.所以如果部署有问题,请检查权限问题,新手用户可以严格按照本教程先部署成功,在来自行修改你需要的配置.
+
+webhook.php
+webhook.php的代码网上也有很多种,有些能用有些无法使用,本文提供的是经过测试可用的,大家也可以自行搜索或者编辑.
+
+Service Timeout
+当遇到push大量代码时,服务器pull需要更长的时间,所以webhook返回给GitHub的信息如下图会出现Service Timeout超时错误,但实际上服务器也成功执行了pull,你可以登陆服务器检查来确认,同时也可以根据你的项目实际情况自行修改webhook.php执行配置.
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/pei-zhi-nginx-he-frps-gong-cun-80443-duan-kou-ji-fan-yu-ming-zhi-chi-jiao-cheng/">
+                  <h3 class="post-title">
+                    配置 Nginx 和 frps 共存 80/443 端口及泛域名支持教程
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

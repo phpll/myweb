@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>配置 Nginx 和 frps 共存 80/443 端口及泛域名支持教程 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1584886991936">
+<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
+
+    <meta name="description" content="
+前言
+常规情况下frps服务器端会占用80和443端口,为内网设备提供穿透,实现用户可以使用域名无端口访问内网设备.而在已经部署nginx的服务器上,由于nginx已经占用80和443端口,frps的HTTP和HTTPS需另外选择端口,可..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://newdy.cf">
+        <img src="https://newdy.cf/images/avatar.png?v=1584886991936" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">配置 Nginx 和 frps 共存 80/443 端口及泛域名支持教程</h2>
+            <div class="post-date">2020-03-08</div>
+            
+            <div class="post-content" v-pre>
+              <p><img src="https://newdy.cf/post-images/1583648139451.jpg" alt="" loading="lazy"><br>
+前言<br>
+常规情况下frps服务器端会占用80和443端口,为内网设备提供穿透,实现用户可以使用域名无端口访问内网设备.而在已经部署nginx的服务器上,由于nginx已经占用80和443端口,frps的HTTP和HTTPS需另外选择端口,可以通过nginx的反向代理配置让frps提供的穿透服务也能够使用80和443端口,实现nginx和frps共存.同时配置支持泛域名反向代理.</p>
+<p>此方案适合个人用户搭建frps,国内服务器也可备案自己的域名,配置泛域名的反向代理及证书,可以方便快速的使用任何二级域名来穿透内网的各项服务.<br>
+此方案不适合公开提供服务的frps服务器,由于公开服务,用户使用的是自己的域名,无法为各用户分别配置反向代理.但如果你提供的frps支持subdomain泛域名,已经为用户提供了二级或三级域名使用,也可以使用本方案,但用户就无法使用自己的域名.所以此方案并不推荐用于公共frp服务.</p>
+<p>方案介绍</p>
+<p>常规frps提供80和443端口的穿透,当外网访问域名时,frps会将80和443端口穿透到内网设备,由内网设备来处理80和443端口的请求.例如HTTPS的强制跳转,伪静态,证书等请求都由内网设备来处理.一些成熟的服务,例如群晖DSM,Web Station以及各套件都能够很好的提供服务,而另外一些服务,例如某些docker容器,部分路由器管理端,可能仅仅提供了HTTP端口,想要使用HTTPS还得借助另外的反向代理服务,相对会更加麻烦.</p>
+<p>内网设备及服务可无需HTTPS支持,frpc.ini也只需要配置HTTP穿透到服务器.当外网访问域名时,收到请求的Nginx会根据泛域名配置,强制跳转到HTTPS,同时Nginx会提供SSL安全证书支持,然后Nginx会反向代理到frps的HTTP端口,在由frps穿透回内网获取信息返回给外网用户.</p>
+<p>经过一段时间的使用,两种方案各有利弊,还是需要根据实际使用场景来选择.例如群晖NAS官方的DSM,各套件和服务可以使用上文第一种独立frps方案,由群晖来处理Web前端和SSL证书.如果使用一些docker容器服务,本身仅只支持HTTP,那么可以选择nginx和frps共存的方案,让nginx反向代理来支持HTTPS和SSL证书.<br>
+方案配置<br>
+frps.ini配置<br>
+由于nginx占用80/443端口,frps.ini中的 vhost_http_port 和 vhost_https_port 请更换为其他端口.<br>
+subdomain_host 根据需求可选配置泛域名,或者注释删除此参数使用自定义域名.<br>
+frpc.ini配置<br>
+如果 frps.ini 配置了 subdomain_host 泛域名,那么 frpc.ini 中域名参数需使用 subdomain = xx 仅填写二级域名主机头即可,不要填写完整域名.<br>
+<img src="https://newdy.cf/post-images/1583648249353.jpg" alt="" loading="lazy"><br>
+如果 frps.ini 没有配置 subdomain_host泛域名,那么 frpc.ini 中域名参数需使用 custom_domains = xx.xxx.com 需填写完整的域名.<br>
+<img src="https://newdy.cf/post-images/1583648269468.jpg" alt="" loading="lazy"><br>
+nginx配置<br>
+proxy_pass http://127.0.0.1:1234; 中的 HTTP ,请勿写成 HTTPS .<br>
+proxy_pass http://127.0.0.1:1234; 中 1234 端口为 frps 的 HTTP 端口.<br>
+proxy_set_header Host $host:80; 注意需加上80端口,否则会无限循环301跳转,导致网页打不开提示重定向次数过多ERR_TOO_MANY_REDIRECTS.</p>
+<p>server {<br>
+listen 80;<br>
+server_name *.yourdomain.com;<br>
+return 301 https://<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mi>o</mi><mi>s</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">host</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">h</span><span class="mord mathdefault">o</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span></span></span></span>request_uri;<br>
+}</p>
+<p>server {<br>
+listen 443 ssl http2;<br>
+server_name *.yourdomain.com;</p>
+<pre><code>ssl_certificate /usr/local/nginx/conf/ssl/yourdomain.com.crt;
+ssl_certificate_key /usr/local/nginx/conf/ssl/yourdomain.com.key;
+
+client_max_body_size 50m; 
+client_body_buffer_size 256k;
+client_header_timeout 3m;
+client_body_timeout 3m;
+send_timeout 3m;
+proxy_connect_timeout 300s; 
+proxy_read_timeout 300s; 
+proxy_send_timeout 300s;
+proxy_buffer_size 64k; 
+proxy_buffers 4 32k; 
+proxy_busy_buffers_size 64k;
+proxy_temp_file_write_size 64k; 
+proxy_ignore_client_abort on; 
+
+location / {
+    proxy_pass http://127.0.0.1:1234;
+    proxy_redirect off;
+    proxy_set_header Host $host:80;
+    proxy_ssl_server_name on;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+</code></pre>
+<p>}</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://newdy.cf/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/">
+                  <h3 class="post-title">
+                    让你的黑群晖更加完美，用M.2 NVME SSD做缓存
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>

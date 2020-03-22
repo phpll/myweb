@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://newdy.cf</id>
     <title>Gridea</title>
-    <updated>2020-03-01T05:23:52.616Z</updated>
+    <updated>2020-03-22T14:24:02.734Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://newdy.cf"/>
     <link rel="self" href="https://newdy.cf/atom.xml"/>
@@ -10,6 +10,309 @@
     <logo>https://newdy.cf/images/avatar.png</logo>
     <icon>https://newdy.cf/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[acme.sh 自动更新 RSA、ECC 双证书实践]]></title>
+        <id>https://newdy.cf/post/acmesh-zi-dong-geng-xin-rsaecc-shuang-zheng-shu-shi-jian/</id>
+        <link href="https://newdy.cf/post/acmesh-zi-dong-geng-xin-rsaecc-shuang-zheng-shu-shi-jian/">
+        </link>
+        <updated>2020-03-14T08:10:38.000Z</updated>
+        <content type="html"><![CDATA[<p>不知不觉，一年的通配符证书就快到期了。作为一名技术人员，我是不准备续费了。恰巧知道一个 acme.sh 的项目，它是一个实现 ACME 协议的客户端，能够向支持 ACME 协议的 CA 申请证书（如 Letsencrypt）。 最重要的是它对接了大多数的域名服务商，能够通过域名服务商提供的 API，自动的添加 DNS 验证记录进行全自动颁发证书，还可以模拟 HTTP 服务器进行文件验证。so，不管你的证书期限是 90 天，还是更短，再也不用担心证书过期的问题了。</p>
+<p>至于 ACME 协议是什么？Automatic Certificate Management Environment 自动化证书管理环境，通过它我们可以实现证书的自动申请以及部署，可以大大的节省人员的管理及额外的配置工作。</p>
+<p>ACME 的通信过程通过一系列的 API 进行，你可以通过类似 https://example.com/directory 获取可以请求的 API 列表，如 Letsencrypt。当然再通信过程中采取了很多的安全措施，如在 RFC 文档中你可能会看 JWT、JWS、JOSE、JWK、reply-nonce等名词，看起来就陌生。如果你不是技术人员，也大可不必去研究那些东西，知道怎么用就行。</p>
+<p>安装 acme.sh<br>
+好了，废话不多说。acme.sh 下载非常的简单，官方提供了 2 中方式：</p>
+<p>通过执行在线脚本安装：</p>
+<p>$ curl https://get.acme.sh | sh</p>
+<h1 id="或者">或者</h1>
+<p>$ wget -O -  https://get.acme.sh | sh<br>
+通过 git 安装：</p>
+<p>git clone https://github.com/Neilpang/acme.sh.git<br>
+cd ./acme.sh<br>
+./acme.sh --install<br>
+在安装的过程中，做了 3 件事：</p>
+<p>复制 acme.sh 到你的 HOME 目录（$HOME）：~/.acme.sh/。之后所有生成的证书也会放在这里。<br>
+创建别名：acme.sh=~/.acme.sh/acme.sh。<br>
+创建 cron 每日任务去检查是否有证书需要更新。 如： 0 0 * * * &quot;/home/user/.acme.sh&quot;/acme.sh --cron --home &quot;/home/user/.acme.sh&quot; &gt; /dev/null<br>
+使用 acme.sh<br>
+如何使用？acme.sh 的功能非常的强大，使用方式确非常的简单。提醒，该脚本需要在你的服务器下执行。官方地址：How-to-issue-a-cert。</p>
+<p>关于 ECC 证书，你只需要再末尾添加 --keylength ec-256。如：</p>
+<p>$ acme.sh --issue -w /home/wwwroot/example.com -d example.com -d www.example.com --keylength ec-256<br>
+可选长度有：</p>
+<p>ec-256 (prime256v1, “ECDSA P-256”)<br>
+ec-384 (secp384r1, “ECDSA P-384”)<br>
+ec-521 (secp521r1, “ECDSA P-521”, which is not supported by Let’s Encrypt yet.)<br>
+申请证书<br>
+单域名</p>
+<p>$ acme.sh --issue -d example.com -w /home/wwwroot/example.com<br>
+多域名</p>
+<p>$ acme.sh --issue -d example.com -d www.example.com -d cp.example.com -w /home/wwwroot/example.com<br>
+这里的 -w 指定的是 web 服务器根目录，请确保有写入权限。example.com 就是你要签发的域名，建议主域放在第一个。颁发好的证书会放在 ~/.acme.sh/example.com/。证书将会每 60 天自动更新。</p>
+<p>注意：这里仅申请颁发证书，之后还有安装步骤。当然这些步骤均可实现自动化。指定 web 根目录是为了写入验证文件，故请保证根目录的文件可以通过 URL 访问到。</p>
+<p>Standalone 模式<br>
+这个模式会自己启动一个 HTTP/HTTPS 的服务器，供 CA 进行域名验证。所以，你需要确保 80⁄443 端口是没有被占用的。</p>
+<h1 id="确保你的-80-端口未被占用">确保你的 80 端口未被占用</h1>
+<p>$ acme.sh  --issue  -d example.com  --standalone</p>
+<h1 id="当然你也可以指定端口但前提是你会通过代理或负载均衡转发到该端口">当然你也可以指定端口，但前提是你会通过代理或负载均衡转发到该端口。</h1>
+<h1 id="因为-letsencrypt-可只会访问-80-端口哦">因为 letsencrypt 可只会访问 80 端口哦。</h1>
+<p>$ acme.sh  --issue  -d example.com  --standalone --httpport 88<br>
+当然还有 --tls 模式，使用 443 端口。</p>
+<p>Apache/Nginx 模式<br>
+这个模式会检查 apache/nginx 现有的配置。在证书颁发成功后，自动的更改配置文件，达到自动申请自动部署的目的，非常的方便：</p>
+<p>$ acme.sh  --issue  -d example.com  --apache<br>
+$ acme.sh  --issue  -d example.com  --nginx<br>
+DNS 手动模式</p>
+<p>$ acme.sh --issue --dns -d example.com -d www.example.com -d cp.example.com<br>
+会有类似以下信息：</p>
+<p>Add the following txt record:<br>
+Domain:_acme-challenge.example.com<br>
+Txt value:9ihDbjYfTExAYeDs4DBUeuTo18KBzwvTEjUnSwd32-c</p>
+<p>Add the following txt record:<br>
+Domain:_acme-challenge.www.example.com<br>
+Txt value:9ihDbjxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+<p>Please add those txt records to the domains. Waiting for the dns to take effect.<br>
+你需要手动添加如上域名记录。</p>
+<p>如果你需要更新证书，请执行：</p>
+<p>$ acme.sh --renew -d example.com<br>
+DNS API模式<br>
+通过域名服务商提供的 API 模式，进行动态的添加 DNS 记录，实现自动证书更新及部署。这也是本博客采用的方式（未采用 Nginx 方式也是有原因的）。</p>
+<p>DNS API支持列表，涵盖了国内外主流的域名服务商。具体的使用方法你需要根据服务商进行不同设置 How to use DNS API。</p>
+<p>混合模式<br>
+该模式下，为每个域名指定不同的验证方式，但 example.com 和 www.example.com 必须在同一根目录。</p>
+<p>$ acme.sh  --issue  <br>
+-d example.com -d www.example.com -w /home/wwwroot/ <br>
+-d bb.com  --dns dns_cf <br>
+-d cc.com  --apache <br>
+-d dd.com  -w /home/wwwroot/dd.com<br>
+安装证书<br>
+再颁发证书之后，我们可能需要将证书拷贝到指定位置。那么我们需要使用到 --install-cert 命令，请尽量避免手动拷贝证书。</p>
+<h1 id="apache">Apache</h1>
+<p>$ acme.sh --install-cert -d example.com <br>
+--cert-file      /path/to/certfile/in/apache/cert.pem  <br>
+--key-file       /path/to/keyfile/in/apache/key.pem  <br>
+--fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem <br>
+--reloadcmd     &quot;service apache2 force-reload&quot;</p>
+<h1 id="nginx">Nginx</h1>
+<p>$ acme.sh --install-cert -d example.com <br>
+--key-file       /path/to/keyfile/in/nginx/key.pem  <br>
+--fullchain-file /path/to/fullchain/nginx/cert.pem <br>
+--reloadcmd     &quot;service nginx force-reload&quot;<br>
+这里会将私钥、证书、证书链拷贝到指定位置，成功后执行 --reloadcmd 命令。请确保有执行这些命令的权限。</p>
+<p>当然你也不用担心证书更新的问题，在证书 60 天之后，会自动更新，更新后就会执行 --reloadcmd 的命令。</p>
+<p>这里还有一些 hook 功能，请查看帮助 $ acme.sh -h，如，--renew-hook（每次证书成功更新后执行的命令）等。</p>
+<p>更新证书<br>
+使用该工具的应该都是冲着其强大的自动更新部署功能来的。当然，如果你想手动更新：</p>
+<h1 id="rsa">RSA</h1>
+<p>$ acme.sh --renew -d example.com --force</p>
+<h1 id="ecc">ECC</h1>
+<p>acme.sh --renew -d example.com --force --ecc<br>
+全自动更新<br>
+为了实现全自动更新证书，我们需要添加一个 --renew-hook 的命令，它的作用就是能够在证书成功颁发后执行命令。</p>
+<p>如：</p>
+<p>$ acme.sh --issue --dns dns_ali -d example.com -d www.example.com -k ec-256 <br>
+--renew-hook &quot;acme.sh --install-cert -d example.com --ecc <br>
+--key-file       /path/to/keyfile/in/nginx/key.pem <br>
+--fullchain-file /path/to/fullchain/nginx/cert.pem <br>
+--reloadcmd      &quot;service nginx force-reload&quot;&quot;<br>
+解读，这里使用 ali_dns 为 example.com 和 www.example.com 颁发 ecc 证书。在证书到期前 30 天，acme.sh 将再次执行这条命令进行证书的更新。更新后执行 --renew-hook 将证书安装到指定地方 /path/to/keyfile/in/nginx/，安装好之后会执行 --reloadcmd 命令，让 nginx 重新加载证书。这样就完成了证书的自动更新，不过首次证书颁发后，需要你进行证书的安装。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Github Webhooks 完美自动化部署教程]]></title>
+        <id>https://newdy.cf/post/github-webhooks-wan-mei-zi-dong-hua-bu-shu-jiao-cheng/</id>
+        <link href="https://newdy.cf/post/github-webhooks-wan-mei-zi-dong-hua-bu-shu-jiao-cheng/">
+        </link>
+        <updated>2020-03-08T07:25:42.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://newdy.cf/post-images/1583652416269.jpg" alt="" loading="lazy"><br>
+前言<br>
+之前使用GitHub Actions可以在提交代码后自动上传到腾讯云COS存储桶,实现静态网站完美自动化部署.那么非静态的网站或者项目需要自动化部署到VPS服务器上就可以使用GitHub Webhooks来实现.作为纯属新手来说,网上查阅了十几篇相关教程,都没法部署成功,最后总算找到了问题关键点,决定整理成文章分享出来,希望能帮助到新手用户.</p>
+<p>Webhook支持php,js等多种方式,可以实现简单的部署,也可以实现复杂的自动化构建等功能,本文介绍适合新手用户的php方式,来自动化部署网站.<br>
+Webhook简单原理<br>
+对于入门新手来说,Webhook可以理解为当你在本地完成代码工作后,Push提交到GitHub,GitHub检测到Push后,使用Webhook发送一条命令到你的VPS服务器上的Webhook.php文件,服务器检测到命令后根据webhook.php中的配置在服务器上执行Pull命令,同步GitHub上的代码到服务器.实现了简单的自动化部署工作.节省了你再次上传至服务器的多余操作.</p>
+<p>部署流程<br>
+启用shell_exec<br>
+编辑php.ini</p>
+<p>vi /usr/local/php/etc/php.ini<br>
+查找shell_exec,在disable_functions中删除shell_exec字段.<br>
+<img src="https://newdy.cf/post-images/1583652514268.jpg" alt="" loading="lazy"><br>
+重启php.ini保存设置</p>
+<p>/etc/init.d/php-fpm restart<br>
+配置站点目录权限<br>
+由于Webhook的推送请求是通过http/https方式发送至服务器,根据webhook.php中的命令执行git pull的实为运行php的用户,根据以下命令可以查执行php用户为www.</p>
+<p>ps aux | grep php<br>
+确保仓库所在的站点目录所有者为www</p>
+<p>chown -R www:www /home/wwwroot<br>
+切换为www账户<br>
+以root账户登陆服务器,修改www的登录权限.</p>
+<p>vi /etc/passwd<br>
+找到</p>
+<p>www❌1003:1003::/home/www:/sbin/nologin<br>
+修为改</p>
+<p>www❌1003:1003::/home/www:/bin/bash<br>
+为www创建ssh公钥<br>
+切换为www登陆</p>
+<p>su www<br>
+创建ssh公钥</p>
+<p>ssh-keygen -t rsa</p>
+<p>获取你的公钥id_rsa.pub</p>
+<p>cat /home/www/.ssh/id_rsa.pub</p>
+<p>登陆GitHub配置ssh公钥<br>
+登陆GitHub - 进入仓库 - Settings - Deploy keys - Add Deploy keys<br>
+粘贴刚才创建的公钥<br>
+<img src="https://newdy.cf/post-images/1583652574339.jpg" alt="" loading="lazy"><br>
+首次git clone仓库<br>
+验证ssh公钥配置成功</p>
+<p>ssh -T git@github.com</p>
+<p>首次clone仓库成功</p>
+<p>git clone git@github.com:xxxxxx/xxxxxxx.git</p>
+<p>配置webhook.php<br>
+在项目网站根目录创建webhook.php获得外网链接为https://yourdoamin.com/webhook.php<br>
+粘贴以下代码,只需要更改keySecret和wwwRoot即可.</p>
+<?php
+
+// 自行创建一个验证密码
+$keySecret = 'xxxxxx';
+
+// 修改为你自己的仓库绝对路径
+$wwwRoot = [
+    '/home/wwwroot/xxxx',
+];
+
+// 保存运行脚本的日志
+$logFile = 'log/webhook.log';
+
+// 执行git命令
+$gitCommand = 'git pull';
+
+// 判断是否开启秘钥认证(已实现gitee和github)
+if (isset($keySecret) && !empty($keySecret)) {
+    list($headers, $gitType) = [[], null];
+    foreach ($_SERVER as $key => $value) {
+        'HTTP_' == substr($key, 0, 5) && $headers[str_replace('_', '-', substr($key, 5))] = $value;
+        if (empty($gitType) && strpos($key, 'GITEE') !== false) {
+            $gitType = 'GITEE';
+        }
+        if (empty($gitType) && strpos($key, 'GITHUB') !== false) {
+            $gitType = 'GITHUB';
+        }
+    }
+    if ($gitType == 'GITEE') {
+        if (!isset($headers['X-GITEE-TOKEN']) || $headers['X-GITEE-TOKEN'] != $keySecret) {
+            die('GITEE - 请求失败，秘钥有误');
+        }
+    } elseif ($gitType == 'GITHUB') {
+        $json_content = file_get_contents('php://input');
+        $signature = "sha1=" . hash_hmac('sha1', $json_content, $keySecret);
+        if ($signature != $headers['X-HUB-SIGNATURE']) {
+            die('GITHUB - 请求失败，秘钥有误');
+        }
+    } else {
+        die('请求错误，未知git类型');
+    }
+}
+
+!is_array($wwwRoot) && $wwwRoot = [$wwwRoot];
+foreach ($wwwRoot as $vo) {
+    $shell = sprintf("cd %s && git pull 2>&1", $vo);
+    $output = shell_exec($shell);
+    $log = sprintf("[%s] %s \n", date('Y-m-d H:i:s', time()) . ' - ' . $vo, $output);
+    echo $log;
+    file_put_contents($logFile, $log, FILE_APPEND);
+}
+GitHub Webhooks配置
+登陆GitHub - 进入仓库 - Settings - Webhooks - Add webhook
+Payload URL 输入刚才获取的webhook.php的外网链接.
+Content type 保持默认
+Secret 输入刚才配置webhook.php创建的验证密码
+Add webhook 完成创建
+![](https://newdy.cf/post-images/1583652656005.jpg)
+恢复关闭www登陆
+exit退出www登陆切回root,在次关闭www登陆.
+
+vi /etc/passwd
+恢复为
+
+www:x:1003:1003::/home/www:/sbin/nologin
+自动化部署成功
+本地push代码到GitHub后,可以看到返回信息提示服务器pull成功.
+![](https://newdy.cf/post-images/1583652683115.jpg)
+
+关键点和相关错误
+权限
+网上很多教程都没有提到权限问题,所以对于新手小白来说,就会不知道为什么不成功.而少数提到权限的教程,也没有非常详细指导用户如何配置.所以如果部署有问题,请检查权限问题,新手用户可以严格按照本教程先部署成功,在来自行修改你需要的配置.
+
+webhook.php
+webhook.php的代码网上也有很多种,有些能用有些无法使用,本文提供的是经过测试可用的,大家也可以自行搜索或者编辑.
+
+Service Timeout
+当遇到push大量代码时,服务器pull需要更长的时间,所以webhook返回给GitHub的信息如下图会出现Service Timeout超时错误,但实际上服务器也成功执行了pull,你可以登陆服务器检查来确认,同时也可以根据你的项目实际情况自行修改webhook.php执行配置.
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[配置 Nginx 和 frps 共存 80/443 端口及泛域名支持教程]]></title>
+        <id>https://newdy.cf/post/pei-zhi-nginx-he-frps-gong-cun-80443-duan-kou-ji-fan-yu-ming-zhi-chi-jiao-cheng/</id>
+        <link href="https://newdy.cf/post/pei-zhi-nginx-he-frps-gong-cun-80443-duan-kou-ji-fan-yu-ming-zhi-chi-jiao-cheng/">
+        </link>
+        <updated>2020-03-08T06:13:07.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://newdy.cf/post-images/1583648139451.jpg" alt="" loading="lazy"><br>
+前言<br>
+常规情况下frps服务器端会占用80和443端口,为内网设备提供穿透,实现用户可以使用域名无端口访问内网设备.而在已经部署nginx的服务器上,由于nginx已经占用80和443端口,frps的HTTP和HTTPS需另外选择端口,可以通过nginx的反向代理配置让frps提供的穿透服务也能够使用80和443端口,实现nginx和frps共存.同时配置支持泛域名反向代理.</p>
+<p>此方案适合个人用户搭建frps,国内服务器也可备案自己的域名,配置泛域名的反向代理及证书,可以方便快速的使用任何二级域名来穿透内网的各项服务.<br>
+此方案不适合公开提供服务的frps服务器,由于公开服务,用户使用的是自己的域名,无法为各用户分别配置反向代理.但如果你提供的frps支持subdomain泛域名,已经为用户提供了二级或三级域名使用,也可以使用本方案,但用户就无法使用自己的域名.所以此方案并不推荐用于公共frp服务.</p>
+<p>方案介绍</p>
+<p>常规frps提供80和443端口的穿透,当外网访问域名时,frps会将80和443端口穿透到内网设备,由内网设备来处理80和443端口的请求.例如HTTPS的强制跳转,伪静态,证书等请求都由内网设备来处理.一些成熟的服务,例如群晖DSM,Web Station以及各套件都能够很好的提供服务,而另外一些服务,例如某些docker容器,部分路由器管理端,可能仅仅提供了HTTP端口,想要使用HTTPS还得借助另外的反向代理服务,相对会更加麻烦.</p>
+<p>内网设备及服务可无需HTTPS支持,frpc.ini也只需要配置HTTP穿透到服务器.当外网访问域名时,收到请求的Nginx会根据泛域名配置,强制跳转到HTTPS,同时Nginx会提供SSL安全证书支持,然后Nginx会反向代理到frps的HTTP端口,在由frps穿透回内网获取信息返回给外网用户.</p>
+<p>经过一段时间的使用,两种方案各有利弊,还是需要根据实际使用场景来选择.例如群晖NAS官方的DSM,各套件和服务可以使用上文第一种独立frps方案,由群晖来处理Web前端和SSL证书.如果使用一些docker容器服务,本身仅只支持HTTP,那么可以选择nginx和frps共存的方案,让nginx反向代理来支持HTTPS和SSL证书.<br>
+方案配置<br>
+frps.ini配置<br>
+由于nginx占用80/443端口,frps.ini中的 vhost_http_port 和 vhost_https_port 请更换为其他端口.<br>
+subdomain_host 根据需求可选配置泛域名,或者注释删除此参数使用自定义域名.<br>
+frpc.ini配置<br>
+如果 frps.ini 配置了 subdomain_host 泛域名,那么 frpc.ini 中域名参数需使用 subdomain = xx 仅填写二级域名主机头即可,不要填写完整域名.<br>
+<img src="https://newdy.cf/post-images/1583648249353.jpg" alt="" loading="lazy"><br>
+如果 frps.ini 没有配置 subdomain_host泛域名,那么 frpc.ini 中域名参数需使用 custom_domains = xx.xxx.com 需填写完整的域名.<br>
+<img src="https://newdy.cf/post-images/1583648269468.jpg" alt="" loading="lazy"><br>
+nginx配置<br>
+proxy_pass http://127.0.0.1:1234; 中的 HTTP ,请勿写成 HTTPS .<br>
+proxy_pass http://127.0.0.1:1234; 中 1234 端口为 frps 的 HTTP 端口.<br>
+proxy_set_header Host $host:80; 注意需加上80端口,否则会无限循环301跳转,导致网页打不开提示重定向次数过多ERR_TOO_MANY_REDIRECTS.</p>
+<p>server {<br>
+listen 80;<br>
+server_name *.yourdomain.com;<br>
+return 301 https://<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mi>o</mi><mi>s</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">host</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">h</span><span class="mord mathdefault">o</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span></span></span></span>request_uri;<br>
+}</p>
+<p>server {<br>
+listen 443 ssl http2;<br>
+server_name *.yourdomain.com;</p>
+<pre><code>ssl_certificate /usr/local/nginx/conf/ssl/yourdomain.com.crt;
+ssl_certificate_key /usr/local/nginx/conf/ssl/yourdomain.com.key;
+
+client_max_body_size 50m; 
+client_body_buffer_size 256k;
+client_header_timeout 3m;
+client_body_timeout 3m;
+send_timeout 3m;
+proxy_connect_timeout 300s; 
+proxy_read_timeout 300s; 
+proxy_send_timeout 300s;
+proxy_buffer_size 64k; 
+proxy_buffers 4 32k; 
+proxy_busy_buffers_size 64k;
+proxy_temp_file_write_size 64k; 
+proxy_ignore_client_abort on; 
+
+location / {
+    proxy_pass http://127.0.0.1:1234;
+    proxy_redirect off;
+    proxy_set_header Host $host:80;
+    proxy_ssl_server_name on;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+</code></pre>
+<p>}</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[让你的黑群晖更加完美，用M.2 NVME SSD做缓存]]></title>
         <id>https://newdy.cf/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/</id>
@@ -281,291 +584,6 @@ V2EX DNS	                        199.91.73.222	     178.79.131.110</p>
 <p>网线标准长度1000英尺/箱（大约相当于305米）</p>
 <p>使用磁铁可以鉴别铁芯线，如果网线用磁铁可以吸引（哪怕是轻微的吸引），那说明是铁芯线，铁芯线因为电阻大，严重影响传输效率和传输距离，不推荐购买。优质的网线一般都是使用铜作为线芯的。即使差一些的线，也应该使用铝作为线芯。</p>
 <p>剥开少许网线，看一下线芯的粗细，线芯细了也会影响传输效率。所以应该选用相对而言线芯粗的。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MySQL（MariaDB）的 SSL 加密复制]]></title>
-        <id>https://newdy.cf/post/mysqlmariadbde-ssl-jia-mi-fu-zhi/</id>
-        <link href="https://newdy.cf/post/mysqlmariadbde-ssl-jia-mi-fu-zhi/">
-        </link>
-        <updated>2020-02-24T12:04:51.000Z</updated>
-        <content type="html"><![CDATA[<p>在默认的主从复制过程或远程连接到MySQL/MariaDB所有的链接通信中的数据都是明文的，在局域网内连接倒问题不大；要是在外网里访问数据或则复制，则安全隐患会被放大很多。由于项目要求需要直接和外网的一台实例进行同步。所以本文介绍下通过SSL加密的方式进行复制的方法，来进一步提高数据的安全性。本文会一起介绍MySQL和MariaDB。</p>
-<p>环境搭建：</p>
-<p>默认情况下ssl都是关闭的，要是have_ssl显示NO，则表示数据库不支持SSL，需要重新编译安装来支持它，显示为DISABLED表示支持SSL，但没有开启。</p>
-<p>复制代码</p>
-<blockquote>
-<p>show variables like '%ssl%';                                                                                                  +---------------+----------+<br>
-| Variable_name | Value    |<br>
-+---------------+----------+<br>
-| have_openssl  | DISABLED |<br>
-| have_ssl      | DISABLED |<br>
-| ssl_ca        |          |<br>
-| ssl_capath    |          |<br>
-| ssl_cert      |          |<br>
-| ssl_cipher    |          |<br>
-| ssl_key       |          |<br>
-+---------------+----------+<br>
-复制代码<br>
-现在来开启SSL，在配置文件的mysqld选项组里面添加：</p>
-</blockquote>
-<p>ssl<br>
-重启数据库，再次查看：</p>
-<p>复制代码<br>
-show variables like '%ssl%';<br>
-+---------------+-------+<br>
-| Variable_name | Value |<br>
-+---------------+-------+<br>
-| have_openssl  | YES   |<br>
-| have_ssl      | YES   |<br>
-| ssl_ca        |       |<br>
-| ssl_capath    |       |<br>
-| ssl_cert      |       |<br>
-| ssl_cipher    |       |<br>
-| ssl_key       |       |<br>
-+---------------+-------+<br>
-复制代码<br>
-接着就是配置SSL的重点了：</p>
-<p>1：在主服务器上创建CA证书：</p>
-<p>openssl genrsa 2048 &gt; ca-key.pem</p>
-<p>openssl req -new -x509 -nodes -days 1000 -key ca-key.pem &gt; ca-cert.pem<br>
-2：在主服务器上创建服务端的证书：</p>
-<p>openssl req -newkey rsa:2048 -days 1000 -nodes -keyout server-key.pem &gt; server-req.pem</p>
-<p>openssl x509 -req -in server-req.pem -days 1000 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 &gt; server-cert.pem<br>
-3：在主服务器上创建客户端的证书：</p>
-<p>openssl req -newkey rsa:2048 -days 1000 -nodes -keyout client-key.pem &gt; client-req.pem</p>
-<p>openssl x509 -req -in client-req.pem -days 1000 -CA ca-cert.pem -CAkey ca-key.pem -set_serial 01 &gt; client-cert.pem<br>
-上面的操作都是在主上执行的，并且都在/etc/mysql/ 目录下执行的。这里需要注意的是MySQL和MariaDB不同：</p>
-<p>MySQL在生成上面证书的时候需要输入大量用户信息，在CA上创建证书要注意所有的用户信息要和CA中的一致，从国家到部门都要相同，否则会造成证书无法使用，直接全部默认回车即可。要是用户信息一样则MariaDB会报错：</p>
-<p>ERROR 2026 (HY000): SSL connection error: error:00000001:lib(0):func(0):reason(1)<br>
-和</p>
-<p>[ERROR] Slave I/O: error connecting to master ... - retry-time: 60  retries: 86400  message: SSL connection error: error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed, Internal MariaDB error code: 2026<br>
-MariaDB在生成上面证书的时候也是需要输入大量用户信息，和MySQL不同的是输入的用户信息服务端和客户端不能一致。即服务端输入和客户端输入不一样。具体原因见这里，最后可以通过：</p>
-<p>openssl verify -CAfile /etc/mysql/ca-cert.pem /etc/mysql/server-cert.pem /etc/mysql/client-cert.pem<br>
-验证MariaDB证书的有效性。好了，所有的证书已经生成，那么在主上需要修改配置文件，把生成的证书配置起来：</p>
-<p>ssl-ca=/etc/mysql/ca-cert.pem<br>
-ssl-cert=/etc/mysql/server-cert.pem<br>
-ssl-key=/etc/mysql/server-key.pem<br>
-并且把生成的证书：ca-cert.pem，client-cert.pem，client-key.pem 复制给从服务器。</p>
-<p>重启主服务器，查看SSL的情况：</p>
-<p>复制代码</p>
-<blockquote>
-<p>show variables like '%ssl%';<br>
-+---------------+----------------------------+<br>
-| Variable_name | Value                      |<br>
-+---------------+----------------------------+<br>
-| have_openssl  | DISABLED                   |<br>
-| have_ssl      | DISABLED                   |<br>
-| ssl_ca        | /etc/mysql/ca-cert.pem     |<br>
-| ssl_capath    |                            |<br>
-| ssl_cert      | /etc/mysql/server-cert.pem |<br>
-| ssl_cipher    |                            |<br>
-| ssl_key       | /etc/mysql/server-key.pem  |<br>
-+---------------+----------------------------+<br>
-复制代码<br>
-发现have_ssl变成了DISABLED，查看错误日志：</p>
-</blockquote>
-<p>SSL error: Unable to get private key from '/etc/mysql/server-key.pem'<br>
-141229 11:09:02 [Warning] Failed to setup SSL<br>
-141229 11:09:02 [Warning] SSL error: Unable to get private key<br>
-发现服务端的key不可用，在网上到了解决办法，大家可以自己看：http://askubuntu.com/questions/194074/enabling-ssl-in-mysql，概括的说就是openssl新版本的变化导致的，这里有2个解决办法来重新生成server-key.pem：</p>
-<p>方法1：openssl rsa</p>
-<p>openssl rsa -in server-key.pem -out server-key.pem<br>
-再次查看SSL情况：</p>
-<p>复制代码</p>
-<blockquote>
-<p>show variables like '%ssl%';<br>
-+---------------+----------------------------+<br>
-| Variable_name | Value                      |<br>
-+---------------+----------------------------+<br>
-| have_openssl  | YES                        |<br>
-| have_ssl      | YES                        |<br>
-| ssl_ca        | /etc/mysql/ca-cert.pem     |<br>
-| ssl_capath    |                            |<br>
-| ssl_cert      | /etc/mysql/server-cert.pem |<br>
-| ssl_cipher    |                            |<br>
-| ssl_key       | /etc/mysql/server-key.pem  |<br>
-+---------------+----------------------------+<br>
-复制代码<br>
-方法2：这里也可以直接安装openssl的0.9.8x版本进行证书生成。</p>
-</blockquote>
-<p>wget http://www.openssl.org/source/openssl-0.9.8x.tar.gz<br>
-tar xvfz openssl-0.9.8x.tar.gz<br>
-cd openssl-0.9.8x<br>
-./config --prefix=/usr/local/openssl-0.9.8<br>
-make<br>
-make install<br>
-本文是通过方法1来进行解决的。</p>
-<p>到此在主上的操作完成，再生成一个复制帐号：REQUIRE SSL</p>
-<p>GRANT REPLICATION SLAVE ON <em>.</em> TO 'rep'@'192.168.200.%' IDENTIFIED BY '123456' REQUIRE SSL;<br>
-接着就去从上配置。之前已经把生成的证书给了从服务器，那么在配置之前可以用SSL连接主服务器试试：</p>
-<p>$mysql --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem -h192.168.200.245 -urep -p<br>
-Enter password:<br>
-SSL error: Unable to get private key from 'client-key.pem'<br>
-ERROR 2026 (HY000): SSL connection error<br>
-同理，也是SSL的问题导致的，重新生成client-key.pem，方法同重新生成server-key.pem一样：</p>
-<p>openssl rsa -in client-key.pem -out client-key.pem<br>
-继续用SSL测试连接：</p>
-<p>复制代码<br>
-$mysql --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem -h192.168.200.245 -urep -p<br>
-Enter password:<br>
-Welcome to the MySQL monitor.  Commands end with ; or \g.<br>
-Your MySQL connection id is 763<br>
-Server version: 5.5.35-0ubuntu0.12.04.2-log (Ubuntu)</p>
-<p>Copyright (c) 2000, 2014, Oracle and/or its affiliates. All rights reserved.</p>
-<p>Oracle is a registered trademark of Oracle Corporation and/or its<br>
-affiliates. Other names may be trademarks of their respective<br>
-owners.</p>
-<p>Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.</p>
-<h2 id="mysql-s">mysql&gt; \s</h2>
-<p>mysql  Ver 14.14 Distrib 5.5.37, for debian-linux-gnu (x86_64) using readline 6.2</p>
-<p>Connection id:        763<br>
-Current database:<br>
-Current user:        rep@192.168.200.212<br>
-SSL:            Cipher in use is DHE-RSA-AES256-SHA<br>
-Current pager:        stdout<br>
-Using outfile:        ''<br>
-Using delimiter:    ;<br>
-Server version:        5.5.35-0ubuntu0.12.04.2-log (Ubuntu)<br>
-Protocol version:    10<br>
-Connection:        192.168.200.245 via TCP/IP<br>
-Server characterset:    utf8mb4<br>
-Db     characterset:    utf8mb4<br>
-Client characterset:    utf8<br>
-Conn.  characterset:    utf8<br>
-TCP port:        3306<br>
-Uptime:            22 min 52 sec</p>
-<p>Threads: 3  Questions: 2325  Slow queries: 1  Opens: 7483  Flush tables: 1  Open tables: 100  Queries per second avg: 1.694<br>
-复制代码<br>
-SSL测试连接成功，并且登入的SSL协议是：Cipher in use is DHE-RSA-AES256-SHA</p>
-<p>继续在从上配置SSL：</p>
-<p>ssl<br>
-ssl-ca=/etc/mysql/ca-cert.pem<br>
-ssl-cert=/etc/mysql/client-cert.pem<br>
-ssl-key=/etc/mysql/client-key.pem<br>
-查看SSL是否被支持：</p>
-<p>复制代码</p>
-<blockquote>
-<p>show variables like '%ssl%';<br>
-+---------------+----------------------------+<br>
-| Variable_name | Value                      |<br>
-+---------------+----------------------------+<br>
-| have_openssl  | YES                        |<br>
-| have_ssl      | YES                        |<br>
-| ssl_ca        | /etc/mysql/ca-cert.pem     |<br>
-| ssl_capath    |                            |<br>
-| ssl_cert      | /etc/mysql/client-cert.pem |<br>
-| ssl_cipher    |                            |<br>
-| ssl_key       | /etc/mysql/client-key.pem  |<br>
-+---------------+----------------------------+<br>
-复制代码<br>
-从上SSL也被正确支持，那么最后开始配置主从replicate。在从上CHANGE:</p>
-</blockquote>
-<p>CHANGE MASTER TO MASTER_HOST='192.168.200.245', MASTER_USER='rep', MASTER_PASSWORD='123456', MASTER_LOG_FILE='mysql-bin.000042', MASTER_LOG_POS=521, MASTER_SSL=1, MASTER_SSL_CA = '/etc/mysql/ca-cert.pem', MASTER_SSL_CERT = '/etc/mysql/client-cert.pem', MASTER_SSL_KEY = '/etc/mysql/client-key.pem'<br>
-测试：</p>
-<p>M：</p>
-<p>复制代码</p>
-<blockquote>
-<p>create table tmp_1229(id int,name varchar(100))default charset utf8;</p>
-</blockquote>
-<blockquote>
-<p>insert into tmp_1229 values(1,'a'),(2,'b'),(3,'c');</p>
-</blockquote>
-<blockquote>
-<p>select * from tmp_1229;<br>
-+------+------+<br>
-| id   | name |<br>
-+------+------+<br>
-|    1 | a    |<br>
-|    2 | b    |<br>
-|    3 | c    |<br>
-+------+------+<br>
-复制代码<br>
-S:</p>
-</blockquote>
-<p>复制代码</p>
-<blockquote>
-<p>select * from tmp_1229;<br>
-+------+------+<br>
-| id   | name |<br>
-+------+------+<br>
-|    1 | a    |<br>
-|    2 | b    |<br>
-|    3 | c    |<br>
-+------+------+</p>
-</blockquote>
-<p>复制代码<br>
-以上同步成功。</p>
-<p>总结：</p>
-<pre><code>  SSL(Secure Sockets Layer 安全套接层),及其继任者传输层安全（Transport Layer Security，TLS）是为网络通信提供安全及数据完整性的一种安全协议。复制默认是明文进行传输的，通过SSL加密可以大大提高数据的安全性。在上面的过程中，遇到一些问题：
-</code></pre>
-<p>1：openssl版本问题引起的证书不可用，文中已经说明解决办法。</p>
-<p>2：MariaDB 证书的不可用，原因是生成服务端客户端证书的时候输入一致导致的，文中也说明了解决办法。</p>
-<p>3：要是配置有问题，在用SSL登陆的时候，可以发现错误信息，可以直接定位到哪里出问题。</p>
-<p>ssl登陆：<br>
-mysql --ssl-ca=ca-cert.pem --ssl-cert=client-cert.pem --ssl-key=client-key.pem -h192.168.200.245 -urep -p<br>
-4：在配置MariaDB的时候，在生成证书的时候可以直接先验证，查看是否有问题。</p>
-<p>验证：<br>
-openssl verify -CAfile /etc/mysql/ca-cert.pem /etc/mysql/server-cert.pem /etc/mysql/client-cert.pem<br>
-/etc/mysql/server-cert.pem: OK<br>
-/etc/mysql/client-cert.pem: OK</p>
-<p>5：要是openssl版本没有问题，不需要再次通过openssl rsa 再次生成，具体的安装配置方法参照本文章即可。</p>
-<p>更新（2016.3.19）：</p>
-<p>今天做了MySQL5.7的SSL复制，5.7安装的时候就已经在数据目录下面生成了上面的这些pem文件，所以直接把client的pem复制到从上去就可以了（注意复制过去之后修改权限，属主改成mysql即可）。否则报错：</p>
-<p>Failed to set up SSL because of the following SSL library error: Unable to get certificate ... server-cert.pem<br>
-Failed to set up SSL because of the following SSL library error: Unable to get private key ... server-cert.pem</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[四个方法离线下载 Chrome 拓展程序]]></title>
-        <id>https://newdy.cf/post/si-ge-fang-fa-chi-xian-xia-zai-chrome-tuo-zhan-cheng-xu/</id>
-        <link href="https://newdy.cf/post/si-ge-fang-fa-chi-xian-xia-zai-chrome-tuo-zhan-cheng-xu/">
-        </link>
-        <updated>2020-02-23T18:50:15.000Z</updated>
-        <content type="html"><![CDATA[<p>1、Chrome 网上商店中文镜像网站<br>
-https://www.gugeapps.net/<br>
-2、离线下载 crx 英文网站，支持历史版本<br>
-https://www.crx4chrome.com/<br>
-3、根据插件 URL 和 ID ，远程下载插件 Google Chrome 插件<br>
-https://chrome-extension-downloader.com/</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[天猫精灵X1自动恢复出厂设置解决方法]]></title>
-        <id>https://newdy.cf/post/tian-mao-jing-ling-x1-zi-dong-hui-fu-chu-han-she-zhi-jie-jue-fang-fa/</id>
-        <link href="https://newdy.cf/post/tian-mao-jing-ling-x1-zi-dong-hui-fu-chu-han-she-zhi-jie-jue-fang-fa/">
-        </link>
-        <updated>2020-02-23T15:05:57.000Z</updated>
-        <content type="html"><![CDATA[<p>最近天猫精灵使用一段时间后就会自动恢复出厂，需要重新配置网络等，特别麻烦。 偶见一篇文章详解了出现该问题的原因及解决办法，跟着动手试了下，还真心好了。 整理了一下操作步骤，给需要的朋友一个解决办法。</p>
-<p>一、修复方法<br>
-<img src="https://newdy.cf/post-images/1582470411036.jpg" alt="" loading="lazy"><br>
-<img src="https://i.loli.net/2020/02/24/eEZnVhjgK64ia3R.png" alt="1581432909952.png" loading="lazy"></p>
-<p>修复方法：SW1右0.5V跳线到GND</p>
-<p>简单操作，手残党勿怕，实在搞不定，找个修电器的帮忙操作下也就几块钱。</p>
-<p>二、修复步骤详解</p>
-<ol>
-<li>
-<p>拆开底座<br>
-小心撕掉底部的橡胶防滑垫，会看见3个螺丝孔，螺丝刀直接顶下去，松动全部螺丝，拿下底座。<br>
-<img src="https://newdy.cf/post-images/1582470437258.jpg" alt="" loading="lazy"></p>
-</li>
-<li>
-<p>分离主板与底座<br>
-拿下底座后，会看见两个固定主板的卡口，轻顶住，小心拿下主板（注意后面还有排线，分离时不要太用力）。<br>
-<img src="https://newdy.cf/post-images/1582470469204.jpg" alt="" loading="lazy"></p>
-</li>
-<li>
-<p>拔掉电源排线<br>
-分离主板与底座后，到主板底面，分离主板与电源控制板的排线。排线直接匀力拔出即可。<br>
-<img src="https://newdy.cf/post-images/1582470508273.jpg" alt="" loading="lazy"></p>
-</li>
-<li>
-<p>焊接跳线<br>
-找一根跳线（家里面找不到细的线了，乱找了一根坏的USB线，剪掉抽一截出来），焊接SW1右侧 与 GND接口，实测可以不拆掉SW1（其实就是恢复出厂设置的那个孔顶下来的按钮）也能正常使用，且保留了恢复出厂的功能。<br>
-焊接完毕后，通电测试，上电正常就按拆开顺序倒序重新安装回去。<br>
-至此修复完毕，目前半个月左右了未再出现自动恢复出厂的情况。<br>
-<img src="https://newdy.cf/post-images/1582470546211.jpg" alt="" loading="lazy"></p>
-</li>
-</ol>
 ]]></content>
     </entry>
 </feed>
