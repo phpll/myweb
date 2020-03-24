@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1585058828321">
-<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+<link rel="shortcut icon" href="https://book.baidv.win/favicon.ico?v=1585060012186">
+<link rel="stylesheet" href="https://book.baidv.win/styles/main.css">
 
 
 
@@ -38,8 +38,8 @@
       <div class="sidebar" :class="{ 'full-height': menuVisible }">
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
-      <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1585058828321" class="site-logo">
+      <a class="site-title-container" href="https://book.baidv.win">
+        <img src="https://book.baidv.win/images/avatar.png?v=1585060012186" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -96,7 +96,7 @@
       温故而知新
     </div>
     <div class="site-footer">
-      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://book.baidv.win/atom.xml" target="_blank">RSS</a>
     </div>
   </div>
 </div>
@@ -113,13 +113,13 @@
 在跨三层设备的环境下，路由获取三层设备下的MAC地址一般为三层设备wan口的MAC地址，针对这种情况，爱快推出了跨三层应用功能，主要解决获取三层下的MAC地址及web认证问题<br>
 本文介绍下爱快与J50交换机之间连接后，具体需要怎么设置</p>
 <p>二、网络拓扑<br>
-<img src="https://newdy.cf/post-images/1582799650812.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799650812.png" alt="" loading="lazy"><br>
 三、具体配置<br>
 1：爱快路由配置步骤：<br>
 ①：网络设置--静态路由，添加一条回指路由，指向J50内网设备</p>
-<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582799734596.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://book.baidv.win/post-images/1582799734596.png" alt="" loading="lazy"></figure>
 <p>②：应用工具--跨三层应用，开启服务</p>
-<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582799739233.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://book.baidv.win/post-images/1582799739233.png" alt="" loading="lazy"></figure>
 <p>注：由于三层设备还未开启SNMP服务，所以这里会显示状态为异常，三层配置成功后会自动检测成功</p>
 <p>功能服务：勾选开启<br>
 功能状态：自动检测工作状态，检测间隔时间为5-10S<br>
@@ -131,33 +131,33 @@ SNMP协议版本：需和J50配置一致，这里选择V2<br>
 团体名：需要和J50配置的团体名一致，如无特殊需求可不修改<br>
 2：IK-J50配置步骤：<br>
 ①：配置vlan100、vlan200，指定接口10为access上联口，vid为100，指定接口20为access下联口，vid为200<br>
-<img src="https://newdy.cf/post-images/1582799758999.png" alt="" loading="lazy"></p>
-<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582799776939.png" alt="" loading="lazy"></figure>
+<img src="https://book.baidv.win/post-images/1582799758999.png" alt="" loading="lazy"></p>
+<figure data-type="image" tabindex="3"><img src="https://book.baidv.win/post-images/1582799776939.png" alt="" loading="lazy"></figure>
 <p>②：配置vlan100的IP为192.168.15.248，vlan200的IP为192.168.200.1<br>
-<img src="https://newdy.cf/post-images/1582799836027.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582799843132.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799836027.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799843132.png" alt="" loading="lazy"><br>
 ③：开启DHCP服务端，配置地址池、租约和DNS<br>
-<img src="https://newdy.cf/post-images/1582799903233.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582799909374.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799903233.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799909374.png" alt="" loading="lazy"><br>
 ④：配置静态路由</p>
-<figure data-type="image" tabindex="4"><img src="https://newdy.cf/post-images/1582799956221.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://book.baidv.win/post-images/1582799956221.png" alt="" loading="lazy"></figure>
 <p>⑤：开启SNMP服务，同时配置SNMP版本<br>
-<img src="https://newdy.cf/post-images/1582799963324.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799963324.png" alt="" loading="lazy"><br>
 ⑥：配置SNMP团体名及访问规则：<br>
-<img src="https://newdy.cf/post-images/1582799996351.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799996351.png" alt="" loading="lazy"><br>
 四、最终效果展示<br>
 跨三层应用界面：</p>
-<figure data-type="image" tabindex="5"><img src="https://newdy.cf/post-images/1582800053303.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://book.baidv.win/post-images/1582800053303.png" alt="" loading="lazy"></figure>
 <p>三层下电脑详情：<br>
-<img src="https://newdy.cf/post-images/1582800057552.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582800057552.png" alt="" loading="lazy"><br>
 爱快终端监控显示：<br>
-<img src="https://newdy.cf/post-images/1582800083530.png" alt="" loading="lazy"></p>
+<img src="https://book.baidv.win/post-images/1582800083530.png" alt="" loading="lazy"></p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://newdy.cf/tag/qn2qMoNvx/" class="tag">
+                  <a href="https://book.baidv.win/tag/qn2qMoNvx/" class="tag">
                     snmp
                   </a>
                 
@@ -166,7 +166,7 @@ SNMP协议版本：需和J50配置一致，这里选择V2<br>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/snmpv1v2v3pei-zhi-ju-li-ji-pei-zhi/">
+                <a href="https://book.baidv.win/post/snmpv1v2v3pei-zhi-ju-li-ji-pei-zhi/">
                   <h3 class="post-title">
                     SNMP（V1/V2/V3）配置举例及配置
                   </h3>

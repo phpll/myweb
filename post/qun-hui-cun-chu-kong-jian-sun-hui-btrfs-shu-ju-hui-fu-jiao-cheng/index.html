@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1585058828321">
-<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+<link rel="shortcut icon" href="https://book.baidv.win/favicon.ico?v=1585060012186">
+<link rel="stylesheet" href="https://book.baidv.win/styles/main.css">
 
 
 
@@ -36,8 +36,8 @@
       <div class="sidebar" :class="{ 'full-height': menuVisible }">
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
-      <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1585058828321" class="site-logo">
+      <a class="site-title-container" href="https://book.baidv.win">
+        <img src="https://book.baidv.win/images/avatar.png?v=1585060012186" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -94,7 +94,7 @@
       温故而知新
     </div>
     <div class="site-footer">
-      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://book.baidv.win/atom.xml" target="_blank">RSS</a>
     </div>
   </div>
 </div>
@@ -115,32 +115,32 @@
 apt-get install mdadm lvm2 btrfs-prog<br>
 mdadm -Asf &amp;&amp; vgchange -ay<br>
 正常完成后可以在磁盘管理中看到 RAID 阵列，但是由于文件系统损坏，此时是无法挂载的。这里会显示阵列的设备文件是 /dev/md/2 ，记住你的显示值，稍后会要用到。<br>
-<img src="https://newdy.cf/post-images/1581432806246.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581432806246.png" alt="" loading="lazy"><br>
 我们切换回终端，运行以下命令：</p>
 <p>btrfs-find-root /dev/md/2 &amp;&gt; /tmp/root.txt<br>
 运行过程可能需要10-30分钟，期间是没有任何回显的。等待运行完成后终端会返回命令提示符，这时我们打开 /tmp/root.txt 文件，可以看到如下内容：<br>
-<img src="https://newdy.cf/post-images/1581432867060.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581432867060.png" alt="" loading="lazy"><br>
 我们需要用到的数据是 Well block 后面的这一串数字，其后的 gen 数字越高，恢复的可能性越大。下一步使用找到的 tree root 来模拟修复，到目前为止的所有操作都不会对硬盘进行写入和修改，也不会破坏任何数据。</p>
 <p>btrfs check --tree-root <block> --super <sup><br>
 其中 <block> 为上一步中的数值，按 gen 数字从高到低依次尝试使用，<sup> 可以尝试0，1或2。如果 <block> 有效，运行结果末尾应当类似于以下图示：<br>
-<img src="https://newdy.cf/post-images/1581432909952.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581432909952.png" alt="" loading="lazy"><br>
 如果最后回显不是以上格式，表明这一条 <block> 无效，需要继续尝试下一条。在确认看到以上提示后，我们尝试将数据导出。</p>
 <p>btrfs restore /dev/md/2 /tmp -D -v -F -i -t <sup><br>
 此时仍然使用上一步中的 <block> 值，将 /tmp 改为导出目录，需要确保留有足够空间存储文件。如果文件名包含特殊符号可能导致导出中断，将目标分区格式化为 Ext3/4 即可。<br>
-<img src="https://newdy.cf/post-images/1581432941261.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581432941261.png" alt="" loading="lazy"><br>
 如果导出正常进行，会看到类似上图的提示，此处没有进度提示，可以自行前往导出目录查看。如果导出失败会给出其他提示，在确认导出分区是 Ext3/4 的情况下，则只能退回上一步尝试其他 <sup> 值。</p>
 <p>到目前为止我们并没有对数据盘进行任何写入和修改操作，如果因为种种原因无法导出，或是导出过程异常中断，仍然可以通过修复原盘的方式来挽回数据。不过请注意，此步骤有可能会损坏数据，如果你不能接受任何风险，请停止执行并联系专业机构。</p>
 <p>btrfs check --repair --tree-root <block> --super <sup><br>
 使用之前步骤中正常回显的 <block> 及 <sup> 值进行正式修复，确认操作完成后执行：</p>
 <p>btrfs rescue super-recover /dev/md/2<br>
-<img src="https://newdy.cf/post-images/1581432991454.png" alt="" loading="lazy"></p>
+<img src="https://book.baidv.win/post-images/1581432991454.png" alt="" loading="lazy"></p>
 <p>提示确认目标分区是 Btrfs 文件系统，否则会损坏数据，输入 y 确认操作。等待数秒后再次回到提示符，如果一切顺利，此时已经可以通过磁盘管理工具挂载 Btrfs 分区了。不过群晖很大几率不会识别修复后的文件系统，还是建议将数据导出后再将硬盘还原。😚</p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://newdy.cf/tag/LYDm33u-V/" class="tag">
+                  <a href="https://book.baidv.win/tag/LYDm33u-V/" class="tag">
                     群晖
                   </a>
                 
@@ -149,7 +149,7 @@ mdadm -Asf &amp;&amp; vgchange -ay<br>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/qun-hui-kai-qi-smb3-duo-tong-dao-die-jia-wang-qia-su-du/">
+                <a href="https://book.baidv.win/post/qun-hui-kai-qi-smb3-duo-tong-dao-die-jia-wang-qia-su-du/">
                   <h3 class="post-title">
                     群晖开启 SMB3 多通道叠加网卡速度
                   </h3>

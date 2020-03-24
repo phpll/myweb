@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1585058828321">
-<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+<link rel="shortcut icon" href="https://book.baidv.win/favicon.ico?v=1585060012186">
+<link rel="stylesheet" href="https://book.baidv.win/styles/main.css">
 
 
 
@@ -39,8 +39,8 @@ NFS就是Network File System的缩写，它最大的功能就是可以通过网�
       <div class="sidebar" :class="{ 'full-height': menuVisible }">
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
-      <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1585058828321" class="site-logo">
+      <a class="site-title-container" href="https://book.baidv.win">
+        <img src="https://book.baidv.win/images/avatar.png?v=1585060012186" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -97,7 +97,7 @@ NFS就是Network File System的缩写，它最大的功能就是可以通过网�
       温故而知新
     </div>
     <div class="site-footer">
-      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://book.baidv.win/atom.xml" target="_blank">RSS</a>
     </div>
   </div>
 </div>
@@ -116,7 +116,7 @@ NFS就是Network File System的缩写，它最大的功能就是可以通过网�
 <p>​	NFS服务器可以让PC将网络中的NFS服务器共享的目录挂载到本地端的文件系统中，而在本地端的系统中来看，那个远程主机的目录就好像是自己的一个磁盘分区一样，在使用上相当便利；</p>
 <p>NFS一般用来存储共享视频，图片等静态数据。</p>
 <p>NFS挂载原理：<br>
-<img src="https://newdy.cf/post-images/1582176745939.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582176745939.jpg" alt="" loading="lazy"><br>
 图；服务器挂载结构<br>
 如上图示：</p>
 <p>当我们在NFS服务器设置好一个共享目录/home/public后，其他的有权访问NFS服务器的NFS客户端就可以将这个目录挂载到自己文件系统的某个挂载点，这个挂载点可以自己定义，如上图客户端A与客户端B挂载的目录就不相同。并且挂载好后我们在本地能够看到服务端/home/public的所有数据。如果服务器端配置的客户端只读，那么客户端就只能够只读。如果配置读写，客户端就能够进行读写。挂载后，NFS客户端查看磁盘信息命令：#df –h。</p>
@@ -127,7 +127,7 @@ NFS就是Network File System的缩写，它最大的功能就是可以通过网�
 <p>首先当NFS启动后，就会随机的使用一些端口，然后NFS就会向RPC去注册这些端口，RPC就会记录下这些端口，并且RPC会开启111端口，等待客户端RPC的请求，如果客户端有请求，那么服务器端的RPC就会将之前记录的NFS端口信息告知客户端。如此客户端就会获取NFS服务器端的端口信息，就会以实际端口进行数据的传输了。</p>
 <p>注意：在启动NFS SERVER之前，首先要启动RPC服务（即portmap服务，下同）否则NFS SERVER就无法向RPC服务区注册，另外，如果RPC服务重新启动，原来已经注册好的NFS端口数据就会全部丢失。因此此时RPC服务管理的NFS程序也要重新启动以重新向RPC注册。特别注意：一般修改NFS配置文档后，是不需要重启NFS的，直接在命令执行systemctl reload nfs或exportfs –rv即可使修改的/etc/exports生效</p>
 <p>NFS客户端和NFS服务器通讯过程：<br>
-<img src="https://newdy.cf/post-images/1582176817313.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582176817313.jpg" alt="" loading="lazy"><br>
 首先服务器端启动RPC服务，并开启111端口</p>
 <p>服务器端启动NFS服务，并向RPC注册端口信息</p>
 <p>客户端启动RPC（portmap服务），向服务端的RPC(portmap)服务请求服务端的NFS端口</p>
@@ -228,9 +228,9 @@ tmpfs                      tmpfs     280M   32K  280M   1% /run/user/0<br>
 192.168.245.128:/protected nfs4       17G  3.7G   14G  22% /mnt/data</p>
 <p>在Window上挂载NFS<br>
 第一步：在控制面板–&gt;添加程序和功能–&gt;添加NFS组件。<br>
-<img src="https://newdy.cf/post-images/1582177129076.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582177129076.png" alt="" loading="lazy"><br>
 第二步：在此电脑，映射驱动器中添加nfs地址，和要共享的文件夹。<br>
-<img src="https://newdy.cf/post-images/1582177154552.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582177154552.png" alt="" loading="lazy"><br>
 第三步：如果权限有问题，打开注册表：regedit, 在HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ClientForNFS\CurrentVersion\Default 下新建两个OWORD（64）位值，添加值AnonymousGid，值默认为0，AnonymousUid，值默认为0。</p>
 
             </div>
@@ -238,7 +238,7 @@ tmpfs                      tmpfs     280M   32K  280M   1% /run/user/0<br>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/windows-gua-zai-nfs/">
+                <a href="https://book.baidv.win/post/windows-gua-zai-nfs/">
                   <h3 class="post-title">
                     windows挂载nfs
                   </h3>

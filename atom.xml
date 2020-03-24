@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://newdy.cf</id>
+    <id>https://book.baidv.win</id>
     <title>Gridea</title>
-    <updated>2020-03-24T14:07:13.148Z</updated>
+    <updated>2020-03-24T14:26:59.679Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://newdy.cf"/>
-    <link rel="self" href="https://newdy.cf/atom.xml"/>
+    <link rel="alternate" href="https://book.baidv.win"/>
+    <link rel="self" href="https://book.baidv.win/atom.xml"/>
     <subtitle>温故而知新</subtitle>
-    <logo>https://newdy.cf/images/avatar.png</logo>
-    <icon>https://newdy.cf/favicon.ico</icon>
+    <logo>https://book.baidv.win/images/avatar.png</logo>
+    <icon>https://book.baidv.win/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
     <entry>
         <title type="html"><![CDATA[acme.sh 自动更新 RSA、ECC 双证书实践]]></title>
-        <id>https://newdy.cf/post/acmesh-zi-dong-geng-xin-rsaecc-shuang-zheng-shu-shi-jian/</id>
-        <link href="https://newdy.cf/post/acmesh-zi-dong-geng-xin-rsaecc-shuang-zheng-shu-shi-jian/">
+        <id>https://book.baidv.win/post/acmesh-zi-dong-geng-xin-rsaecc-shuang-zheng-shu-shi-jian/</id>
+        <link href="https://book.baidv.win/post/acmesh-zi-dong-geng-xin-rsaecc-shuang-zheng-shu-shi-jian/">
         </link>
         <updated>2020-03-14T08:10:38.000Z</updated>
         <content type="html"><![CDATA[<p>不知不觉，一年的通配符证书就快到期了。作为一名技术人员，我是不准备续费了。恰巧知道一个 acme.sh 的项目，它是一个实现 ACME 协议的客户端，能够向支持 ACME 协议的 CA 申请证书（如 Letsencrypt）。 最重要的是它对接了大多数的域名服务商，能够通过域名服务商提供的 API，自动的添加 DNS 验证记录进行全自动颁发证书，还可以模拟 HTTP 服务器进行文件验证。so，不管你的证书期限是 90 天，还是更短，再也不用担心证书过期的问题了。</p>
@@ -118,11 +118,11 @@ DNS API模式<br>
     </entry>
     <entry>
         <title type="html"><![CDATA[Github Webhooks 完美自动化部署教程]]></title>
-        <id>https://newdy.cf/post/github-webhooks-wan-mei-zi-dong-hua-bu-shu-jiao-cheng/</id>
-        <link href="https://newdy.cf/post/github-webhooks-wan-mei-zi-dong-hua-bu-shu-jiao-cheng/">
+        <id>https://book.baidv.win/post/github-webhooks-wan-mei-zi-dong-hua-bu-shu-jiao-cheng/</id>
+        <link href="https://book.baidv.win/post/github-webhooks-wan-mei-zi-dong-hua-bu-shu-jiao-cheng/">
         </link>
         <updated>2020-03-08T07:25:42.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://newdy.cf/post-images/1583652416269.jpg" alt="" loading="lazy"><br>
+        <content type="html"><![CDATA[<p><img src="https://book.baidv.win/post-images/1583652416269.jpg" alt="" loading="lazy"><br>
 前言<br>
 之前使用GitHub Actions可以在提交代码后自动上传到腾讯云COS存储桶,实现静态网站完美自动化部署.那么非静态的网站或者项目需要自动化部署到VPS服务器上就可以使用GitHub Webhooks来实现.作为纯属新手来说,网上查阅了十几篇相关教程,都没法部署成功,最后总算找到了问题关键点,决定整理成文章分享出来,希望能帮助到新手用户.</p>
 <p>Webhook支持php,js等多种方式,可以实现简单的部署,也可以实现复杂的自动化构建等功能,本文介绍适合新手用户的php方式,来自动化部署网站.<br>
@@ -133,7 +133,7 @@ Webhook简单原理<br>
 编辑php.ini</p>
 <p>vi /usr/local/php/etc/php.ini<br>
 查找shell_exec,在disable_functions中删除shell_exec字段.<br>
-<img src="https://newdy.cf/post-images/1583652514268.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1583652514268.jpg" alt="" loading="lazy"><br>
 重启php.ini保存设置</p>
 <p>/etc/init.d/php-fpm restart<br>
 配置站点目录权限<br>
@@ -158,7 +158,7 @@ Webhook简单原理<br>
 <p>登陆GitHub配置ssh公钥<br>
 登陆GitHub - 进入仓库 - Settings - Deploy keys - Add Deploy keys<br>
 粘贴刚才创建的公钥<br>
-<img src="https://newdy.cf/post-images/1583652574339.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1583652574339.jpg" alt="" loading="lazy"><br>
 首次git clone仓库<br>
 验证ssh公钥配置成功</p>
 <p>ssh -T git@github.com</p>
@@ -224,7 +224,7 @@ Payload URL 输入刚才获取的webhook.php的外网链接.
 Content type 保持默认
 Secret 输入刚才配置webhook.php创建的验证密码
 Add webhook 完成创建
-![](https://newdy.cf/post-images/1583652656005.jpg)
+![](https://book.baidv.win/post-images/1583652656005.jpg)
 恢复关闭www登陆
 exit退出www登陆切回root,在次关闭www登陆.
 
@@ -234,7 +234,7 @@ vi /etc/passwd
 www:x:1003:1003::/home/www:/sbin/nologin
 自动化部署成功
 本地push代码到GitHub后,可以看到返回信息提示服务器pull成功.
-![](https://newdy.cf/post-images/1583652683115.jpg)
+![](https://book.baidv.win/post-images/1583652683115.jpg)
 
 关键点和相关错误
 权限
@@ -249,11 +249,11 @@ Service Timeout
     </entry>
     <entry>
         <title type="html"><![CDATA[配置 Nginx 和 frps 共存 80/443 端口及泛域名支持教程]]></title>
-        <id>https://newdy.cf/post/pei-zhi-nginx-he-frps-gong-cun-80443-duan-kou-ji-fan-yu-ming-zhi-chi-jiao-cheng/</id>
-        <link href="https://newdy.cf/post/pei-zhi-nginx-he-frps-gong-cun-80443-duan-kou-ji-fan-yu-ming-zhi-chi-jiao-cheng/">
+        <id>https://book.baidv.win/post/pei-zhi-nginx-he-frps-gong-cun-80443-duan-kou-ji-fan-yu-ming-zhi-chi-jiao-cheng/</id>
+        <link href="https://book.baidv.win/post/pei-zhi-nginx-he-frps-gong-cun-80443-duan-kou-ji-fan-yu-ming-zhi-chi-jiao-cheng/">
         </link>
         <updated>2020-03-08T06:13:07.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://newdy.cf/post-images/1583648139451.jpg" alt="" loading="lazy"><br>
+        <content type="html"><![CDATA[<p><img src="https://book.baidv.win/post-images/1583648139451.jpg" alt="" loading="lazy"><br>
 前言<br>
 常规情况下frps服务器端会占用80和443端口,为内网设备提供穿透,实现用户可以使用域名无端口访问内网设备.而在已经部署nginx的服务器上,由于nginx已经占用80和443端口,frps的HTTP和HTTPS需另外选择端口,可以通过nginx的反向代理配置让frps提供的穿透服务也能够使用80和443端口,实现nginx和frps共存.同时配置支持泛域名反向代理.</p>
 <p>此方案适合个人用户搭建frps,国内服务器也可备案自己的域名,配置泛域名的反向代理及证书,可以方便快速的使用任何二级域名来穿透内网的各项服务.<br>
@@ -268,9 +268,9 @@ frps.ini配置<br>
 subdomain_host 根据需求可选配置泛域名,或者注释删除此参数使用自定义域名.<br>
 frpc.ini配置<br>
 如果 frps.ini 配置了 subdomain_host 泛域名,那么 frpc.ini 中域名参数需使用 subdomain = xx 仅填写二级域名主机头即可,不要填写完整域名.<br>
-<img src="https://newdy.cf/post-images/1583648249353.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1583648249353.jpg" alt="" loading="lazy"><br>
 如果 frps.ini 没有配置 subdomain_host泛域名,那么 frpc.ini 中域名参数需使用 custom_domains = xx.xxx.com 需填写完整的域名.<br>
-<img src="https://newdy.cf/post-images/1583648269468.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1583648269468.jpg" alt="" loading="lazy"><br>
 nginx配置<br>
 proxy_pass http://127.0.0.1:1234; 中的 HTTP ,请勿写成 HTTPS .<br>
 proxy_pass http://127.0.0.1:1234; 中 1234 端口为 frps 的 HTTP 端口.<br>
@@ -315,8 +315,8 @@ location / {
     </entry>
     <entry>
         <title type="html"><![CDATA[让你的黑群晖更加完美，用M.2 NVME SSD做缓存]]></title>
-        <id>https://newdy.cf/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/</id>
-        <link href="https://newdy.cf/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/">
+        <id>https://book.baidv.win/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/</id>
+        <link href="https://book.baidv.win/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/">
         </link>
         <updated>2020-03-01T05:18:42.000Z</updated>
         <content type="html"><![CDATA[<p>黑群晖一直以来有一个不完美的点就是无法使用缓存功能，目前使用国外大神做的这个补丁已经可以完美解决这个问题</p>
@@ -336,21 +336,21 @@ chmod 755 libNVMEpatch.sh<br>
     </entry>
     <entry>
         <title type="html"><![CDATA[snmp对接爱快跨三层应用功能 --- J35/J50 ]]></title>
-        <id>https://newdy.cf/post/snmp-dui-jie-ai-kuai-kua-san-ceng-ying-yong-gong-neng-j35j50/</id>
-        <link href="https://newdy.cf/post/snmp-dui-jie-ai-kuai-kua-san-ceng-ying-yong-gong-neng-j35j50/">
+        <id>https://book.baidv.win/post/snmp-dui-jie-ai-kuai-kua-san-ceng-ying-yong-gong-neng-j35j50/</id>
+        <link href="https://book.baidv.win/post/snmp-dui-jie-ai-kuai-kua-san-ceng-ying-yong-gong-neng-j35j50/">
         </link>
         <updated>2020-02-27T10:33:39.000Z</updated>
         <content type="html"><![CDATA[<p>一、介绍<br>
 在跨三层设备的环境下，路由获取三层设备下的MAC地址一般为三层设备wan口的MAC地址，针对这种情况，爱快推出了跨三层应用功能，主要解决获取三层下的MAC地址及web认证问题<br>
 本文介绍下爱快与J50交换机之间连接后，具体需要怎么设置</p>
 <p>二、网络拓扑<br>
-<img src="https://newdy.cf/post-images/1582799650812.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799650812.png" alt="" loading="lazy"><br>
 三、具体配置<br>
 1：爱快路由配置步骤：<br>
 ①：网络设置--静态路由，添加一条回指路由，指向J50内网设备</p>
-<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582799734596.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://book.baidv.win/post-images/1582799734596.png" alt="" loading="lazy"></figure>
 <p>②：应用工具--跨三层应用，开启服务</p>
-<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582799739233.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://book.baidv.win/post-images/1582799739233.png" alt="" loading="lazy"></figure>
 <p>注：由于三层设备还未开启SNMP服务，所以这里会显示状态为异常，三层配置成功后会自动检测成功</p>
 <p>功能服务：勾选开启<br>
 功能状态：自动检测工作状态，检测间隔时间为5-10S<br>
@@ -362,33 +362,33 @@ SNMP协议版本：需和J50配置一致，这里选择V2<br>
 团体名：需要和J50配置的团体名一致，如无特殊需求可不修改<br>
 2：IK-J50配置步骤：<br>
 ①：配置vlan100、vlan200，指定接口10为access上联口，vid为100，指定接口20为access下联口，vid为200<br>
-<img src="https://newdy.cf/post-images/1582799758999.png" alt="" loading="lazy"></p>
-<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582799776939.png" alt="" loading="lazy"></figure>
+<img src="https://book.baidv.win/post-images/1582799758999.png" alt="" loading="lazy"></p>
+<figure data-type="image" tabindex="3"><img src="https://book.baidv.win/post-images/1582799776939.png" alt="" loading="lazy"></figure>
 <p>②：配置vlan100的IP为192.168.15.248，vlan200的IP为192.168.200.1<br>
-<img src="https://newdy.cf/post-images/1582799836027.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582799843132.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799836027.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799843132.png" alt="" loading="lazy"><br>
 ③：开启DHCP服务端，配置地址池、租约和DNS<br>
-<img src="https://newdy.cf/post-images/1582799903233.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1582799909374.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799903233.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799909374.png" alt="" loading="lazy"><br>
 ④：配置静态路由</p>
-<figure data-type="image" tabindex="4"><img src="https://newdy.cf/post-images/1582799956221.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://book.baidv.win/post-images/1582799956221.png" alt="" loading="lazy"></figure>
 <p>⑤：开启SNMP服务，同时配置SNMP版本<br>
-<img src="https://newdy.cf/post-images/1582799963324.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799963324.png" alt="" loading="lazy"><br>
 ⑥：配置SNMP团体名及访问规则：<br>
-<img src="https://newdy.cf/post-images/1582799996351.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582799996351.png" alt="" loading="lazy"><br>
 四、最终效果展示<br>
 跨三层应用界面：</p>
-<figure data-type="image" tabindex="5"><img src="https://newdy.cf/post-images/1582800053303.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://book.baidv.win/post-images/1582800053303.png" alt="" loading="lazy"></figure>
 <p>三层下电脑详情：<br>
-<img src="https://newdy.cf/post-images/1582800057552.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582800057552.png" alt="" loading="lazy"><br>
 爱快终端监控显示：<br>
-<img src="https://newdy.cf/post-images/1582800083530.png" alt="" loading="lazy"></p>
+<img src="https://book.baidv.win/post-images/1582800083530.png" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[SNMP（V1/V2/V3）配置举例及配置]]></title>
-        <id>https://newdy.cf/post/snmpv1v2v3pei-zhi-ju-li-ji-pei-zhi/</id>
-        <link href="https://newdy.cf/post/snmpv1v2v3pei-zhi-ju-li-ji-pei-zhi/">
+        <id>https://book.baidv.win/post/snmpv1v2v3pei-zhi-ju-li-ji-pei-zhi/</id>
+        <link href="https://book.baidv.win/post/snmpv1v2v3pei-zhi-ju-li-ji-pei-zhi/">
         </link>
         <updated>2020-02-27T03:14:20.000Z</updated>
         <content type="html"><![CDATA[<p>SNMPv1和SNMPv2c配置举例：<br>
@@ -487,37 +487,37 @@ Confirm Password:                //输入加密密码，本例的加密密码为
     </entry>
     <entry>
         <title type="html"><![CDATA[一条网线有八根线，空闲的四根能做什么？]]></title>
-        <id>https://newdy.cf/post/yi-tiao-wang-xian-you-ba-gen-xian-kong-xian-de-si-gen-neng-zuo-shi-me/</id>
-        <link href="https://newdy.cf/post/yi-tiao-wang-xian-you-ba-gen-xian-kong-xian-de-si-gen-neng-zuo-shi-me/">
+        <id>https://book.baidv.win/post/yi-tiao-wang-xian-you-ba-gen-xian-kong-xian-de-si-gen-neng-zuo-shi-me/</id>
+        <link href="https://book.baidv.win/post/yi-tiao-wang-xian-you-ba-gen-xian-kong-xian-de-si-gen-neng-zuo-shi-me/">
         </link>
         <updated>2020-02-26T16:56:00.000Z</updated>
         <content type="html"><![CDATA[<p>一条网线里面有八根线，多数情况下实际有用的只有四根（橙白、橙、绿白、绿），另外四根（蓝白、蓝、棕白、棕）就空着不用。这给了我们很多省事的机会，用上这四根线，就不用重新拉线了。来看看这四根线能做什么？</p>
-<p><img src="https://newdy.cf/post-images/1582736196547.jpg" alt="" loading="lazy"><br>
+<p><img src="https://book.baidv.win/post-images/1582736196547.jpg" alt="" loading="lazy"><br>
 网线才用一半，那另一半岂不是可以再拉一路网线。理论上可以，实际上也可以。不过不能拉太远。因为蓝白、蓝、棕白、棕这四根线的电阻比橙白、橙、绿白、绿这四根的要大的多，并且绕线密度也不一样，所以传输距离会小很多。<br>
-<img src="https://newdy.cf/post-images/1582736242356.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582736242356.jpg" alt="" loading="lazy"><br>
 办公上最常用的就是接电话线了。电话线是用两芯的，也就是说一路电话线要用两根线。这样一条网线除了上网，还能拉两路电话线。PS：注意拉线时不要用测线仪测电话线，电话线电压高，有些测线仪会烧掉的。网卡电压3.3v以下，电话线平时一二十伏，来电时能超过50v。<br>
-<img src="https://newdy.cf/post-images/1582736279863.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582736279863.jpg" alt="" loading="lazy"><br>
 还一种比较常用的就是接摄像头。模拟摄像头是两芯的，也跟电话线一样可以接两路。高清头是四芯的，只能接一路了。摄像头这样接还要另外供电。<br>
-<img src="https://newdy.cf/post-images/1582736304697.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582736304697.jpg" alt="" loading="lazy"><br>
 再来说说USB，功能太多了。USB是四芯的，一根接地，一根供电（5v），两根传数据。四根线两头颜色对好接上就行了。可以当作USB延长线，接手机，连打印机等。打印机这样接十米都没问题，比usb线效果还好。</p>
-<p><img src="https://newdy.cf/post-images/1582736336102.jpg" alt="" loading="lazy"><br>
+<p><img src="https://book.baidv.win/post-images/1582736336102.jpg" alt="" loading="lazy"><br>
 一般LED屏显示的内容都是通过插U盘上传的。如果显示实时内容就要用串口（com口）连接电脑。这种串口接线只要接3根就行，网线4根够用了。不过串口线长度不要超过30米。<br>
-<img src="https://newdy.cf/post-images/1582736361767.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1582736361767.jpg" alt="" loading="lazy"><br>
 网线还可以供电，就是我们平常说的PoE（Power over Ethernet）。一路供电用两根线就行了，不过有衰减，有空余的线可以把多根拧成一根，效果会好一点。这种方法仅限于弱电供电。当然也有牛人用它来接220V的交流电，不过小编不敢。</p>
-<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582736389055.jpg" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://book.baidv.win/post-images/1582736389055.jpg" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[开启ECN功能]]></title>
-        <id>https://newdy.cf/post/kai-qi-ecn-gong-neng/</id>
-        <link href="https://newdy.cf/post/kai-qi-ecn-gong-neng/">
+        <id>https://book.baidv.win/post/kai-qi-ecn-gong-neng/</id>
+        <link href="https://book.baidv.win/post/kai-qi-ecn-gong-neng/">
         </link>
         <updated>2020-02-25T17:32:16.000Z</updated>
         <content type="html"><![CDATA[<p>登录服务器，单击 开始 &gt; 运行，输入 cmd，进入命令行窗口。<br>
 执行如下命令，查看TCP全局参数的信息。<br>
 netsh interface tcp show global<br>
 系统显示类似如下，则说明系统已经开启ECN功能</p>
-<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582652009787.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://book.baidv.win/post-images/1582652009787.png" alt="" loading="lazy"></figure>
 <p>执行如下命令，关闭ECN功能。<br>
 netsh interface tcp set global ecncapability=disabled<br>
 执行如下命令，开启ECN功能<br>
@@ -530,8 +530,8 @@ ECN的作用主要是在网络出现拥塞时通知TCP的传输层，减少TCP�
     </entry>
     <entry>
         <title type="html"><![CDATA[公共 DNS 服务器 IP 地址]]></title>
-        <id>https://newdy.cf/post/gong-gong-dns-fu-wu-qi-ip-di-zhi/</id>
-        <link href="https://newdy.cf/post/gong-gong-dns-fu-wu-qi-ip-di-zhi/">
+        <id>https://book.baidv.win/post/gong-gong-dns-fu-wu-qi-ip-di-zhi/</id>
+        <link href="https://book.baidv.win/post/gong-gong-dns-fu-wu-qi-ip-di-zhi/">
         </link>
         <updated>2020-02-25T02:56:24.000Z</updated>
         <content type="html"><![CDATA[<p>名称                                           	     DNS 服务器IP 地址<br>
@@ -557,8 +557,8 @@ V2EX DNS	                        199.91.73.222	     178.79.131.110</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[网线水晶头接法和线序（图文详解）]]></title>
-        <id>https://newdy.cf/post/wang-xian-shui-jing-tou-jie-fa-he-xian-xu-tu-wen-xiang-jie/</id>
-        <link href="https://newdy.cf/post/wang-xian-shui-jing-tou-jie-fa-he-xian-xu-tu-wen-xiang-jie/">
+        <id>https://book.baidv.win/post/wang-xian-shui-jing-tou-jie-fa-he-xian-xu-tu-wen-xiang-jie/</id>
+        <link href="https://book.baidv.win/post/wang-xian-shui-jing-tou-jie-fa-he-xian-xu-tu-wen-xiang-jie/">
         </link>
         <updated>2020-02-24T14:23:00.000Z</updated>
         <content type="html"><![CDATA[<p>水晶头接线颜色有两种：<br>
@@ -568,7 +568,7 @@ V2EX DNS	                        199.91.73.222	     178.79.131.110</p>
 <p>568B标准顺序：橙白，橙，绿白，蓝，蓝白，绿，棕白，棕</p>
 <p>如果连接的双方地位不对等的，则用平行线，例如电脑连接到路由器或交换机。</p>
 <p>如果连接的两台设备是对等的，则用交叉线，例如电脑连接到电脑。<br>
-<img src="https://newdy.cf/post-images/1582554223204.jpg" alt="" loading="lazy"></p>
+<img src="https://book.baidv.win/post-images/1582554223204.jpg" alt="" loading="lazy"></p>
 <p>扩展资料</p>
 <p>网线质量鉴别<br>
 三类线的标识是“CAT3”，带宽10M，适用于十兆网基本已淘汰；五类线的标识是“CAT5”，带宽100M ，适用于百兆以下的网；超五类线的标识是“CAT5E”，带宽155M，是主流产品；六类线的标识是“ CAT6”，带宽250M，用于架设千兆网</p>

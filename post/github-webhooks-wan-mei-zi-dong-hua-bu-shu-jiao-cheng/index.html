@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1585058828321">
-<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+<link rel="shortcut icon" href="https://book.baidv.win/favicon.ico?v=1585060012186">
+<link rel="stylesheet" href="https://book.baidv.win/styles/main.css">
 
 
 
@@ -38,8 +38,8 @@
       <div class="sidebar" :class="{ 'full-height': menuVisible }">
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
-      <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1585058828321" class="site-logo">
+      <a class="site-title-container" href="https://book.baidv.win">
+        <img src="https://book.baidv.win/images/avatar.png?v=1585060012186" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -96,7 +96,7 @@
       温故而知新
     </div>
     <div class="site-footer">
-      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://book.baidv.win/atom.xml" target="_blank">RSS</a>
     </div>
   </div>
 </div>
@@ -109,7 +109,7 @@
             <div class="post-date">2020-03-08</div>
             
             <div class="post-content" v-pre>
-              <p><img src="https://newdy.cf/post-images/1583652416269.jpg" alt="" loading="lazy"><br>
+              <p><img src="https://book.baidv.win/post-images/1583652416269.jpg" alt="" loading="lazy"><br>
 前言<br>
 之前使用GitHub Actions可以在提交代码后自动上传到腾讯云COS存储桶,实现静态网站完美自动化部署.那么非静态的网站或者项目需要自动化部署到VPS服务器上就可以使用GitHub Webhooks来实现.作为纯属新手来说,网上查阅了十几篇相关教程,都没法部署成功,最后总算找到了问题关键点,决定整理成文章分享出来,希望能帮助到新手用户.</p>
 <p>Webhook支持php,js等多种方式,可以实现简单的部署,也可以实现复杂的自动化构建等功能,本文介绍适合新手用户的php方式,来自动化部署网站.<br>
@@ -120,7 +120,7 @@ Webhook简单原理<br>
 编辑php.ini</p>
 <p>vi /usr/local/php/etc/php.ini<br>
 查找shell_exec,在disable_functions中删除shell_exec字段.<br>
-<img src="https://newdy.cf/post-images/1583652514268.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1583652514268.jpg" alt="" loading="lazy"><br>
 重启php.ini保存设置</p>
 <p>/etc/init.d/php-fpm restart<br>
 配置站点目录权限<br>
@@ -145,7 +145,7 @@ Webhook简单原理<br>
 <p>登陆GitHub配置ssh公钥<br>
 登陆GitHub - 进入仓库 - Settings - Deploy keys - Add Deploy keys<br>
 粘贴刚才创建的公钥<br>
-<img src="https://newdy.cf/post-images/1583652574339.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1583652574339.jpg" alt="" loading="lazy"><br>
 首次git clone仓库<br>
 验证ssh公钥配置成功</p>
 <p>ssh -T git@github.com</p>
@@ -211,7 +211,7 @@ Payload URL 输入刚才获取的webhook.php的外网链接.
 Content type 保持默认
 Secret 输入刚才配置webhook.php创建的验证密码
 Add webhook 完成创建
-![](https://newdy.cf/post-images/1583652656005.jpg)
+![](https://book.baidv.win/post-images/1583652656005.jpg)
 恢复关闭www登陆
 exit退出www登陆切回root,在次关闭www登陆.
 
@@ -221,7 +221,7 @@ vi /etc/passwd
 www:x:1003:1003::/home/www:/sbin/nologin
 自动化部署成功
 本地push代码到GitHub后,可以看到返回信息提示服务器pull成功.
-![](https://newdy.cf/post-images/1583652683115.jpg)
+![](https://book.baidv.win/post-images/1583652683115.jpg)
 
 关键点和相关错误
 权限
@@ -238,7 +238,7 @@ Service Timeout
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/pei-zhi-nginx-he-frps-gong-cun-80443-duan-kou-ji-fan-yu-ming-zhi-chi-jiao-cheng/">
+                <a href="https://book.baidv.win/post/pei-zhi-nginx-he-frps-gong-cun-80443-duan-kou-ji-fan-yu-ming-zhi-chi-jiao-cheng/">
                   <h3 class="post-title">
                     配置 Nginx 和 frps 共存 80/443 端口及泛域名支持教程
                   </h3>

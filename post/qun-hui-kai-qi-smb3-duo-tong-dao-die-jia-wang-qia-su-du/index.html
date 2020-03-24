@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1585058828321">
-<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+<link rel="shortcut icon" href="https://book.baidv.win/favicon.ico?v=1585060012186">
+<link rel="stylesheet" href="https://book.baidv.win/styles/main.css">
 
 
 
@@ -36,8 +36,8 @@
       <div class="sidebar" :class="{ 'full-height': menuVisible }">
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
-      <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1585058828321" class="site-logo">
+      <a class="site-title-container" href="https://book.baidv.win">
+        <img src="https://book.baidv.win/images/avatar.png?v=1585060012186" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -94,7 +94,7 @@
       温故而知新
     </div>
     <div class="site-footer">
-      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://book.baidv.win/atom.xml" target="_blank">RSS</a>
     </div>
   </div>
 </div>
@@ -114,20 +114,20 @@
 PC 端带有2个或以上的相同线速的网卡，并安装 Windows 8/Server 2012及更高版本 OS<br>
 由于群晖目前没有开放相关设置项，所以我们部分操作需要通过 SSH 来完成：</p>
 <p>1.打开控制面板，依次进入：文件服务-高级设置，将最大协议改为 SMB3，点击应用<br>
-<img src="https://newdy.cf/post-images/1581432465559.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581432465559.png" alt="" loading="lazy"><br>
 2.进入：终端机和 SNMP，勾选启动 SSH 功能，点击应用<br>
-<img src="https://newdy.cf/post-images/1581432503103.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581432503103.png" alt="" loading="lazy"><br>
 3.使用 PUTTY 等软件登入群晖 SSH，输入 sudo -i 临时提权，并输入密码回车。待命令提示符由 $ 变为 # 后，执行：vi /etc/samba/smb.conf<br>
-<img src="https://newdy.cf/post-images/1581432535629.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581432535629.png" alt="" loading="lazy"><br>
 4.在文件末尾添加以下内容，完成后按 ESC，并输入 :wq 保存退出</p>
 <p>server multi channel support = yes<br>
 aio read size = 1<br>
 aio write size = 1<br>
 5.重启群晖，PC 和交换机，所有设置完成。</p>
 <p>在重启完成后，PC 端使用主机名（如\homeshare）或 ip 进入一次共享，即可自动启用 SMB3 多通道了。另外也可以用管理员权限运行 PowerShell ，执行： Get-SmbMultichannelConnection 确认。<br>
-<img src="https://newdy.cf/post-images/1581432576355.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581432576355.png" alt="" loading="lazy"><br>
 如上所示，目前 PC 已连接到服务器 192.168.199.189，并且分别通过本地 ip:192.168.199.99 192.168.199.100 与远端 ip: 192.168.199.188 192.168.199.189 建立了 SMB3 多通道连接。<br>
-<img src="https://newdy.cf/post-images/1581432604857.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581432604857.png" alt="" loading="lazy"><br>
 通过复制文件也可以看出，两张网卡均有流量，并且总和超过了 1Gbps 。</p>
 <p>基于 RTL8111 的 PCIE x1 网卡目前均价不过20-30块，并且对于交换机并无特殊限制，故整套解决方案成本是非常低的。除了PCIE 网卡之外，也可以使用 USB 网卡，但需要确保所有网卡线速一致，才能够启用 SMB3 多通道。</p>
 
@@ -135,7 +135,7 @@ aio write size = 1<br>
             
               <div class="tag-container">
                 
-                  <a href="https://newdy.cf/tag/LYDm33u-V/" class="tag">
+                  <a href="https://book.baidv.win/tag/LYDm33u-V/" class="tag">
                     群晖
                   </a>
                 
@@ -144,7 +144,7 @@ aio write size = 1<br>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/wei-esxi-tian-jia-rtl81688111-ji-sata-kong-zhi-qi-qu-dong/">
+                <a href="https://book.baidv.win/post/wei-esxi-tian-jia-rtl81688111-ji-sata-kong-zhi-qi-qu-dong/">
                   <h3 class="post-title">
                     为 ESXi 添加 RTL8168/8111 及 SATA 控制器驱动
                   </h3>

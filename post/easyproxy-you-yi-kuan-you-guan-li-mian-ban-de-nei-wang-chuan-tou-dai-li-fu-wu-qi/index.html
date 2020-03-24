@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1585058828321">
-<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+<link rel="shortcut icon" href="https://book.baidv.win/favicon.ico?v=1585060012186">
+<link rel="stylesheet" href="https://book.baidv.win/styles/main.css">
 
 
 
@@ -36,8 +36,8 @@
       <div class="sidebar" :class="{ 'full-height': menuVisible }">
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
-      <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1585058828321" class="site-logo">
+      <a class="site-title-container" href="https://book.baidv.win">
+        <img src="https://book.baidv.win/images/avatar.png?v=1585060012186" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -94,7 +94,7 @@
       温故而知新
     </div>
     <div class="site-footer">
-      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://book.baidv.win/atom.xml" target="_blank">RSS</a>
     </div>
   </div>
 </div>
@@ -110,8 +110,8 @@
               <p>easyProxy是一款轻量级、高性能、功能最为强大的内网穿透代理服务器。目前支持tcp、udp流量转发，可支持任何tcp、udp上层协议（访问内网网站、本地支付接口调试、ssh访问、远程桌面，内网dns解析等等……），此外还支持内网http代理、内网socks5代理，可实现在非内网环境下如同使用vpn一样访问内网资源和设备的效果，同时支持socks5验证，gzip、snnapy压缩（节省带宽和流量）。</p>
 <p>目前市面上提供类似服务的有花生壳、TeamView、GoToMyCloud等等，但要使用第三方的公网服务器就必须为第三方付费，并且这些服务都有各种各样的限制，此外，由于数据包会流经第三方，因此对数据安全也是一大隐患。<br>
 支持客户端与服务端连接中断自动重连，多路传输，大大的提高请求处理速度，go语言编写，无第三方依赖。<br>
-<img src="https://newdy.cf/post-images/1581905568218.png" alt="" loading="lazy"><br>
-<img src="https://newdy.cf/post-images/1581905601275.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581905568218.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581905601275.png" alt="" loading="lazy"><br>
 一、简介<br>
 web管理模式，可配置多条tcp、udp隧道，多个域名代理等等—-&gt; web管理模式<br>
 内网多站点配合代理。—-&gt; http反向代理请求<br>
@@ -172,7 +172,7 @@ hostPort	域名代理模式监听端口<br>
 TCP隧道模式<br>
 场景及原理<br>
 较为适用于处理tcp连接，例如ssh，同时也适用于http等，访问服务端的8024端口相当于访问内网10.1.50.202机器的4000端口，构成如下所示的隧道。<br>
-<img src="https://newdy.cf/post-images/1581905662220.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581905662220.jpg" alt="" loading="lazy"><br>
 例如：</p>
 <p>背景:</p>
 <p>内网机器10.1.50.203提供了web服务80端口<br>
@@ -197,7 +197,7 @@ udp隧道模式<br>
 有VPS一个,公网IP:123.206.77.88<br>
 需求: 在家里能够通过设置本地dns为123.206.77.88,使用内网机器A进行域名解析服务.</p>
 <p>访问vps的53端口相当于访问10.1.50.210的53端口，构成如下所示的隧道。<br>
-<img src="https://newdy.cf/post-images/1581905725788.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581905725788.png" alt="" loading="lazy"><br>
 使用<br>
 服务端<br>
 ./easyProxy -mode=udpServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=53 -target=10.1.50.210:53<br>
@@ -212,7 +212,7 @@ target	目标地址，格式如上<br>
 HTTP代理请求<br>
 场景及原理<br>
 较为适用于http，也就是web站点的穿透，服务端与客户端之间建立连接，服务端收到http请求后，将请求发送到客户端，客户端再执行这个请求，并将结果返回给服务端，服务端收到后再返回。特点：支持同时代理多个站点，不同站点之间有联系还可以实现匹配替换<br>
-<img src="https://newdy.cf/post-images/1581905766574.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581905766574.png" alt="" loading="lazy"><br>
 最终效果：</p>
 <p>访问a.server.com和访问10.1.50.203的80端口相同<br>
 访问b.server.com和访问10.1.50.202的80端口相同<br>
@@ -286,7 +286,7 @@ proxy_pass      http://nodejs;<br>
 场景及原理<br>
 原理</p>
 <p>主要用于socks5代理，也就是和ss类似，不过是代理内网。使用此模式时，可在非内网环境下配置本机的socks5代理（服务器ip、sock5代理端口），即可实现socks5代理，达到访问内网的网站的效果，配合proxifer等全局代理软件，即可如同使用内网vpn一样，访问内网网站，通过ssh连接内网机器等等……。<br>
-<img src="https://newdy.cf/post-images/1581905816245.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581905816245.png" alt="" loading="lazy"><br>
 使用<br>
 服务端<br>
 ./easyProxy -mode=sock5ServerServer -vkey=DKibZF5TXvic1g3kY -tcpport=8284 -httpport=8024<br>
@@ -307,7 +307,7 @@ p	验证的密码<br>
 如果设置了用户名和密码，记得填上用户名和密码</p>
 <p>http代理模式<br>
 场景及原理<br>
-<img src="https://newdy.cf/post-images/1581905912887.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1581905912887.png" alt="" loading="lazy"><br>
 主要用于HTTP代理，区别也就是HTTP代理和sock5代理的区别。使用此模式时，可在非内网环境下配置本机的HTTP代理（服务器ip、HTTP代理端口），即可实现HTTP代理，达到访问内网的网站的效果。</p>
 <p>使用<br>
 服务端<br>
@@ -339,7 +339,7 @@ SNAPPY压缩</p>
             
               <div class="tag-container">
                 
-                  <a href="https://newdy.cf/tag/VDXNt5ZDS/" class="tag">
+                  <a href="https://book.baidv.win/tag/VDXNt5ZDS/" class="tag">
                     代理服务器
                   </a>
                 
@@ -348,7 +348,7 @@ SNAPPY压缩</p>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/surveillancestation-po-jie-255/">
+                <a href="https://book.baidv.win/post/surveillancestation-po-jie-255/">
                   <h3 class="post-title">
                      群晖上监控插件SurveillanceStation 破解255
                   </h3>

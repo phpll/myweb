@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1585058828321">
-<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+<link rel="shortcut icon" href="https://book.baidv.win/favicon.ico?v=1585060012186">
+<link rel="stylesheet" href="https://book.baidv.win/styles/main.css">
 
 
 
@@ -38,8 +38,8 @@
       <div class="sidebar" :class="{ 'full-height': menuVisible }">
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
-      <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1585058828321" class="site-logo">
+      <a class="site-title-container" href="https://book.baidv.win">
+        <img src="https://book.baidv.win/images/avatar.png?v=1585060012186" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -96,7 +96,7 @@
       温故而知新
     </div>
     <div class="site-footer">
-      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://book.baidv.win/atom.xml" target="_blank">RSS</a>
     </div>
   </div>
 </div>
@@ -109,7 +109,7 @@
             <div class="post-date">2020-03-08</div>
             
             <div class="post-content" v-pre>
-              <p><img src="https://newdy.cf/post-images/1583648139451.jpg" alt="" loading="lazy"><br>
+              <p><img src="https://book.baidv.win/post-images/1583648139451.jpg" alt="" loading="lazy"><br>
 前言<br>
 常规情况下frps服务器端会占用80和443端口,为内网设备提供穿透,实现用户可以使用域名无端口访问内网设备.而在已经部署nginx的服务器上,由于nginx已经占用80和443端口,frps的HTTP和HTTPS需另外选择端口,可以通过nginx的反向代理配置让frps提供的穿透服务也能够使用80和443端口,实现nginx和frps共存.同时配置支持泛域名反向代理.</p>
 <p>此方案适合个人用户搭建frps,国内服务器也可备案自己的域名,配置泛域名的反向代理及证书,可以方便快速的使用任何二级域名来穿透内网的各项服务.<br>
@@ -124,9 +124,9 @@ frps.ini配置<br>
 subdomain_host 根据需求可选配置泛域名,或者注释删除此参数使用自定义域名.<br>
 frpc.ini配置<br>
 如果 frps.ini 配置了 subdomain_host 泛域名,那么 frpc.ini 中域名参数需使用 subdomain = xx 仅填写二级域名主机头即可,不要填写完整域名.<br>
-<img src="https://newdy.cf/post-images/1583648249353.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1583648249353.jpg" alt="" loading="lazy"><br>
 如果 frps.ini 没有配置 subdomain_host泛域名,那么 frpc.ini 中域名参数需使用 custom_domains = xx.xxx.com 需填写完整的域名.<br>
-<img src="https://newdy.cf/post-images/1583648269468.jpg" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1583648269468.jpg" alt="" loading="lazy"><br>
 nginx配置<br>
 proxy_pass http://127.0.0.1:1234; 中的 HTTP ,请勿写成 HTTPS .<br>
 proxy_pass http://127.0.0.1:1234; 中 1234 端口为 frps 的 HTTP 端口.<br>
@@ -173,7 +173,7 @@ location / {
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/">
+                <a href="https://book.baidv.win/post/rang-ni-de-hei-qun-hui-geng-jia-wan-mei-yong-m2-nvme-ssd-zuo-huan-cun/">
                   <h3 class="post-title">
                     让你的黑群晖更加完美，用M.2 NVME SSD做缓存
                   </h3>

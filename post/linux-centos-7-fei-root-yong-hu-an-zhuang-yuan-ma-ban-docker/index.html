@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://newdy.cf/favicon.ico?v=1585058828321">
-<link rel="stylesheet" href="https://newdy.cf/styles/main.css">
+<link rel="shortcut icon" href="https://book.baidv.win/favicon.ico?v=1585060012186">
+<link rel="stylesheet" href="https://book.baidv.win/styles/main.css">
 
 
 
@@ -44,8 +44,8 @@
       <div class="sidebar" :class="{ 'full-height': menuVisible }">
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
-      <a class="site-title-container" href="https://newdy.cf">
-        <img src="https://newdy.cf/images/avatar.png?v=1585058828321" class="site-logo">
+      <a class="site-title-container" href="https://book.baidv.win">
+        <img src="https://book.baidv.win/images/avatar.png?v=1585060012186" class="site-logo">
         <h1 class="site-title">Gridea</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -102,7 +102,7 @@
       温故而知新
     </div>
     <div class="site-footer">
-      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://newdy.cf/atom.xml" target="_blank">RSS</a>
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://book.baidv.win/atom.xml" target="_blank">RSS</a>
     </div>
   </div>
 </div>
@@ -118,34 +118,34 @@
               <p>注意:非root用户必须要有sudo权限</p>
 <p>一、安装前的准备</p>
 <p>1.查看当前主机是否有docker组</p>
-<figure data-type="image" tabindex="1"><img src="https://newdy.cf/post-images/1582087080673.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://book.baidv.win/post-images/1582087080673.png" alt="" loading="lazy"></figure>
 <p>若没有输出结果则新建</p>
-<figure data-type="image" tabindex="2"><img src="https://newdy.cf/post-images/1582087086554.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://book.baidv.win/post-images/1582087086554.png" alt="" loading="lazy"></figure>
 <p>再次查看,发现已经有了docker组</p>
-<figure data-type="image" tabindex="3"><img src="https://newdy.cf/post-images/1582087091705.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://book.baidv.win/post-images/1582087091705.png" alt="" loading="lazy"></figure>
 <p>2.新增拥有sudo权限的用户(若知道root和其他拥有sudo权限的系统用户密码,跳到3;若都没有,必做)</p>
-<figure data-type="image" tabindex="4"><img src="https://newdy.cf/post-images/1582087133234.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://book.baidv.win/post-images/1582087133234.png" alt="" loading="lazy"></figure>
 <p>修改该用户的密码<br>
-<img src="https://newdy.cf/post-images/1582087138797.png" alt="" loading="lazy"></p>
+<img src="https://book.baidv.win/post-images/1582087138797.png" alt="" loading="lazy"></p>
 <p>为新增的用户添加sudo权限</p>
 <p>sudo vi /etc/sudoers<br>
 　　在92行下一行添加<br>
 　　test    　　ALL=(ALL)    　　ALL<br>
 3.把当前用户加入到docker组 （此时用户并没有加入进docker组）</p>
-<figure data-type="image" tabindex="5"><img src="https://newdy.cf/post-images/1582087165679.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://book.baidv.win/post-images/1582087165679.png" alt="" loading="lazy"></figure>
 <p>切换至sudo权限用户，然后再切换回当前用户（此时可以看到用户已经加入docker组）</p>
-<figure data-type="image" tabindex="6"><img src="https://newdy.cf/post-images/1582087175735.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="6"><img src="https://book.baidv.win/post-images/1582087175735.png" alt="" loading="lazy"></figure>
 <p>3.删除新增的用户和它的sudo权限（第2步没做请忽略此步）</p>
 <p>sudo vi /etc/sudoers<br>
 　　在92行下一行添加<br>
 　　test　　ALL=(ALL)  ALL<br>
 两次退出，不然删除用户时会报错</p>
-<figure data-type="image" tabindex="7"><img src="https://newdy.cf/post-images/1582087195961.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://book.baidv.win/post-images/1582087195961.png" alt="" loading="lazy"></figure>
 <p>二、安装docker</p>
 <p>1.下载docker源码包并上传至虚拟机</p>
 <p>https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/static/stable/x86_64/docker-18.09.0.tgz</p>
 <p>2.解压源码包至指定目录下</p>
-<figure data-type="image" tabindex="8"><img src="https://newdy.cf/post-images/1582087215827.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://book.baidv.win/post-images/1582087215827.png" alt="" loading="lazy"></figure>
 <p>3.将解压出来的docker目录下的指令复制到 /usr/bin/ 目录下</p>
 <p>sudo cp docker/* /usr/bin/<br>
 4./usr/bin/目录下docker有关指令的所属用户和所属组(必做,不然非root用户使用docker指令报错:权限不够)</p>
@@ -154,7 +154,7 @@ sudo chown root:docker /usr/bin/containerd*<br>
 sudo chown root:docker /usr/bin/runc<br>
 sudo chown root:docker /usr/bin/ctr<br>
 5.查看一下是否改变所属用户和所属组(得到和解压出来的docker目录下的一样的8个指令)</p>
-<figure data-type="image" tabindex="9"><img src="https://newdy.cf/post-images/1582087235444.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="9"><img src="https://book.baidv.win/post-images/1582087235444.png" alt="" loading="lazy"></figure>
 <p>6.将docker注册为service服务</p>
 <p>新建该文件<br>
 sudo vi /etc/systemd/system/docker.service<br>
@@ -220,7 +220,7 @@ dd</p>
             
               <div class="tag-container">
                 
-                  <a href="https://newdy.cf/tag/EaZ5nQI7f/" class="tag">
+                  <a href="https://book.baidv.win/tag/EaZ5nQI7f/" class="tag">
                     Docker
                   </a>
                 
@@ -229,7 +229,7 @@ dd</p>
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://newdy.cf/post/windows10-xia-nginx-de-rtmp-fu-wu-qi-da-jian/">
+                <a href="https://book.baidv.win/post/windows10-xia-nginx-de-rtmp-fu-wu-qi-da-jian/">
                   <h3 class="post-title">
                     Windows10下nginx的rtmp服务器搭建
                   </h3>
