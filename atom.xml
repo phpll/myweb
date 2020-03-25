@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://book.baidv.win</id>
     <title>Gridea</title>
-    <updated>2020-03-24T14:26:59.679Z</updated>
+    <updated>2020-03-25T15:06:55.935Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://book.baidv.win"/>
     <link rel="self" href="https://book.baidv.win/atom.xml"/>
@@ -10,6 +10,54 @@
     <logo>https://book.baidv.win/images/avatar.png</logo>
     <icon>https://book.baidv.win/favicon.ico</icon>
     <rights>All rights reserved 2020, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[intel ax200ngw刷killer 1650x教程]]></title>
+        <id>https://book.baidv.win/post/intel-ax200ngw-shua-killer-1650x-jiao-cheng/</id>
+        <link href="https://book.baidv.win/post/intel-ax200ngw-shua-killer-1650x-jiao-cheng/">
+        </link>
+        <updated>2020-03-22T14:11:35.000Z</updated>
+        <content type="html"><![CDATA[<p>首先是效果图<br>
+<img src="https://book.baidv.win/post-images/1584886354254.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886374327.png" alt="" loading="lazy"><br>
+接下来开始教程</p>
+<p>第一步<br>
+去killer官网下载beta版控制中心<br>
+<img src="https://book.baidv.win/post-images/1584886406599.png" alt="" loading="lazy"><br>
+下好之后先不要安装</p>
+<p>第二步<br>
+去注册表里HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\PCI这个位置按CtrlF搜索你网卡的硬件id第一行<br>
+<img src="https://book.baidv.win/post-images/1584886414309.png" alt="" loading="lazy"><br>
+然后把一二行的这串数字改成16541A56<br>
+改好之后双击安装你刚才下载的控制中心<br>
+<img src="https://book.baidv.win/post-images/1584886454013.png" alt="" loading="lazy"><br>
+第三步<br>
+然后在设备管理器里面右击你的ax200 驱动更换成1650x的 直接更换就行 不会报错，id会变回去，不用管id<br>
+（更换的详细步骤：右击ax200 更新驱动程序&gt;浏览我的计算机&gt;让我从计算机可用的驱动程序列表选取&gt;取消勾选&quot;显示兼容硬件&quot; 找到如图所示的驱动 下一步 ）<br>
+<img src="https://book.baidv.win/post-images/1584886462938.png" alt="" loading="lazy"><br>
+第四步<br>
+找到C:\ProgramFiles\Killer Networking\Killer Control Center这个目录<br>
+<img src="https://book.baidv.win/post-images/1584886499130.png" alt="" loading="lazy"><br>
+找到如图这个文件 推荐用**notepad++**编辑<br>
+然后把1650x的代码改成你自己的<br>
+<img src="https://book.baidv.win/post-images/1584886526141.png" alt="" loading="lazy"><br>
+这个代码直接从你网卡的硬件id那里复制（第二步那里）<br>
+改好之后保存它</p>
+<p>第五步<br>
+接着打开你的win10设置&gt;更新和安全&gt;恢复&gt;高级启动&gt;立即重新启动<br>
+<img src="https://book.baidv.win/post-images/1584886556190.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886564196.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886602407.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886607419.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886625311.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886630695.png" alt="" loading="lazy"><br>
+重启到禁用驱动程序签名的模式</p>
+<p>第六步<br>
+再次打开C:\Program Files\Killer Networking\Killer Control Center这个目录<br>
+<img src="https://book.baidv.win/post-images/1584886672248.png" alt="" loading="lazy"><br>
+按照图中顺序右击安装这两个inf 装好之后你会发现你的网卡名字又变回ax200 不要慌<br>
+再次重复第三步的步骤 装一下1650x的驱动，装好之后重启电脑，你会发现右下角已经出现killer控制中心的图标了在这里插入图片描述<img src="https://book.baidv.win/post-images/1584886695848.png" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[acme.sh 自动更新 RSA、ECC 双证书实践]]></title>
         <id>https://book.baidv.win/post/acmesh-zi-dong-geng-xin-rsaecc-shuang-zheng-shu-shi-jian/</id>
@@ -553,37 +601,6 @@ V2EX DNS	                        199.91.73.222	     178.79.131.110</p>
 香港联通                                205.252.144.228    208.151.69.65<br>
 澳门 V                                   202.175.3.8            202.175.3.3<br>
 台湾                                      168.95.192.1          168.95.1.1</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[网线水晶头接法和线序（图文详解）]]></title>
-        <id>https://book.baidv.win/post/wang-xian-shui-jing-tou-jie-fa-he-xian-xu-tu-wen-xiang-jie/</id>
-        <link href="https://book.baidv.win/post/wang-xian-shui-jing-tou-jie-fa-he-xian-xu-tu-wen-xiang-jie/">
-        </link>
-        <updated>2020-02-24T14:23:00.000Z</updated>
-        <content type="html"><![CDATA[<p>水晶头接线颜色有两种：<br>
-1.平行线的做法是：两头同为568A标准或568B标准。（常用）</p>
-<p>2.交叉线的做法是：一头568A标准，一头568B标准。</p>
-<p>568A标准顺序：绿白，绿，橙白，蓝，蓝白，橙，棕白，棕</p>
-<p>568B标准顺序：橙白，橙，绿白，蓝，蓝白，绿，棕白，棕</p>
-<p>如果连接的双方地位不对等的，则用平行线，例如电脑连接到路由器或交换机。</p>
-<p>如果连接的两台设备是对等的，则用交叉线，例如电脑连接到电脑。<br>
-<img src="https://book.baidv.win/post-images/1582554223204.jpg" alt="" loading="lazy"></p>
-<p>扩展资料</p>
-<p>网线质量鉴别<br>
-三类线的标识是“CAT3”，带宽10M，适用于十兆网基本已淘汰；五类线的标识是“CAT5”，带宽100M ，适用于百兆以下的网；超五类线的标识是“CAT5E”，带宽155M，是主流产品；六类线的标识是“ CAT6”，带宽250M，用于架设千兆网</p>
-<p>除了假线外，市面上有很多用三类线冒充五类线、超五类线的情况。下面是网线的鉴别方法：</p>
-<p>三类线里的线是二对四根，五类线里的线是四对八根。</p>
-<p>真线的外胶皮不易燃烧，而假线的外胶皮大部分是易燃的。</p>
-<p>假线在较高温下（40℃以上）外胶皮会变软，真的不会。</p>
-<p>真线内部的铜芯用料较纯，比较软、有韧性而且不易被拉断。</p>
-<p>网线的扭绕方向是逆时针扭绕而不是顺时针绕的。顺时针绕会对速度和传输距离有影响。</p>
-<p>网线里的线在对绕时圈数是不一样的，因为圈数一样的话两对线之间的传输信号会互相干扰，使传输距离变短。</p>
-<p>屏蔽双绞线的导线与胶皮间有一层金属网和绝缘材料，水晶头外面也被金属所包裹。</p>
-<p>有条件的话可以找100米的双绞线利用Windows中的“网络监视器”或“资源监视器”实地测试一下，5类线能达到100Mbps，3类线只有10Mbps。</p>
-<p>网线标准长度1000英尺/箱（大约相当于305米）</p>
-<p>使用磁铁可以鉴别铁芯线，如果网线用磁铁可以吸引（哪怕是轻微的吸引），那说明是铁芯线，铁芯线因为电阻大，严重影响传输效率和传输距离，不推荐购买。优质的网线一般都是使用铜作为线芯的。即使差一些的线，也应该使用铝作为线芯。</p>
-<p>剥开少许网线，看一下线芯的粗细，线芯细了也会影响传输效率。所以应该选用相对而言线芯粗的。</p>
 ]]></content>
     </entry>
 </feed>

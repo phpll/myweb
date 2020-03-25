@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>intel ax200ngw刷killer 1650x教程 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://newdy.cf/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://book.baidv.win/favicon.ico?v=1585148811618">
+<link rel="stylesheet" href="https://book.baidv.win/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://newdy.cf/css/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-10634410-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-10634410-2');
+</script>
+
+
+    <meta name="description" content="首先是效果图
+
+
+接下来开始教程
+第一步
+去killer官网下载beta版控制中心
+
+下好之后先不要安装
+第二步
+去注册表里HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\PCI这个位置按C..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://book.baidv.win">
+        <img src="https://book.baidv.win/images/avatar.png?v=1585148811618" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://newdy.cf" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://newdy.cf" target="_blank">Gridea</a> | <a class="rss" href="https://book.baidv.win/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">intel ax200ngw刷killer 1650x教程</h2>
+            <div class="post-date">2020-03-22</div>
+            
+            <div class="post-content" v-pre>
+              <p>首先是效果图<br>
+<img src="https://book.baidv.win/post-images/1584886354254.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886374327.png" alt="" loading="lazy"><br>
+接下来开始教程</p>
+<p>第一步<br>
+去killer官网下载beta版控制中心<br>
+<img src="https://book.baidv.win/post-images/1584886406599.png" alt="" loading="lazy"><br>
+下好之后先不要安装</p>
+<p>第二步<br>
+去注册表里HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Enum\PCI这个位置按CtrlF搜索你网卡的硬件id第一行<br>
+<img src="https://book.baidv.win/post-images/1584886414309.png" alt="" loading="lazy"><br>
+然后把一二行的这串数字改成16541A56<br>
+改好之后双击安装你刚才下载的控制中心<br>
+<img src="https://book.baidv.win/post-images/1584886454013.png" alt="" loading="lazy"><br>
+第三步<br>
+然后在设备管理器里面右击你的ax200 驱动更换成1650x的 直接更换就行 不会报错，id会变回去，不用管id<br>
+（更换的详细步骤：右击ax200 更新驱动程序&gt;浏览我的计算机&gt;让我从计算机可用的驱动程序列表选取&gt;取消勾选&quot;显示兼容硬件&quot; 找到如图所示的驱动 下一步 ）<br>
+<img src="https://book.baidv.win/post-images/1584886462938.png" alt="" loading="lazy"><br>
+第四步<br>
+找到C:\ProgramFiles\Killer Networking\Killer Control Center这个目录<br>
+<img src="https://book.baidv.win/post-images/1584886499130.png" alt="" loading="lazy"><br>
+找到如图这个文件 推荐用**notepad++**编辑<br>
+然后把1650x的代码改成你自己的<br>
+<img src="https://book.baidv.win/post-images/1584886526141.png" alt="" loading="lazy"><br>
+这个代码直接从你网卡的硬件id那里复制（第二步那里）<br>
+改好之后保存它</p>
+<p>第五步<br>
+接着打开你的win10设置&gt;更新和安全&gt;恢复&gt;高级启动&gt;立即重新启动<br>
+<img src="https://book.baidv.win/post-images/1584886556190.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886564196.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886602407.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886607419.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886625311.png" alt="" loading="lazy"><br>
+<img src="https://book.baidv.win/post-images/1584886630695.png" alt="" loading="lazy"><br>
+重启到禁用驱动程序签名的模式</p>
+<p>第六步<br>
+再次打开C:\Program Files\Killer Networking\Killer Control Center这个目录<br>
+<img src="https://book.baidv.win/post-images/1584886672248.png" alt="" loading="lazy"><br>
+按照图中顺序右击安装这两个inf 装好之后你会发现你的网卡名字又变回ax200 不要慌<br>
+再次重复第三步的步骤 装一下1650x的驱动，装好之后重启电脑，你会发现右下角已经出现killer控制中心的图标了在这里插入图片描述<img src="https://book.baidv.win/post-images/1584886695848.png" alt="" loading="lazy"></p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://book.baidv.win/post/acmesh-zi-dong-geng-xin-rsaecc-shuang-zheng-shu-shi-jian/">
+                  <h3 class="post-title">
+                    acme.sh 自动更新 RSA、ECC 双证书实践
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://newdy.cf/js/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+
+  </body>
+</html>
